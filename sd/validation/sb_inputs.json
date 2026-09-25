@@ -1,0 +1,101 @@
+{
+  "input_ids": [
+    "Source",
+    "Effect"
+  ],
+  "props_by_cat": {
+    "Annotation": [
+      {
+        "id": "outputs_computation",
+        "type": "bool"
+      },
+      {
+        "id": "identifier",
+        "type": "string"
+      },
+      {
+        "id": "category",
+        "type": "string"
+      },
+      {
+        "id": "label",
+        "type": "string"
+      },
+      {
+        "id": "author",
+        "type": "string"
+      },
+      {
+        "id": "author_url",
+        "type": "string"
+      },
+      {
+        "id": "tags",
+        "type": "string"
+      },
+      {
+        "id": "description",
+        "type": "string"
+      },
+      {
+        "id": "userdata",
+        "type": "string"
+      },
+      {
+        "id": "icon",
+        "type": "SDTypeTexture"
+      },
+      {
+        "id": "show_in_library",
+        "type": "bool"
+      },
+      {
+        "id": "physical_size",
+        "type": "float3"
+      },
+      {
+        "id": "material_model",
+        "type": "string"
+      }
+    ],
+    "Input": [
+      {
+        "id": "$outputsize",
+        "type": "int2"
+      },
+      {
+        "id": "$format",
+        "type": "sbs::compositing::format"
+      },
+      {
+        "id": "$pixelsize",
+        "type": "float2"
+      },
+      {
+        "id": "$pixelratio",
+        "type": "sbs::compositing::pixelratio"
+      },
+      {
+        "id": "$tiling",
+        "type": "sbs::compositing::tiling"
+      },
+      {
+        "id": "$randomseed",
+        "type": "int"
+      },
+      {
+        "id": "Samples",
+        "type": "int"
+      },
+      {
+        "id": "Intensity",
+        "type": "float"
+      },
+      {
+        "id": "mode",
+        "type": "int"
+      }
+    ]
+  },
+  "fail": null
+}

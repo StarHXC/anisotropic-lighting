@@ -1,0 +1,206 @@
+{
+  "objects": [
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::warp"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    },
+    {
+      "def": "sbs::compositing::input_grayscale"
+    },
+    {
+      "def": "sbs::compositing::input_grayscale"
+    },
+    {
+      "def": "sbs::compositing::output"
+    },
+    {
+      "def": "sbs::compositing::blend"
+    }
+  ],
+  "fail": null
+}

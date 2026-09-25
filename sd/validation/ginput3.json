@@ -1,0 +1,81 @@
+{
+  "types": [
+    {
+      "type": "SDTypeFloat",
+      "input_ok": true
+    },
+    {
+      "type": "SDTypeFloat2",
+      "input_ok": true
+    },
+    {
+      "type": "SDTypeFloat3",
+      "input_ok": true
+    },
+    {
+      "type": "SDTypeFloat4",
+      "input_ok": true
+    },
+    {
+      "type": "SDTypeInt",
+      "input_ok": true
+    },
+    {
+      "type": "SDTypeBool",
+      "input_ok": true
+    },
+    {
+      "type": "SDTypeString",
+      "input_ok": true
+    },
+    {
+      "type": "SDTypeTexture",
+      "input_ok": false,
+      "input_err": "APIException(<SDApiError.InvalidType: 10>)"
+    },
+    {
+      "type": "SDTypeUsage",
+      "input_ok": false,
+      "input_err": "APIException(<SDApiError.InvalidType: 10>)"
+    },
+    {
+      "type": "SDTypeEnum",
+      "error": "TypeError(\"SDTypeEnum.sNew() missing 1 required positional argument: 'sdTypeEnumId'\")"
+    },
+    {
+      "type": "SDTypeColorRGB",
+      "input_ok": true
+    },
+    {
+      "type": "SDTypeColorRGBA",
+      "input_ok": true
+    },
+    {
+      "type": "SDTypeVoid",
+      "input_ok": false,
+      "input_err": "APIException(<SDApiError.InvalidType: 10>)"
+    },
+    {
+      "type": "SDTypeArray",
+      "error": "AttributeError(\"type object 'SDTypeArray' has no attribute 'sNew'\")"
+    },
+    {
+      "type": "SDTypeStruct",
+      "error": "TypeError(\"SDTypeStruct.sNew() missing 1 required positional argument: 'sdTypeStructId'\")"
+    },
+    {
+      "type": "SDTypeCustom",
+      "error": "AttributeError(\"type object 'SDTypeCustom' has no attribute 'sNew'\")"
+    },
+    {
+      "type": "SDTypeMaterial",
+      "error": "ModuleNotFoundError(\"No module named 'sd.api.sdtypematerial'\")"
+    },
+    {
+      "type": "SDTypeScene",
+      "error": "AttributeError(\"module 'sd.api.sdresourcescene' has no attribute 'SDTypeScene'\")"
+    }
+  ],
+  "fail": null,
+  "ok": true
+}

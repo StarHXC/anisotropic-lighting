@@ -1,0 +1,3 @@
+{
+  "fail": "Traceback (most recent call last):\n  File \"E:/AI_Project/Anisotropic Lighting/sd\\probe_ginput2.py\", line 65, in <module>\n    main()\n    ~~~~^^\n  File \"E:/AI_Project/Anisotropic Lighting/sd\\probe_ginput2.py\", line 44, in main\n    g.setPropertyAnnotationValueFromId(prop, 'usages', arr)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Program Files/Adobe/Adobe Substance 3D Designer/resources/python\\sd\\api\\sdresource.py\", line 313, in setPropertyAnnotationValueFromId\n    raise APIException(SDApiError(_res))\nsd.api.apiexception.APIException: SDApiError.ItemNotFound\n"
+}

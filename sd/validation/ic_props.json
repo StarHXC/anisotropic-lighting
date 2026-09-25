@@ -1,0 +1,53 @@
+{
+  "props": [
+    {
+      "cat": "Input",
+      "id": "$outputsize",
+      "type": "int2",
+      "usage": ""
+    },
+    {
+      "cat": "Input",
+      "id": "$format",
+      "type": "sbs::compositing::format",
+      "usage": ""
+    },
+    {
+      "cat": "Input",
+      "id": "$pixelsize",
+      "type": "float2",
+      "usage": ""
+    },
+    {
+      "cat": "Input",
+      "id": "$pixelratio",
+      "type": "sbs::compositing::pixelratio",
+      "usage": ""
+    },
+    {
+      "cat": "Input",
+      "id": "$tiling",
+      "type": "sbs::compositing::tiling",
+      "usage": ""
+    },
+    {
+      "cat": "Input",
+      "id": "$randomseed",
+      "type": "int",
+      "usage": ""
+    },
+    {
+      "cat": "Input",
+      "id": "bitmapresourcepath",
+      "type": "string",
+      "usage": ""
+    },
+    {
+      "cat": "Output",
+      "id": "unique_filter_output",
+      "type": "SDTypeTexture",
+      "usage": ""
+    }
+  ],
+  "fail": null
+}

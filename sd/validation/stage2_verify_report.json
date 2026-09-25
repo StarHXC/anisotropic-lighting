@@ -1,0 +1,60 @@
+{
+  "probe": "stage2_verify",
+  "steps": [
+    {
+      "step": "环境",
+      "ok": true,
+      "detail": {
+        "sd_api_version": "16.0.1"
+      }
+    },
+    {
+      "step": "unload 旧包",
+      "ok": true
+    },
+    {
+      "step": "重新加载 .sbs",
+      "ok": true
+    },
+    {
+      "step": "wrapper graph 找回",
+      "ok": true
+    },
+    {
+      "step": "参数持久化",
+      "ok": true,
+      "detail": {
+        "count": 41
+      }
+    },
+    {
+      "step": "节点持久化",
+      "ok": true,
+      "detail": {
+        "sbs::compositing::bitmap": 4,
+        "sbs::compositing::pixelprocessor": 1,
+        "sbs::compositing::output": 1
+      }
+    },
+    {
+      "step": "test graph",
+      "ok": true
+    },
+    {
+      "step": "实例化到 test graph",
+      "ok": true
+    },
+    {
+      "step": "实例 compute+save",
+      "ok": false,
+      "detail": {
+        "size": null,
+        "err": "getPropertyValue 返回 None"
+      }
+    }
+  ],
+  "fail": {
+    "error": "RuntimeError(\"stage2_verify 失败于: 实例 compute+save  ({'size': None, 'err': 'getPropertyValue 返回 None'})\")",
+    "traceback": "Traceback (most recent call last):\n  File \"E:/AI_Project/Anisotropic Lighting/sd\\probe_stage2_verify.py\", line 95, in <module>\n    main()\n    ~~~~^^\n  File \"E:/AI_Project/Anisotropic Lighting/sd\\probe_stage2_verify.py\", line 87, in main\n    step('实例 compute+save', rb['ok'],\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n         {'size': rb['size'], 'err': (rb['error'] or '')[:200]})\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:/AI_Project/Anisotropic Lighting/sd\\probe_stage2_verify.py\", line 29, in step\n    raise RuntimeError(f'stage2_verify 失败于: {name}  ({detail})')\nRuntimeError: stage2_verify 失败于: 实例 compute+save  ({'size': None, 'err': 'getPropertyValue 返回 None'})\n"
+  }
+}

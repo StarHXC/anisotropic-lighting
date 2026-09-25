@@ -1,0 +1,71 @@
+{
+  "probe": "stage2_wrapper",
+  "steps": [
+    {
+      "step": "环境",
+      "ok": true,
+      "detail": {
+        "sd_api_version": "16.0.1"
+      }
+    },
+    {
+      "step": "wrapper graph",
+      "ok": true
+    },
+    {
+      "step": "41 参数注册",
+      "ok": true,
+      "detail": {
+        "registered": 41
+      }
+    },
+    {
+      "step": "4 bitmap 导入（CopiedAndLinked + 2048²/32F）",
+      "ok": true
+    },
+    {
+      "step": "主链 PP 创建",
+      "ok": true,
+      "detail": {
+        "node_id": "sbs::compositing::pixelprocessor",
+        "colorswitch": true,
+        "format": 3,
+        "format_inheritance": "SDPropertyInheritanceMethod.Absolute",
+        "outputsize_log2": [
+          11,
+          11
+        ],
+        "size_inheritance": "SDPropertyInheritanceMethod.Absolute"
+      }
+    },
+    {
+      "step": "核心链发射（常数快照版）",
+      "ok": true,
+      "detail": {
+        "fg_nodes": 664
+      }
+    },
+    {
+      "step": "wrapper output（setOutputNode 标记）",
+      "ok": true
+    },
+    {
+      "step": "保存 aniso_lightmap.sbs",
+      "ok": true,
+      "detail": {
+        "path": "E:\\AI_Project\\Anisotropic Lighting\\sd\\aniso_lightmap.sbs",
+        "size": 195448
+      }
+    }
+  ],
+  "fail": null,
+  "sbs_path": "E:\\AI_Project\\Anisotropic Lighting\\sd\\aniso_lightmap.sbs",
+  "fg_nodes": 664,
+  "manual_checks": [
+    "① 在 test graph 导入 E:\\AI_Project\\Anisotropic Lighting\\sd\\aniso_lightmap.sbs（File → Import），拖入 aniso_lightmap 实例。",
+    "② 查看实例节点属性面板：应显示 41 参数（01_光照方向 … 06_调试与系统 分组）。",
+    "③ 截图参数面板发回核对。",
+    "④ 实例输出即成品 lightmap（当前常数快照版；参数读取版核心链在 A2 替换，届时面板调参才会真正生效）。"
+  ],
+  "ok": true
+}

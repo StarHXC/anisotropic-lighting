@@ -1,0 +1,16 @@
+{
+  "probe": "ginput",
+  "attempts": [
+    {
+      "case": "string_prop",
+      "ok": true
+    },
+    {
+      "case": "usage_prop",
+      "ok": false,
+      "err": "APIException(<SDApiError.InvalidType: 10>)"
+    }
+  ],
+  "fail": null,
+  "ok": false
+}

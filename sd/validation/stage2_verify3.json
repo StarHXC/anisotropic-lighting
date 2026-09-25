@@ -1,0 +1,23 @@
+{
+  "tries": [
+    {
+      "attempt": 0,
+      "value_none": true,
+      "tex_none": true,
+      "size": null
+    },
+    {
+      "attempt": 1,
+      "value_none": true,
+      "tex_none": true,
+      "size": null
+    },
+    {
+      "attempt": 2,
+      "value_none": true,
+      "tex_none": true,
+      "size": null
+    }
+  ],
+  "ok": true
+}

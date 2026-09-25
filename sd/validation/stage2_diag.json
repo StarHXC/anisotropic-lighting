@@ -1,0 +1,14 @@
+{
+  "wrapper_output_nodes": 1,
+  "output_ids": [
+    "output"
+  ],
+  "inst_found": true,
+  "inst_outputs": [
+    {
+      "id": "output",
+      "type": "SDTypeTexture",
+      "value": "None"
+    }
+  ]
+}

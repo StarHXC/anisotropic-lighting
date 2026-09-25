@@ -1,0 +1,37 @@
+{
+  "wrapper_self": {
+    "ok": true,
+    "size": [
+      2048,
+      2048
+    ],
+    "err": ""
+  },
+  "inst_inputs": [
+    {
+      "input": "$outputsize",
+      "connections": 0
+    },
+    {
+      "input": "$format",
+      "connections": 0
+    },
+    {
+      "input": "$pixelsize",
+      "connections": 0
+    },
+    {
+      "input": "$pixelratio",
+      "connections": 0
+    },
+    {
+      "input": "$tiling",
+      "connections": 0
+    },
+    {
+      "input": "$randomseed",
+      "connections": 0
+    }
+  ],
+  "ok": true
+}

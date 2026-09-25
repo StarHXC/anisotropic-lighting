@@ -1,0 +1,68 @@
+{
+  "props": [
+    {
+      "owner": "graph",
+      "id": "$outputsize",
+      "type": "int2",
+      "usages": [],
+      "variadic": false
+    },
+    {
+      "owner": "graph",
+      "id": "$format",
+      "type": "sbs::compositing::format",
+      "usages": [],
+      "variadic": false
+    },
+    {
+      "owner": "graph",
+      "id": "$pixelsize",
+      "type": "float2",
+      "usages": [],
+      "variadic": false
+    },
+    {
+      "owner": "graph",
+      "id": "$pixelratio",
+      "type": "sbs::compositing::pixelratio",
+      "usages": [],
+      "variadic": false
+    },
+    {
+      "owner": "graph",
+      "id": "$tiling",
+      "type": "sbs::compositing::tiling",
+      "usages": [],
+      "variadic": false
+    },
+    {
+      "owner": "graph",
+      "id": "$randomseed",
+      "type": "int",
+      "usages": [],
+      "variadic": false
+    },
+    {
+      "owner": "graph",
+      "id": "Samples",
+      "type": "int",
+      "usages": [],
+      "variadic": false
+    },
+    {
+      "owner": "graph",
+      "id": "Intensity",
+      "type": "float",
+      "usages": [],
+      "variadic": false
+    },
+    {
+      "owner": "graph",
+      "id": "mode",
+      "type": "int",
+      "usages": [],
+      "variadic": false
+    }
+  ],
+  "fail": null
+}

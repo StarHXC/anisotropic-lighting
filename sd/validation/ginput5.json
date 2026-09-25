@@ -1,0 +1,12 @@
+{
+  "types": {
+    "float4": true,
+    "rgba": true
+  },
+  "has_paraminput": true,
+  "paraminput_snips": [
+    "<paraminput><identifier v=\"in_img_f4\"/><uid v=\"1582437432\"/><type v=\"2048\"/><defaultValue><constantValueFloat4 v=\"0 0 0 1\"/></defaultValue><defaultWidget><name v=\"\"/><options/></defaultWidget></paraminput><paraminput><identifier v=\"in_img_rgba\"/><uid v=\"1582437433\"/><type v=\"2048\"/><defaultValue><co",
+    "<paraminput><identifier v=\"in_img_rgba\"/><uid v=\"1582437433\"/><type v=\"2048\"/><defaultValue><constantValueFloat4 v=\"0 0 0 1\"/></defaultValue><defaultWidget><name v=\"\"/><options/></defaultWidget></paraminput></paraminputs><graphOutputs/><compNodes/><baseParameters/><root/></graph></content></package>"
+  ],
+  "ok": true
+}
