@@ -1,0 +1,18 @@
+{
+  "fail": null,
+  "readback": {
+    "ok": true,
+    "size": [
+      2048,
+      2048
+    ],
+    "err": ""
+  },
+  "order": [
+    "bake_position",
+    "bake_normalobj",
+    "mask1",
+    "bake_ao"
+  ],
+  "ok": true
+}

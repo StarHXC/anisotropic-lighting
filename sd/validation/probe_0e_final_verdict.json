@@ -1,0 +1,14 @@
+{
+  "verdict": "0E 裁定（实测数据）",
+  "metrics": {
+    "fg_nodes": 165, "depth_layers": 40, "fanout": 32, "candidates": 3,
+    "struct_create_seconds": 0.004, "fg_emit_seconds": 0.089,
+    "first_compute_seconds_2048": 1.114, "warm_compute_seconds": 1.101
+  },
+  "extrapolation": {
+    "nodes_budget": "全模式主链约750节点的结构估算在构建/发射层面无压力（165节点发射0.09s）",
+    "compute": "2048² 全链 PP 预计与 165 节点探针同量级（1.1s 首算/热算持平，说明编译缓存生效）；实时交互可行（每参数改动 <1.5s 刷新）",
+    "caveat": "像素处理器实际成本与节点拓扑相关，主链（含 ~750 节点与 sample 链）需 Stage 1 实测复核"
+  },
+  "note": "本实验与 0D3/0B6 均通过桥自动化完成；无任何手动导出/控制台转写"
+}

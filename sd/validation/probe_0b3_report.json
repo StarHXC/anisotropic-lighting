@@ -1,0 +1,59 @@
+{
+  "probe": "0B3",
+  "steps": [
+    {
+      "step": "环境",
+      "ok": true,
+      "detail": {
+        "sd_api_version": "16.0.1"
+      }
+    },
+    {
+      "step": "graph",
+      "ok": true,
+      "detail": {
+        "id": "test"
+      }
+    },
+    {
+      "step": "bitmap 定位",
+      "ok": true,
+      "detail": [
+        "bake_ao",
+        "bake_normalobj",
+        "bake_position",
+        "mask1"
+      ]
+    },
+    {
+      "step": "主 PP 函数图（2 输入采样打包）",
+      "ok": true,
+      "detail": {
+        "mapping": "R=pos.r G=nrm.r B=ao.r A=mask.r"
+      }
+    },
+    {
+      "step": "compute+save",
+      "ok": true,
+      "detail": {
+        "size": [
+          2048,
+          2048
+        ],
+        "err": ""
+      }
+    }
+  ],
+  "fail": null,
+  "channel_defaults": {
+    "X.channelred": "0",
+    "X.channelgreen": "1",
+    "X.channelblue": "2",
+    "X.channelalpha": "3",
+    "Y.channelred": "0",
+    "Y.channelgreen": "1",
+    "Y.channelblue": "2",
+    "Y.channelalpha": "3"
+  },
+  "ok": true
+}

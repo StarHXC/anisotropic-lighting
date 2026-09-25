@@ -1,0 +1,8 @@
+{
+  "defs": [
+    "sbs::compositing::uniform",
+    "sbs::compositing::passthrough"
+  ],
+  "fail": null,
+  "total": 29
+}

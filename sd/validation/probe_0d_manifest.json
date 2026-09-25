@@ -1,0 +1,239 @@
+{
+  "cases": [
+    {
+      "name": "unit_x",
+      "v": [
+        1,
+        0,
+        0
+      ],
+      "fallback": [
+        0,
+        0,
+        1
+      ],
+      "mode": 0,
+      "e0": 0.3,
+      "e1": 0.6,
+      "thr": 0.5,
+      "angle": 0.0
+    },
+    {
+      "name": "unit_y",
+      "v": [
+        0,
+        1,
+        0
+      ],
+      "fallback": [
+        0,
+        0,
+        1
+      ],
+      "mode": 1,
+      "e0": 0.3,
+      "e1": 0.6,
+      "thr": 0.5,
+      "angle": 90.0
+    },
+    {
+      "name": "unit_z",
+      "v": [
+        0,
+        0,
+        1
+      ],
+      "fallback": [
+        1,
+        0,
+        0
+      ],
+      "mode": 2,
+      "e0": 0.3,
+      "e1": 0.6,
+      "thr": 0.5,
+      "angle": 180.0
+    },
+    {
+      "name": "diag",
+      "v": [
+        1,
+        1,
+        1
+      ],
+      "fallback": [
+        0,
+        0,
+        1
+      ],
+      "mode": 0,
+      "e0": 0.2,
+      "e1": 0.8,
+      "thr": 0.4,
+      "angle": 45.0
+    },
+    {
+      "name": "scaled",
+      "v": [
+        0,
+        0,
+        5
+      ],
+      "fallback": [
+        0,
+        0,
+        1
+      ],
+      "mode": 1,
+      "e0": 0.1,
+      "e1": 0.9,
+      "thr": 0.5,
+      "angle": -90.0
+    },
+    {
+      "name": "zero",
+      "v": [
+        0,
+        0,
+        0
+      ],
+      "fallback": [
+        0,
+        0,
+        1
+      ],
+      "mode": 2,
+      "e0": 0.3,
+      "e1": 0.6,
+      "thr": 0.5,
+      "angle": 0.0
+    },
+    {
+      "name": "tiny",
+      "v": [
+        1e-14,
+        0,
+        0
+      ],
+      "fallback": [
+        0,
+        0,
+        1
+      ],
+      "mode": 0,
+      "e0": 0.3,
+      "e1": 0.6,
+      "thr": 0.5,
+      "angle": 0.0
+    },
+    {
+      "name": "near_zero",
+      "v": [
+        1e-08,
+        0,
+        0
+      ],
+      "fallback": [
+        0,
+        0,
+        1
+      ],
+      "mode": 1,
+      "e0": 0.3,
+      "e1": 0.6,
+      "thr": 0.5,
+      "angle": 0.0
+    },
+    {
+      "name": "neg_small",
+      "v": [
+        -1e-08,
+        0,
+        -1
+      ],
+      "fallback": [
+        0,
+        0,
+        1
+      ],
+      "mode": 2,
+      "e0": 0.3,
+      "e1": 0.6,
+      "thr": 0.5,
+      "angle": 90.0
+    },
+    {
+      "name": "neg_unit",
+      "v": [
+        0,
+        0,
+        -1
+      ],
+      "fallback": [
+        1,
+        0,
+        0
+      ],
+      "mode": 0,
+      "e0": 0.3,
+      "e1": 0.6,
+      "thr": 0.5,
+      "angle": -45.0
+    },
+    {
+      "name": "rot_nz_x",
+      "v": [
+        0.6,
+        0.8,
+        0
+      ],
+      "fallback": [
+        0,
+        0,
+        1
+      ],
+      "mode": 1,
+      "e0": 0.25,
+      "e1": 0.75,
+      "thr": 0.5,
+      "angle": 90.0
+    },
+    {
+      "name": "rot_nz_xy",
+      "v": [
+        0.6,
+        0.8,
+        0
+      ],
+      "fallback": [
+        0,
+        0,
+        1
+      ],
+      "mode": 2,
+      "e0": 0.25,
+      "e1": 0.75,
+      "thr": 0.5,
+      "angle": -90.0
+    }
+  ],
+  "layout": {
+    "cases_x": 4,
+    "cases_y": 3,
+    "grid": [
+      4,
+      3
+    ],
+    "case_index": "cx = min(floor(u*4),3); cy = min(floor(v*3),2); idx = cy*4+cx",
+    "size": [
+      2048,
+      2048
+    ]
+  },
+  "acceptance": {
+    "finite_first": true,
+    "valid_exact_01": true,
+    "max_abs": 0.0001,
+    "rmse": 1e-05
+  }
+}

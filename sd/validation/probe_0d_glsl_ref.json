@@ -1,0 +1,367 @@
+{
+  "source": "numpy float64 实数公式基准（§6 配方逐式对应）",
+  "line_order": "不适用（case 表非图像）",
+  "note": "本基准供 check_export.py 在 SD 导出的 EXR case 采样点上对比；SD 侧图内 case 布局见 probe_0d_manifest.json",
+  "cases": [
+    {
+      "case_index": 0,
+      "name": "unit_x",
+      "sn_xyz": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "sn_valid": 1.0,
+      "plane_fallback": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pf_trigger": 1.0,
+      "cross3": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "pick_sign": 1.0,
+      "pick3_center": [
+        0.1,
+        0.0,
+        0.0
+      ],
+      "segmented_at_half": 0.5,
+      "rot_x": 1.0,
+      "srgb": 0.025840000000000002
+    },
+    {
+      "case_index": 1,
+      "name": "unit_y",
+      "sn_xyz": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "sn_valid": 1.0,
+      "plane_fallback": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "pf_trigger": 1.0,
+      "cross3": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "pick_sign": 1.0,
+      "pick3_center": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "segmented_at_half": 0.7407407407407408,
+      "rot_x": 6.123233995736766e-17,
+      "srgb": 0.04044990748269014
+    },
+    {
+      "case_index": 2,
+      "name": "unit_z",
+      "sn_xyz": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "sn_valid": 1.0,
+      "plane_fallback": [
+        0.0,
+        0.9999999999995,
+        9.999999999995e-07
+      ],
+      "pf_trigger": 1.0,
+      "cross3": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "pick_sign": 1.0,
+      "pick3_center": [
+        0.0,
+        0.0,
+        0.3
+      ],
+      "segmented_at_half": 1.0,
+      "rot_x": -1.0,
+      "srgb": 0.7353569830524495
+    },
+    {
+      "case_index": 3,
+      "name": "diag",
+      "sn_xyz": [
+        0.5773502691896258,
+        0.5773502691896258,
+        0.5773502691896258
+      ],
+      "sn_valid": 1.0,
+      "plane_fallback": [
+        0.0,
+        0.7071071347400265,
+        -0.7071064276328918
+      ],
+      "pf_trigger": 1.0,
+      "cross3": [
+        1.0,
+        -1.0,
+        0.0
+      ],
+      "pick_sign": 1.0,
+      "pick3_center": [
+        0.1,
+        0.0,
+        0.0
+      ],
+      "segmented_at_half": 0.5,
+      "rot_x": 0.7071067811865476,
+      "srgb": 0.9999999999999999
+    },
+    {
+      "case_index": 4,
+      "name": "scaled",
+      "sn_xyz": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "sn_valid": 1.0,
+      "plane_fallback": [
+        0.0,
+        0.99999999999998,
+        1.99999999999996e-07
+      ],
+      "pf_trigger": 1.0,
+      "cross3": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pick_sign": 1.0,
+      "pick3_center": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "segmented_at_half": 0.5,
+      "rot_x": 6.123233995736766e-17,
+      "srgb": 1.3532560461493863
+    },
+    {
+      "case_index": 5,
+      "name": "zero",
+      "sn_xyz": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "sn_valid": 0.0,
+      "plane_fallback": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pf_trigger": 1.0,
+      "cross3": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pick_sign": 1.0,
+      "pick3_center": [
+        0.0,
+        0.0,
+        0.3
+      ],
+      "segmented_at_half": 1.0,
+      "rot_x": 1.0,
+      "srgb": 0.0
+    },
+    {
+      "case_index": 6,
+      "name": "tiny",
+      "sn_xyz": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "sn_valid": 0.0,
+      "plane_fallback": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pf_trigger": 1.0,
+      "cross3": [
+        0.0,
+        -1e-14,
+        0.0
+      ],
+      "pick_sign": 1.0,
+      "pick3_center": [
+        0.1,
+        0.0,
+        0.0
+      ],
+      "segmented_at_half": 0.5,
+      "rot_x": 1.0,
+      "srgb": 0.03876
+    },
+    {
+      "case_index": 7,
+      "name": "near_zero",
+      "sn_xyz": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "sn_valid": 1.0,
+      "plane_fallback": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "pf_trigger": 1.0,
+      "cross3": [
+        0.0,
+        -1e-08,
+        0.0
+      ],
+      "pick_sign": 1.0,
+      "pick3_center": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "segmented_at_half": 0.7407407407407408,
+      "rot_x": 1.0,
+      "srgb": 0.9546871718858662
+    },
+    {
+      "case_index": 8,
+      "name": "neg_small",
+      "sn_xyz": [
+        -1e-08,
+        0.0,
+        -1.0
+      ],
+      "sn_valid": 1.0,
+      "plane_fallback": [
+        0.0,
+        -0.9999999999995,
+        9.999999999995e-07
+      ],
+      "pf_trigger": 1.0,
+      "cross3": [
+        0.0,
+        1e-08,
+        -0.0
+      ],
+      "pick_sign": -1.0,
+      "pick3_center": [
+        0.0,
+        0.0,
+        0.3
+      ],
+      "segmented_at_half": 1.0,
+      "rot_x": 6.123233995736766e-17,
+      "srgb": 0.3491902126282938
+    },
+    {
+      "case_index": 9,
+      "name": "neg_unit",
+      "sn_xyz": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "sn_valid": 1.0,
+      "plane_fallback": [
+        0.0,
+        -0.9999999999995,
+        9.999999999995e-07
+      ],
+      "pf_trigger": 1.0,
+      "cross3": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "pick_sign": -1.0,
+      "pick3_center": [
+        0.1,
+        0.0,
+        0.0
+      ],
+      "segmented_at_half": 0.5,
+      "rot_x": 0.7071067811865476,
+      "srgb": 0.9063317533440594
+    },
+    {
+      "case_index": 10,
+      "name": "rot_nz_x",
+      "sn_xyz": [
+        0.6,
+        0.8,
+        0.0
+      ],
+      "sn_valid": 1.0,
+      "plane_fallback": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "pf_trigger": 1.0,
+      "cross3": [
+        0.8,
+        -0.6,
+        0.0
+      ],
+      "pick_sign": 1.0,
+      "pick3_center": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "segmented_at_half": 0.5,
+      "rot_x": 6.123233995736766e-17,
+      "srgb": 0.609711615498214
+    },
+    {
+      "case_index": 11,
+      "name": "rot_nz_xy",
+      "sn_xyz": [
+        0.6,
+        0.8,
+        0.0
+      ],
+      "sn_valid": 1.0,
+      "plane_fallback": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "pf_trigger": 1.0,
+      "cross3": [
+        0.8,
+        -0.6,
+        0.0
+      ],
+      "pick_sign": 1.0,
+      "pick3_center": [
+        0.0,
+        0.0,
+        0.3
+      ],
+      "segmented_at_half": 1.0,
+      "rot_x": 6.123233995736766e-17,
+      "srgb": 0.8911433221007495
+    }
+  ]
+}

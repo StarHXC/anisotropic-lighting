@@ -1,0 +1,68 @@
+{
+  "uniform_readback": [
+    {
+      "want": 0.2,
+      "got_r": 0.2,
+      "ok": true
+    },
+    {
+      "want": 0.4,
+      "got_r": 0.4,
+      "ok": true
+    },
+    {
+      "want": 0.6,
+      "got_r": 0.6,
+      "ok": true
+    },
+    {
+      "want": 0.8,
+      "got_r": 0.8,
+      "ok": true
+    },
+    {
+      "want": 1.0,
+      "got_r": 1.0,
+      "ok": true
+    }
+  ],
+  "single_pp": [
+    {
+      "slot": 0,
+      "sample_idx": 0,
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\idxmap2_slot0.exr",
+      "err": ""
+    },
+    {
+      "slot": 1,
+      "sample_idx": 1,
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\idxmap2_slot1.exr",
+      "err": ""
+    },
+    {
+      "slot": 2,
+      "sample_idx": 2,
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\idxmap2_slot2.exr",
+      "err": ""
+    },
+    {
+      "slot": 3,
+      "sample_idx": 3,
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\idxmap2_slot3.exr",
+      "err": ""
+    },
+    {
+      "slot": 4,
+      "sample_idx": 4,
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\idxmap2_slot4.exr",
+      "err": ""
+    }
+  ],
+  "fail": null,
+  "ok": true
+}

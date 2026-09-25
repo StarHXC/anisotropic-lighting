@@ -1,0 +1,11 @@
+{
+  "verdict": "0D 裁定（228/228 PASS, tol 1e-4, 0 NaN/Inf）",
+  "covered_recipes": ["safeNormalize(参数化fb/minLen)", "planeFallback(含1e-6偏置+trigger)", "cross3", "pickSign(含|x|<1e-6域)", "pick3(f1+f3)", "segmented(三模式)", "linearToSRGB(分段点两侧)", "旋转(cos/sin弧度)"],
+  "defects_found_and_fixed": {
+    "vector3_ports": "componentsin 单值端口多连覆盖（SD 16.0.1 实测；参考插件 node_builder.vec2/vec3 连法在本版本损坏）→ emitter 改为 v2(x,y)→componentsin + z→componentslast 链式组装；bc_f3/bc_f4 同步修复",
+    "numpy基准planeFallback": "use_y 比较方向写反（GLSL aniso.frag:156 为 nx²>=len2*0.5）→ 基准已修正；SD 侧配方本就正确",
+    "参数图fb": "基准 cross3 用完整 fallback 向量 → 参数图增 P4(fbx,fby,fbz)"
+  },
+  "methodology": "3 参数图直连（0B6 bitmap 模型）+ 5 计算PP 16×1 与参数图 1:1 零重采样；非 2 幂参数图在 2048² PP 中会因放大重采样产生混叠（36×1 教训）",
+  "acceptance": {"max_abs": "<=1e-4 全过", "finite": "全图 0 NaN/Inf"}
+}

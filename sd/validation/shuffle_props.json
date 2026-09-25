@@ -1,0 +1,83 @@
+{
+  "props": [
+    {
+      "cat": "Input",
+      "id": "$outputsize",
+      "type": "int2",
+      "variadic": false
+    },
+    {
+      "cat": "Input",
+      "id": "$format",
+      "type": "sbs::compositing::format",
+      "variadic": false
+    },
+    {
+      "cat": "Input",
+      "id": "$pixelsize",
+      "type": "float2",
+      "variadic": false
+    },
+    {
+      "cat": "Input",
+      "id": "$pixelratio",
+      "type": "sbs::compositing::pixelratio",
+      "variadic": false
+    },
+    {
+      "cat": "Input",
+      "id": "$tiling",
+      "type": "sbs::compositing::tiling",
+      "variadic": false
+    },
+    {
+      "cat": "Input",
+      "id": "$randomseed",
+      "type": "int",
+      "variadic": false
+    },
+    {
+      "cat": "Input",
+      "id": "channelred",
+      "type": "sbs::compositing::channelred",
+      "variadic": false
+    },
+    {
+      "cat": "Input",
+      "id": "channelgreen",
+      "type": "sbs::compositing::channelgreen",
+      "variadic": false
+    },
+    {
+      "cat": "Input",
+      "id": "channelblue",
+      "type": "sbs::compositing::channelblue",
+      "variadic": false
+    },
+    {
+      "cat": "Input",
+      "id": "channelalpha",
+      "type": "sbs::compositing::channelalpha",
+      "variadic": false
+    },
+    {
+      "cat": "Input",
+      "id": "input1",
+      "type": "SDTypeTexture",
+      "variadic": false
+    },
+    {
+      "cat": "Input",
+      "id": "input2",
+      "type": "SDTypeTexture",
+      "variadic": false
+    },
+    {
+      "cat": "Output",
+      "id": "unique_filter_output",
+      "type": "SDTypeTexture",
+      "variadic": false
+    }
+  ],
+  "fail": null
+}

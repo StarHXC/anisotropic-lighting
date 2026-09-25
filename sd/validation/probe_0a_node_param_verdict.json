@@ -1,0 +1,11 @@
+{
+  "user_claim": "renderer_sbsar 把参数创建在 PP 上",
+  "actual_mechanism": {
+    "step1": "_expose_parameters() 把参数注册在临时 comp graph（node_builder.py:460-461,844-881）",
+    "step2": "sbscooker 编译 .sbs → .sbsar，注释明确 'preserves annotations'（sbsar_exporter.py:103）",
+    "step3": "newInstanceNode(resource) 把 .sbsar 作为实例节点插入用户图（sbsar_exporter.py:139）",
+    "effect": "实例节点的属性面板显示子图 INPUT PARAMETERS —— 用户在'节点面板'上调参",
+    "conclusion": "参数定义仍在子图/comp graph 层；'显示在 PP 上'是 .sbsar 实例化的表现。这与 wrapper 变体是同一条路"
+  },
+  "implication": "aniso 迁移走同样管线（.sbs 自定义节点或 .sbsar）即可获得完全相同的交互形态"
+}

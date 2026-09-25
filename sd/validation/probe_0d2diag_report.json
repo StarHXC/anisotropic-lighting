@@ -1,0 +1,12 @@
+{
+  "fail": null,
+  "a": {
+    "ok": true,
+    "err": ""
+  },
+  "b": {
+    "ok": true,
+    "err": ""
+  },
+  "ok": true
+}

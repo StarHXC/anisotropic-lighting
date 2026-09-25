@@ -1,0 +1,76 @@
+{
+  "probe": "0E2",
+  "steps": [
+    {
+      "step": "环境",
+      "ok": true,
+      "detail": {
+        "sd_api_version": "16.0.1"
+      }
+    },
+    {
+      "step": "graph",
+      "ok": true,
+      "detail": {
+        "id": "test"
+      }
+    },
+    {
+      "step": "源 bitmap",
+      "ok": true
+    },
+    {
+      "step": "PP 结构创建",
+      "ok": true,
+      "detail": {
+        "seconds": 0.004
+      }
+    },
+    {
+      "step": "DAG 发射（深度40+扇出32+pick3）",
+      "ok": true,
+      "detail": {
+        "fg_nodes": 165,
+        "after_depth": 83,
+        "after_fanout": 149,
+        "emit_seconds": 0.089
+      }
+    },
+    {
+      "step": "输出设置",
+      "ok": true
+    },
+    {
+      "step": "首次 compute+save",
+      "ok": true,
+      "detail": {
+        "seconds": 1.114,
+        "size": [
+          2048,
+          2048
+        ],
+        "err": ""
+      }
+    },
+    {
+      "step": "二次 compute（热）",
+      "ok": true,
+      "detail": {
+        "seconds": 1.101
+      }
+    }
+  ],
+  "fail": null,
+  "metrics": {
+    "fg_nodes": 165,
+    "depth_layers": 40,
+    "fanout": 32,
+    "candidates": 3,
+    "struct_seconds": 0.004,
+    "emit_seconds": 0.089,
+    "first_compute_seconds": 1.114,
+    "warm_compute_seconds": 1.101,
+    "output": "2048²"
+  },
+  "ok": true
+}

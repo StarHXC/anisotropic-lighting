@@ -1,0 +1,140 @@
+{
+  "probe": "0A",
+  "steps": [
+    {
+      "step": "环境版本登记",
+      "ok": true,
+      "detail": {
+        "sd_api_version": "16.0.1",
+        "python": "3.13.9 (tags/v3.13.9:8183fa5, Oct 14 2025, 14:09:13) [MSC v.1944 64 bit (AMD64)]",
+        "module_sd": "C:\\Program Files/Adobe/Adobe Substance 3D Designer/resources/python\\sd\\__init__.py"
+      }
+    },
+    {
+      "step": "当前 graph 取得",
+      "ok": true,
+      "detail": {
+        "class": "SDSBSCompGraph",
+        "id": "test"
+      }
+    },
+    {
+      "step": "PP 创建（colorswitch/$format=3/$outputsize 11,11 读回一致）",
+      "ok": true,
+      "detail": {
+        "node_id": "sbs::compositing::pixelprocessor",
+        "colorswitch": true,
+        "format": 3,
+        "format_inheritance": "SDPropertyInheritanceMethod.Absolute",
+        "outputsize_log2": [
+          11,
+          11
+        ],
+        "size_inheritance": "SDPropertyInheritanceMethod.Absolute"
+      }
+    },
+    {
+      "step": "perpixel 函数图",
+      "ok": true,
+      "detail": {
+        "created": true,
+        "class": "SDSBSFunctionGraph"
+      }
+    },
+    {
+      "step": "函数图最小输出（get_float2 $pos → samplecol(input0) → setOutput）",
+      "ok": true,
+      "detail": {
+        "note": "input0 未接线时输出视为 0/黑属正常，0B 才验证绑定"
+      }
+    },
+    {
+      "step": "comp graph 参数 float1 注册+读回",
+      "ok": true,
+      "detail": {
+        "got": "0.5"
+      }
+    },
+    {
+      "step": "comp graph 参数 int 注册+读回",
+      "ok": true,
+      "detail": {
+        "got": "1"
+      }
+    },
+    {
+      "step": "comp graph 参数 float3 注册+读回",
+      "ok": true,
+      "detail": {
+        "got": "<sd.api.sdvaluefloat3.SDValueFloat3 object at 0x000002863B262F30>"
+      }
+    },
+    {
+      "step": "SDSBSCompNode.newProperty 存在性（hasattr 实测）",
+      "ok": true,
+      "detail": {
+        "has_newProperty": true
+      }
+    },
+    {
+      "step": "PP 节点级参数能力裁定",
+      "ok": true,
+      "detail": {
+        "newProperty": true,
+        "annotation_api": false,
+        "verdict": "节点级: newProperty 可建属性, 但值只读 + 无注解 API → 不可承载可调参数; 参数最终载体 = comp graph 层"
+      }
+    },
+    {
+      "step": "函数图 newProperty 存在性",
+      "ok": true,
+      "detail": {
+        "has_newProperty": true
+      }
+    },
+    {
+      "step": "函数图级参数能力裁定",
+      "ok": true,
+      "detail": {
+        "newProperty_exists": true,
+        "register_result": "APIException(<SDApiError.InvalidHandle: 9>)",
+        "verdict": "函数图 newProperty 报 InvalidHandle → 函数图层也不承载参数; 载体唯一 = comp graph 层"
+      }
+    },
+    {
+      "step": "函数图 get_float1(p_probe_f1) 节点创建",
+      "ok": true
+    },
+    {
+      "step": "第二 PP + 独立函数图（作用域隔离前提）",
+      "ok": true,
+      "detail": {
+        "created": true,
+        "pp_positions": "PP1(0,0) PP2(300,0)"
+      }
+    },
+    {
+      "step": "owner 节点清单",
+      "ok": true,
+      "detail": {
+        "owned_pp_count": 123
+      }
+    },
+    {
+      "step": "安全重建：删除 PP2",
+      "ok": true,
+      "detail": {
+        "before": 123,
+        "after": 122
+      }
+    }
+  ],
+  "fail": null,
+  "manual_checks": [
+    "① 在 SD 属性面板确认 p_probe_f1/p_probe_int/p_probe_f3 出现在哪个面板层级（根物质图 Parameters / PP 节点属性 / 函数图），并截图。",
+    "② 拖动 p_probe_f1 滑块 0→1，确认面板无异常（数值范围/clamp 生效）。",
+    "③ File → Save As 保存当前 .sbs 到临时路径，关闭再重新打开：确认两个 PP、函数图节点、参数全部保留（持久化证据）。",
+    "④ PP 的 input0 尚未接线，2D 视图应显示黑/空——这是预期；0B 再接标记图验证。"
+  ],
+  "ok": true
+}

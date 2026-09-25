@@ -1,0 +1,22 @@
+{
+  "steps": [
+    [
+      "newProperty",
+      true
+    ],
+    [
+      "setPropertyValue",
+      false,
+      "APIException(<SDApiError.DataIsReadOnly: 15>)"
+    ],
+    [
+      "node-level setAnnotationPropertyValueFromId exists",
+      true
+    ],
+    [
+      "getPropertyValue",
+      "None"
+    ]
+  ],
+  "fail": null
+}

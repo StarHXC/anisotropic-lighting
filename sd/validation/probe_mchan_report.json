@@ -1,0 +1,27 @@
+{
+  "probe": "mchan",
+  "steps": [
+    {
+      "step": "graph",
+      "ok": true,
+      "detail": "SDSBSCompGraph"
+    },
+    {
+      "step": "mask1 定位",
+      "ok": true
+    },
+    {
+      "step": "compute+save EXR",
+      "ok": true,
+      "detail": {
+        "size": [
+          4,
+          4
+        ],
+        "error": ""
+      }
+    }
+  ],
+  "fail": null,
+  "ok": true
+}

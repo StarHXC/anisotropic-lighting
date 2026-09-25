@@ -1,0 +1,44 @@
+# -*- coding: utf-8 -*-
+r"""清理 0D3 探针：4 参数图 bitmap 实例 + 6 个 PP + output + fixture 资源。"""
+import json
+import os
+
+SD_DIR = os.path.dirname(os.path.abspath(__file__))
+res = {'deleted': 0, 'kept': 0, 'fail': None}
+
+try:
+    import sd
+    ctx = sd.getContext()
+    app = ctx.getSDApplication()
+    ui = app.getUIMgr()
+    graph = ui.getCurrentGraph()
+
+    to_del = []
+    nodes = graph.getNodes()
+    for i in range(nodes.getSize()):
+        node = nodes.getItem(i)
+        try:
+            d = node.getDefinition().getId()
+            if d == 'sbs::compositing::bitmap':
+                if 'fixture_0d3' in node.getReferencedResource().getUrl():
+                    to_del.append(node)
+                    continue
+            elif d in ('sbs::compositing::pixelprocessor',
+                       'sbs::compositing::output'):
+                to_del.append(node)
+                continue
+        except BaseException:
+            pass
+        res['kept'] += 1
+    for n in to_del:
+        graph.deleteNode(n)
+        res['deleted'] += 1
+    res['ok'] = True
+except BaseException:
+    import traceback
+    res['fail'] = traceback.format_exc()
+
+with open(os.path.join(SD_DIR, 'validation', 'cleanup_0d3_report.json'), 'w',
+          encoding='utf-8') as f:
+    json.dump(res, f, ensure_ascii=False, indent=2)
+print('[DONE] deleted:', res['deleted'], 'kept:', res['kept'])

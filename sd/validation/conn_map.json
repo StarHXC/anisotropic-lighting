@@ -1,0 +1,675 @@
+{
+  "pps": [
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/bake_position?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/bake_normalobj?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:2",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/mask1?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:3",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/bake_ao?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:4",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/bake_position?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/bake_normalobj?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:2",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/mask1?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:3",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/bake_ao?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:4",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/bake_position?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/bake_normalobj?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:2",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/mask1?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:3",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/bake_ao?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:4",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/mask1?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:2",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:3",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:4",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:5",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:2",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:3",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:4",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:5",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:2",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:2",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:3",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:2",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:2",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:3",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:2",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:3",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:4",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:5",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:2",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:3",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:4",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:5",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/bake_position?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:2",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/bake_normalobj?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:3",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/mask1?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:4",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/bake_ao?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:5",
+          "connected": false,
+          "source": null
+        }
+      ]
+    },
+    {
+      "connections": [
+        {
+          "pin": "input",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::uniform",
+            "res": ""
+          }
+        },
+        {
+          "pin": "input:1",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/bake_position?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:2",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/bake_normalobj?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:3",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/mask1?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:4",
+          "connected": true,
+          "source": {
+            "def": "sbs::compositing::bitmap",
+            "res": "pkg:///Resources/bake_ao?dependency=1582301487"
+          }
+        },
+        {
+          "pin": "input:5",
+          "connected": false,
+          "source": null
+        }
+      ]
+    }
+  ],
+  "fail": null,
+  "ok": true
+}

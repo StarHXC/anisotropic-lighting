@@ -1,0 +1,138 @@
+{
+  "probe": "0B",
+  "steps": [
+    {
+      "step": "环境",
+      "ok": true,
+      "detail": {
+        "sd_api_version": "16.0.1",
+        "python": "3.13.9"
+      }
+    },
+    {
+      "step": "当前 graph",
+      "ok": true,
+      "detail": {
+        "class": "SDSBSCompGraph",
+        "id": "test"
+      }
+    },
+    {
+      "step": "PP 4×4 + 5 槽按序接线",
+      "ok": true,
+      "detail": {
+        "used_pins_raw": [
+          "input",
+          "input:1",
+          "input:2",
+          "input:3",
+          "input:4"
+        ],
+        "pins_instantiated": [
+          "input",
+          "input:1",
+          "input:2",
+          "input:3",
+          "input:4",
+          "input:5"
+        ],
+        "markers": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ],
+          [
+            1.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            1.0
+          ]
+        ]
+      }
+    },
+    {
+      "step": "perpixel 函数图",
+      "ok": true,
+      "detail": {
+        "created": true
+      }
+    },
+    {
+      "step": "函数图打包输出 (s0.r, s1.g, s2.b, s3.r)",
+      "ok": true,
+      "detail": {
+        "interpretation": "导出后 R=input0红 G=input1绿 B=input2蓝 A=input3黄红"
+      }
+    },
+    {
+      "step": "断开/重接 input0 无静默重排",
+      "ok": true,
+      "detail": {
+        "before": [
+          "input",
+          "input:1",
+          "input:2",
+          "input:3",
+          "input:4",
+          "input:5"
+        ],
+        "after": [
+          "input",
+          "input:1",
+          "input:2",
+          "input:3",
+          "input:4",
+          "input:5",
+          "input:6"
+        ],
+        "note": "断开残留空口不回收（SD VARIADIC 行为），重接新增 :6；既有引脚 id 序列保持前缀一致 → 无重排"
+      }
+    }
+  ],
+  "fail": null,
+  "expected_export": {
+    "format": "PNG16 或 EXR（Raw、关色彩变换、非预乘）",
+    "size": [
+      4,
+      4
+    ],
+    "expect_R_G_B_A": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "failure_signatures": {
+      "R=0,G=1,B=1,A=1": "idx 错位 1（采样到的实际是后一个槽）",
+      "R=1,G=0,B=1,A=1": "idx 错位 2",
+      "R=G=B=0": "全部槽位未接/采样失败"
+    },
+    "export_note": "用户手动导出 4×4 到 sd/validation/probe_0b_export.png/tiff/exr"
+  },
+  "coordinate_adapters": {
+    "pos_to_q": "待梯度标记图实测（0B 第二轮）：候选 q=(u,1-v) 或 q=(u,v)",
+    "q_to_sample_address": "待实测：候选恒等或 y 翻转",
+    "decision_rule": "四角+横纵梯度+导数分别裁定；禁止凭成品朝向猜测"
+  },
+  "manual_checks": [
+    "① 导出 4×4 PP 输出（Raw/关色彩变换/非预乘）到 sd/validation/，文件名 probe_0b_export.<png16|tiff|exr>，供 check_export.py 验证 idx 映射。",
+    "② 观察断开重接演练后 2D 视图无变化（红色应仍在打包输出的 R 位对应位置）。",
+    "③ 后续提供 X/Y 梯度标记图后做四角采样（0B 第二轮，锁定两个坐标适配常量）。"
+  ],
+  "ok": true
+}

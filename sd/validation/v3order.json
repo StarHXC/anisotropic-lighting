@@ -1,0 +1,21 @@
+{
+  "fail": null,
+  "results": {
+    "m1_componentsin_x2": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v3order_0.exr",
+      "err": ""
+    },
+    "m2_vec2_sin": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v3order_1.exr",
+      "err": ""
+    },
+    "m3_const_f3": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v3order_2.exr",
+      "err": ""
+    }
+  },
+  "ok": true
+}

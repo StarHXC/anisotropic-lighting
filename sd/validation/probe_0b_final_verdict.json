@@ -1,0 +1,16 @@
+{
+  "verdict": "0B 终局裁定（实验 bmidx_0..3 全部 corr=1.0）",
+  "reliable_pattern": {
+    "wiring": "4 张 bitmap 直接连 PP 的 4 个 VARIADIC 引脚（不得经过 uniform/PP 输出/shuffle 等中间节点）",
+    "sampling": "samplecol __constant__=int2(i,0)，i=0..3 按 0 基精确对应第 i 张 bitmap",
+    "coordinate": "$pos 即采样坐标，无翻转（读回与源图逐位 corr=1.0）",
+    "second_component": "int2 第二分量 0..4 无差别（保留参数，恒传 0）"
+  },
+  "unreliable_patterns_rejected": {
+    "uniform_as_source": "uniform 混入连接会使资源索引错位（idxmap/0B2 实验复现）",
+    "pp_output_as_source": "PP 输出作源时索引分配异常（ppchain 实验 sample(0)=第2连接）",
+    "shuffle_layers": "非必要——bitmap 直连下不需要任何打包层"
+  },
+  "history_note": "此前 idxmap/0B2/ppchain/0B3/0B4 实验的异常全部源于连接源类型混杂；0B5（纯 bitmap sample(0)）与 0B6（纯 bitmap 全索引）干净复现",
+  "architecture": "双 PP 直连 4 bitmap：PP1(pos,nrm,mask,ao)→核心光照；PP2←PP1 输出→曝光/sRGB/填充"
+}

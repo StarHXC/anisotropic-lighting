@@ -1,0 +1,87 @@
+{
+  "nodes": [
+    {
+      "def": "sbs::compositing::bitmap",
+      "pos": [
+        322.1,
+        464.0
+      ],
+      "resource": "pkg:///Resources/bake_ao?dependency=1582301487"
+    },
+    {
+      "def": "sbs::compositing::bitmap",
+      "pos": [
+        321.1,
+        336.0
+      ],
+      "resource": "pkg:///Resources/mask1?dependency=1582301487"
+    },
+    {
+      "def": "sbs::compositing::bitmap",
+      "pos": [
+        318.1,
+        208.0
+      ],
+      "resource": "pkg:///Resources/bake_normalobj?dependency=1582301487"
+    },
+    {
+      "def": "sbs::compositing::bitmap",
+      "pos": [
+        317.1,
+        80.0
+      ],
+      "resource": "pkg:///Resources/bake_position?dependency=1582301487"
+    },
+    {
+      "def": "sbs::compositing::bitmap",
+      "pos": [
+        12600.0,
+        400.0
+      ],
+      "resource": "pkg:///Resources/fixture_0d2_params?dependency=1582301487"
+    },
+    {
+      "def": "sbs::compositing::bitmap",
+      "pos": [
+        12600.0,
+        400.0
+      ],
+      "resource": "pkg:///Resources/fixture_0d2_params_1?dependency=1582301487"
+    },
+    {
+      "def": "sbs::compositing::bitmap",
+      "pos": [
+        12600.0,
+        400.0
+      ],
+      "resource": "pkg:///Resources/fixture_0d2_params_2?dependency=1582301487"
+    },
+    {
+      "def": "sbs::compositing::bitmap",
+      "pos": [
+        12600.0,
+        400.0
+      ],
+      "resource": "pkg:///Resources/fixture_0d2_params_3?dependency=1582301487"
+    },
+    {
+      "def": "sbs::compositing::bitmap",
+      "pos": [
+        14800.0,
+        -2600.0
+      ],
+      "resource": "pkg:///Resources/fixture_diag2?dependency=1582301487"
+    },
+    {
+      "def": "sbs::compositing::bitmap",
+      "pos": [
+        12600.0,
+        400.0
+      ],
+      "resource": "pkg:///Resources/fixture_0d2_params_4?dependency=1582301487"
+    }
+  ],
+  "fail": null,
+  "graph": "test",
+  "total": 10
+}

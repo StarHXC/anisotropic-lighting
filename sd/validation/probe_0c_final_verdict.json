@@ -1,0 +1,10 @@
+{
+  "verdict": "0C 裁定（0C2 四组实验 max|d|=0 全通过）",
+  "evidence": {
+    "png16": "16-bit PNG 源经 bitmap→PP→EXR 逐位往返（默认与 $format=3 相同）；低位差 1/65535 保留",
+    "f32_tiff": "float32 TIFF 负值(-1.0)/HDR(100.0)/A=0-RGB≠0 逐位往返；EXR 读回 float32 无 half 降位",
+    "alpha": "非预乘语义正确",
+    "format_note": "SD 16.0.1 bitmap 默认按文件位深加载，不强制 $format=3 也不降位；主链仍将显式设置以自文档化"
+  },
+  "implication": "全链路 32F 保真成立，1e-4 容差可安全用于 0D 数学验收；EXR float32 + SDTexture.save(空色彩变换) 定为标准数值导出通路"
+}

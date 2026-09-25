@@ -1,0 +1,36 @@
+{
+  "cases": [
+    {
+      "idx": 0,
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\bmidx_0.exr",
+      "err": ""
+    },
+    {
+      "idx": 1,
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\bmidx_1.exr",
+      "err": ""
+    },
+    {
+      "idx": 2,
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\bmidx_2.exr",
+      "err": ""
+    },
+    {
+      "idx": 3,
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\bmidx_3.exr",
+      "err": ""
+    }
+  ],
+  "fail": null,
+  "order": [
+    "bake_position",
+    "bake_normalobj",
+    "mask1",
+    "bake_ao"
+  ],
+  "ok": true
+}

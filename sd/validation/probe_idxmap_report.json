@@ -1,0 +1,42 @@
+{
+  "probe": "idxmap",
+  "steps": [
+    {
+      "step": "graph",
+      "ok": true,
+      "detail": "SDSBSCompGraph"
+    },
+    {
+      "step": "compute+save EXR",
+      "ok": true,
+      "detail": {
+        "size": [
+          4,
+          4
+        ],
+        "error": ""
+      }
+    },
+    {
+      "step": "compute+save EXR (idx3)",
+      "ok": true,
+      "detail": {
+        "size": [
+          4,
+          4
+        ],
+        "error": ""
+      }
+    }
+  ],
+  "fail": null,
+  "expect": {
+    "idx0_r": 0.2,
+    "idx1_r": 0.4,
+    "idx2_r": 0.6,
+    "idx3_r": 0.8,
+    "idx4_r": 1.0,
+    "note": "槽 i uniform r=(i+1)/5；读回 R=sample(0) G=sample(1) B=sample(2) A=sample(4)；idx3 见 idxmap_idx3.exr"
+  },
+  "ok": true
+}

@@ -1,0 +1,60 @@
+{
+  "props": [
+    {
+      "cat": "SDPropertyCategory.Input",
+      "id": "$outputsize",
+      "type": "int2",
+      "variadic": false
+    },
+    {
+      "cat": "SDPropertyCategory.Input",
+      "id": "$format",
+      "type": "sbs::compositing::format",
+      "variadic": false
+    },
+    {
+      "cat": "SDPropertyCategory.Input",
+      "id": "$pixelsize",
+      "type": "float2",
+      "variadic": false
+    },
+    {
+      "cat": "SDPropertyCategory.Input",
+      "id": "$pixelratio",
+      "type": "sbs::compositing::pixelratio",
+      "variadic": false
+    },
+    {
+      "cat": "SDPropertyCategory.Input",
+      "id": "$tiling",
+      "type": "sbs::compositing::tiling",
+      "variadic": false
+    },
+    {
+      "cat": "SDPropertyCategory.Input",
+      "id": "$randomseed",
+      "type": "int",
+      "variadic": false
+    },
+    {
+      "cat": "SDPropertyCategory.Input",
+      "id": "colorswitch",
+      "type": "bool",
+      "variadic": false
+    },
+    {
+      "cat": "SDPropertyCategory.Input",
+      "id": "outputcolor",
+      "type": "ColorRGBA",
+      "variadic": false
+    },
+    {
+      "cat": "SDPropertyCategory.Output",
+      "id": "unique_filter_output",
+      "type": "SDTypeTexture",
+      "variadic": false
+    }
+  ],
+  "fail": null,
+  "uid": "1582395169"
+}

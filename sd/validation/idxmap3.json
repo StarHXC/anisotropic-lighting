@@ -1,0 +1,24 @@
+{
+  "cases": [
+    {
+      "n_conn": 1,
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\idxmap3_1conn.exr",
+      "err": ""
+    },
+    {
+      "n_conn": 2,
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\idxmap3_2conn.exr",
+      "err": ""
+    },
+    {
+      "n_conn": 3,
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\idxmap3_3conn.exr",
+      "err": ""
+    }
+  ],
+  "fail": null,
+  "ok": true
+}

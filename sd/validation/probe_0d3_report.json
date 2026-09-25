@@ -1,0 +1,142 @@
+{
+  "probe": "0D3",
+  "steps": [
+    {
+      "step": "graph",
+      "ok": true,
+      "detail": {
+        "id": "test"
+      }
+    },
+    {
+      "step": "case 表",
+      "ok": true,
+      "detail": {
+        "cases": 12
+      }
+    },
+    {
+      "step": "4 参数图导入",
+      "ok": true
+    },
+    {
+      "step": "PP1 safeNormalize",
+      "ok": true
+    },
+    {
+      "step": "PP2 planeFallback",
+      "ok": true
+    },
+    {
+      "step": "PP3 cross3+pickSign",
+      "ok": true
+    },
+    {
+      "step": "PP4 rot+segmented+sRGB",
+      "ok": true
+    },
+    {
+      "step": "PP5 pick3",
+      "ok": true
+    },
+    {
+      "step": "读回 pp1_sn",
+      "ok": true,
+      "detail": {
+        "size": [
+          16,
+          16
+        ]
+      }
+    },
+    {
+      "step": "读回 pp2_pf",
+      "ok": true,
+      "detail": {
+        "size": [
+          16,
+          16
+        ]
+      }
+    },
+    {
+      "step": "读回 pp3_cr",
+      "ok": true,
+      "detail": {
+        "size": [
+          16,
+          16
+        ]
+      }
+    },
+    {
+      "step": "读回 pp4_rot",
+      "ok": true,
+      "detail": {
+        "size": [
+          16,
+          16
+        ]
+      }
+    },
+    {
+      "step": "读回 pp5_p3",
+      "ok": true,
+      "detail": {
+        "size": [
+          16,
+          16
+        ]
+      }
+    }
+  ],
+  "fail": null,
+  "readbacks": {
+    "pp1_sn": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\probe_0d3_pp1_sn.exr",
+      "size": [
+        16,
+        16
+      ],
+      "err": ""
+    },
+    "pp2_pf": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\probe_0d3_pp2_pf.exr",
+      "size": [
+        16,
+        16
+      ],
+      "err": ""
+    },
+    "pp3_cr": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\probe_0d3_pp3_cr.exr",
+      "size": [
+        16,
+        16
+      ],
+      "err": ""
+    },
+    "pp4_rot": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\probe_0d3_pp4_rot.exr",
+      "size": [
+        16,
+        16
+      ],
+      "err": ""
+    },
+    "pp5_p3": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\probe_0d3_pp5_p3.exr",
+      "size": [
+        16,
+        16
+      ],
+      "err": ""
+    }
+  },
+  "ok": true
+}

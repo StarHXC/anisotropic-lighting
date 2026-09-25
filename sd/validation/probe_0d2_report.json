@@ -1,0 +1,447 @@
+{
+  "probe": "0D2",
+  "steps": [
+    {
+      "step": "环境",
+      "ok": true,
+      "detail": {
+        "sd_api_version": "16.0.1"
+      }
+    },
+    {
+      "step": "graph",
+      "ok": true,
+      "detail": {
+        "id": "test"
+      }
+    },
+    {
+      "step": "case 表载入",
+      "ok": true,
+      "detail": {
+        "cases": 12
+      }
+    },
+    {
+      "step": "参数图生成",
+      "ok": true,
+      "detail": {
+        "path": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\probe_0d2_params.tiff",
+        "W": 64
+      }
+    },
+    {
+      "step": "PP1 safeNormalize 构建",
+      "ok": true
+    },
+    {
+      "step": "PP2 planeFallback 构建",
+      "ok": true
+    },
+    {
+      "step": "PP3 cross3+pickSign 构建",
+      "ok": true
+    },
+    {
+      "step": "PP4 rot+segmented+sRGB 构建",
+      "ok": true
+    },
+    {
+      "step": "PP5 pick3 构建",
+      "ok": true
+    },
+    {
+      "step": "读回 pp1_sn",
+      "ok": true,
+      "detail": {
+        "size": [
+          64,
+          64
+        ]
+      }
+    },
+    {
+      "step": "读回 pp2_pf",
+      "ok": true,
+      "detail": {
+        "size": [
+          64,
+          64
+        ]
+      }
+    },
+    {
+      "step": "读回 pp3_cr",
+      "ok": true,
+      "detail": {
+        "size": [
+          64,
+          64
+        ]
+      }
+    },
+    {
+      "step": "读回 pp4_rot",
+      "ok": true,
+      "detail": {
+        "size": [
+          64,
+          64
+        ]
+      }
+    },
+    {
+      "step": "读回 pp5_p3",
+      "ok": true,
+      "detail": {
+        "size": [
+          64,
+          64
+        ]
+      }
+    }
+  ],
+  "fail": null,
+  "readbacks": {
+    "pp1_sn": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\probe_0d2_pp1_sn.exr",
+      "size": [
+        64,
+        64
+      ],
+      "err": ""
+    },
+    "pp2_pf": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\probe_0d2_pp2_pf.exr",
+      "size": [
+        64,
+        64
+      ],
+      "err": ""
+    },
+    "pp3_cr": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\probe_0d2_pp3_cr.exr",
+      "size": [
+        64,
+        64
+      ],
+      "err": ""
+    },
+    "pp4_rot": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\probe_0d2_pp4_rot.exr",
+      "size": [
+        64,
+        64
+      ],
+      "err": ""
+    },
+    "pp5_p3": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\probe_0d2_pp5_p3.exr",
+      "size": [
+        64,
+        64
+      ],
+      "err": ""
+    }
+  },
+  "param_meta": [
+    {
+      "case": 0,
+      "texel_base": 0,
+      "texels": [
+        [
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          0.0,
+          0.3,
+          0.6,
+          0.0
+        ],
+        [
+          0.5,
+          0.002,
+          0.5,
+          0.0
+        ]
+      ]
+    },
+    {
+      "case": 1,
+      "texel_base": 3,
+      "texels": [
+        [
+          0,
+          1,
+          0,
+          1
+        ],
+        [
+          1.0,
+          0.3,
+          0.6,
+          90.0
+        ],
+        [
+          0.5,
+          0.0031308,
+          0.5,
+          0.0
+        ]
+      ]
+    },
+    {
+      "case": 2,
+      "texel_base": 6,
+      "texels": [
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          2.0,
+          0.3,
+          0.6,
+          180.0
+        ],
+        [
+          0.5,
+          0.5,
+          0.5,
+          0.0
+        ]
+      ]
+    },
+    {
+      "case": 3,
+      "texel_base": 9,
+      "texels": [
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          0.0,
+          0.2,
+          0.8,
+          45.0
+        ],
+        [
+          0.4,
+          1.0,
+          0.5,
+          0.0
+        ]
+      ]
+    },
+    {
+      "case": 4,
+      "texel_base": 12,
+      "texels": [
+        [
+          0,
+          0,
+          5,
+          1
+        ],
+        [
+          1.0,
+          0.1,
+          0.9,
+          -90.0
+        ],
+        [
+          0.5,
+          2.0,
+          0.5,
+          0.0
+        ]
+      ]
+    },
+    {
+      "case": 5,
+      "texel_base": 15,
+      "texels": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          2.0,
+          0.3,
+          0.6,
+          0.0
+        ],
+        [
+          0.5,
+          0.0,
+          0.5,
+          0.0
+        ]
+      ]
+    },
+    {
+      "case": 6,
+      "texel_base": 18,
+      "texels": [
+        [
+          1e-14,
+          0,
+          0,
+          1
+        ],
+        [
+          0.0,
+          0.3,
+          0.6,
+          0.0
+        ],
+        [
+          0.5,
+          0.003,
+          0.5,
+          0.0
+        ]
+      ]
+    },
+    {
+      "case": 7,
+      "texel_base": 21,
+      "texels": [
+        [
+          1e-08,
+          0,
+          0,
+          1
+        ],
+        [
+          1.0,
+          0.3,
+          0.6,
+          0.0
+        ],
+        [
+          0.5,
+          0.9,
+          0.5,
+          0.0
+        ]
+      ]
+    },
+    {
+      "case": 8,
+      "texel_base": 24,
+      "texels": [
+        [
+          -1e-08,
+          0,
+          -1,
+          1
+        ],
+        [
+          2.0,
+          0.3,
+          0.6,
+          90.0
+        ],
+        [
+          0.5,
+          0.1,
+          0.5,
+          0.0
+        ]
+      ]
+    },
+    {
+      "case": 9,
+      "texel_base": 27,
+      "texels": [
+        [
+          0,
+          0,
+          -1,
+          0
+        ],
+        [
+          0.0,
+          0.3,
+          0.6,
+          -45.0
+        ],
+        [
+          0.5,
+          0.8,
+          0.5,
+          0.0
+        ]
+      ]
+    },
+    {
+      "case": 10,
+      "texel_base": 30,
+      "texels": [
+        [
+          0.6,
+          0.8,
+          0,
+          1
+        ],
+        [
+          1.0,
+          0.25,
+          0.75,
+          90.0
+        ],
+        [
+          0.5,
+          0.33,
+          0.5,
+          0.0
+        ]
+      ]
+    },
+    {
+      "case": 11,
+      "texel_base": 33,
+      "texels": [
+        [
+          0.6,
+          0.8,
+          0,
+          1
+        ],
+        [
+          2.0,
+          0.25,
+          0.75,
+          -90.0
+        ],
+        [
+          0.5,
+          0.77,
+          0.5,
+          0.0
+        ]
+      ]
+    }
+  ],
+  "acceptance": {
+    "max_abs": 0.0001,
+    "rmse": 1e-05
+  },
+  "ok": true
+}

@@ -1,0 +1,11 @@
+{
+  "deleted": {
+    "sbs::compositing::pixelprocessor": 46,
+    "sbs::compositing::output": 36,
+    "sbs::compositing::uniform": 29,
+    "sbs::compositing::shuffle": 5
+  },
+  "kept": 4,
+  "fail": null,
+  "ok": true
+}

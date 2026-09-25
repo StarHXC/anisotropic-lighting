@@ -1,0 +1,13 @@
+{
+  "verdict": "samplecol 输入索引实测裁定（SD 16.0.1，idxmap4 终局实验）",
+  "model": "samplecol(idx) 采样【VARIADIC 实例资源列表】第 idx 项；第 1 个连接落在基名 'input' 引脚，不计入资源列表 → 实际偏移：sample(i) 对应第 i+2 次连接的源（即跳过第 1 个连接）",
+  "evidence": {
+    "1conn": "sample(0)=0（唯一连接不可采样）",
+    "2conn": "sample(0)=槽1",
+    "3conn": "sample(0)=槽1, sample(1)=槽2",
+    "5conn": "sample(0)=槽1(0.2), sample(1)=槽2(0.3), sample(3)=槽3(0.4), sample(4)=槽4(0.5)",
+    "anomaly": "sample(2) 在全部实验中恒返回 0（疑似版本缺陷/未文档行为），已三重复现"
+  },
+  "migration_strategy": "5 槽占位方案：源接序 [dummy, bake_position, bake_normalobj, mask1, bake_ao]，PP 内用 sample idx 0/1/3/4 采样真实图，idx2 读占位（恒 0，不参与计算）",
+  "quantization_note": "uniform ColorRGBA 读回存在 ~0.002 量化（0.298 vs 0.3）——位图输入路径的位深保真归 0C 验证"
+}

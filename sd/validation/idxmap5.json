@@ -1,0 +1,21 @@
+{
+  "fail": null,
+  "rb": [
+    {
+      "ok": true,
+      "err": ""
+    },
+    {
+      "ok": true,
+      "err": ""
+    }
+  ],
+  "order": [
+    "bake_position",
+    "bake_normalobj",
+    "mask1",
+    "bake_ao",
+    "mask1"
+  ],
+  "ok": true
+}
