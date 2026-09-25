@@ -35,50 +35,50 @@
     {
       "def": "sbs::compositing::bitmap",
       "pos": [
-        12600.0,
-        400.0
-      ],
-      "resource": "pkg:///Resources/fixture_0d2_params?dependency=1582301487"
-    },
-    {
-      "def": "sbs::compositing::bitmap",
-      "pos": [
-        12600.0,
-        400.0
-      ],
-      "resource": "pkg:///Resources/fixture_0d2_params_1?dependency=1582301487"
-    },
-    {
-      "def": "sbs::compositing::bitmap",
-      "pos": [
-        12600.0,
-        400.0
-      ],
-      "resource": "pkg:///Resources/fixture_0d2_params_2?dependency=1582301487"
-    },
-    {
-      "def": "sbs::compositing::bitmap",
-      "pos": [
-        12600.0,
-        400.0
-      ],
-      "resource": "pkg:///Resources/fixture_0d2_params_3?dependency=1582301487"
-    },
-    {
-      "def": "sbs::compositing::bitmap",
-      "pos": [
-        14800.0,
+        21000.0,
         -2600.0
       ],
-      "resource": "pkg:///Resources/fixture_diag2?dependency=1582301487"
+      "resource": "pkg:///Resources/fixture_0c2b_gray8?dependency=1582301487"
     },
     {
       "def": "sbs::compositing::bitmap",
       "pos": [
-        12600.0,
-        400.0
+        21000.0,
+        -2600.0
       ],
-      "resource": "pkg:///Resources/fixture_0d2_params_4?dependency=1582301487"
+      "resource": "pkg:///Resources/fixture_0c2b_gray16?dependency=1582301487"
+    },
+    {
+      "def": "sbs::compositing::bitmap",
+      "pos": [
+        21000.0,
+        -2600.0
+      ],
+      "resource": "pkg:///Resources/fixture_0c2b_gray16_32f?dependency=1582301487"
+    },
+    {
+      "def": "sbs::compositing::bitmap",
+      "pos": [
+        21000.0,
+        -2600.0
+      ],
+      "resource": "pkg:///Resources/fixture_0c2b_grayf?dependency=1582301487"
+    },
+    {
+      "def": "sbs::compositing::bitmap",
+      "pos": [
+        22600.0,
+        -2600.0
+      ],
+      "resource": "pkg:///Resources/fixture_0c2c_rgb8?dependency=1582301487"
+    },
+    {
+      "def": "sbs::compositing::bitmap",
+      "pos": [
+        22600.0,
+        -2600.0
+      ],
+      "resource": "pkg:///Resources/fixture_0c2c_rgb8_1?dependency=1582301487"
     }
   ],
   "fail": null,

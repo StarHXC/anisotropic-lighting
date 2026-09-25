@@ -1,0 +1,22 @@
+{
+  "params": {
+    "light_dir": [
+      0.4,
+      -0.6,
+      0.7
+    ],
+    "view_mode": "normal_proxy",
+    "spec_mode": "smooth",
+    "diffuse_mode": "smooth"
+  },
+  "inputs_sha": {
+    "bake_position.png": "26284818bc0e00ac",
+    "bake_normalobj.png": "9da904e3094de3db",
+    "mask1.png": "a5c91d47635fcc00",
+    "bake_ao.png": "416dc17bb2e2d137"
+  },
+  "size": [
+    2048,
+    2048
+  ]
+}

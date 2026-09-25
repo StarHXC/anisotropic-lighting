@@ -1,0 +1,28 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "finite": {
+        "glsl": 0,
+        "sd": 0,
+        "ok": true
+      }
+    },
+    {
+      "valid": {
+        "mismatches": 25,
+        "false_valid": 11,
+        "false_invalid": 14
+      }
+    },
+    {
+      "numeric": {
+        "n": 2742873,
+        "max_abs": 1.5020370483398438e-05,
+        "rmse": 2.482709078321932e-07,
+        "n_over": 0,
+        "ok": true
+      }
+    }
+  ]
+}

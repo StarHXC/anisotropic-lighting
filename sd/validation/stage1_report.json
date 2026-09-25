@@ -1,0 +1,62 @@
+{
+  "probe": "stage1",
+  "steps": [
+    {
+      "step": "graph",
+      "ok": true,
+      "detail": {
+        "id": "test"
+      }
+    },
+    {
+      "step": "4 bitmap 定位",
+      "ok": true,
+      "detail": [
+        "bake_ao",
+        "bake_normalobj",
+        "bake_position",
+        "mask1"
+      ]
+    },
+    {
+      "step": "主 PP + 4 槽接线（bitmap 2048²/32F）",
+      "ok": true,
+      "detail": {
+        "format": 3,
+        "size": [
+          11,
+          11
+        ]
+      }
+    },
+    {
+      "step": "核心链发射",
+      "ok": true,
+      "detail": {
+        "fg_nodes": 630
+      }
+    },
+    {
+      "step": "compute+save",
+      "ok": true,
+      "detail": {
+        "size": [
+          2048,
+          2048
+        ],
+        "err": ""
+      }
+    }
+  ],
+  "fail": null,
+  "fg_nodes": 630,
+  "readback": {
+    "path": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\stage1_core.exr",
+    "size": [
+      2048,
+      2048
+    ]
+  },
+  "manual_checks": [],
+  "ok": true
+}

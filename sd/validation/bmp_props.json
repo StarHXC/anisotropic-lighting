@@ -1,0 +1,127 @@
+{
+  "node_props": [
+    {
+      "cat": "Input",
+      "id": "$outputsize",
+      "type": "int2"
+    },
+    {
+      "cat": "Input",
+      "id": "$format",
+      "type": "sbs::compositing::format"
+    },
+    {
+      "cat": "Input",
+      "id": "$pixelsize",
+      "type": "float2"
+    },
+    {
+      "cat": "Input",
+      "id": "$pixelratio",
+      "type": "sbs::compositing::pixelratio"
+    },
+    {
+      "cat": "Input",
+      "id": "$tiling",
+      "type": "sbs::compositing::tiling"
+    },
+    {
+      "cat": "Input",
+      "id": "$randomseed",
+      "type": "int"
+    },
+    {
+      "cat": "Input",
+      "id": "colorswitch",
+      "type": "bool"
+    },
+    {
+      "cat": "Input",
+      "id": "bitmapresourcepath",
+      "type": "string"
+    },
+    {
+      "cat": "Input",
+      "id": "resizemethod",
+      "type": "sbs::compositing::resizemethod"
+    },
+    {
+      "cat": "Output",
+      "id": "unique_filter_output",
+      "type": "SDTypeTexture"
+    }
+  ],
+  "resource_props": [
+    {
+      "cat": "Annotation",
+      "id": "file_path",
+      "type": "string"
+    },
+    {
+      "cat": "Annotation",
+      "id": "identifier",
+      "type": "string"
+    },
+    {
+      "cat": "Annotation",
+      "id": "category",
+      "type": "string"
+    },
+    {
+      "cat": "Annotation",
+      "id": "label",
+      "type": "string"
+    },
+    {
+      "cat": "Annotation",
+      "id": "author",
+      "type": "string"
+    },
+    {
+      "cat": "Annotation",
+      "id": "author_url",
+      "type": "string"
+    },
+    {
+      "cat": "Annotation",
+      "id": "tags",
+      "type": "string"
+    },
+    {
+      "cat": "Annotation",
+      "id": "description",
+      "type": "string"
+    },
+    {
+      "cat": "Annotation",
+      "id": "userdata",
+      "type": "string"
+    },
+    {
+      "cat": "Annotation",
+      "id": "show_in_library",
+      "type": "bool"
+    },
+    {
+      "cat": "Annotation",
+      "id": "bitmap_format",
+      "type": "int"
+    },
+    {
+      "cat": "Annotation",
+      "id": "bitmap_compression_quality",
+      "type": "float"
+    },
+    {
+      "cat": "Annotation",
+      "id": "bitmap_color_space",
+      "type": "string"
+    },
+    {
+      "cat": "Annotation",
+      "id": "bitmap_premultiplied_alpha",
+      "type": "bool"
+    }
+  ],
+  "fail": null
+}

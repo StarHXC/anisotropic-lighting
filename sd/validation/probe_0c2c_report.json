@@ -1,0 +1,34 @@
+{
+  "probe": "0C2c",
+  "steps": [
+    {
+      "step": "8bit RGB fixture",
+      "ok": true,
+      "detail": {
+        "path": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\fixture_rgb8.png"
+      }
+    },
+    {
+      "step": "RGB8 直通读回",
+      "ok": true,
+      "detail": {
+        "size": [
+          256,
+          256
+        ]
+      }
+    },
+    {
+      "step": "position 直通读回",
+      "ok": true,
+      "detail": {
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    }
+  ],
+  "fail": null,
+  "ok": true
+}

@@ -1,0 +1,69 @@
+{
+  "probe": "0C2b",
+  "steps": [
+    {
+      "step": "fixtures 生成",
+      "ok": true
+    },
+    {
+      "step": "读回 gray8",
+      "ok": true,
+      "detail": {
+        "size": [
+          256,
+          256
+        ]
+      }
+    },
+    {
+      "step": "读回 gray16",
+      "ok": true,
+      "detail": {
+        "size": [
+          256,
+          256
+        ]
+      }
+    },
+    {
+      "step": "读回 gray16_32f",
+      "ok": true,
+      "detail": {
+        "size": [
+          256,
+          256
+        ]
+      }
+    },
+    {
+      "step": "读回 grayf",
+      "ok": true,
+      "detail": {
+        "size": [
+          256,
+          256
+        ]
+      }
+    }
+  ],
+  "fail": null,
+  "outs": {
+    "gray8": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\curve_gray8.exr"
+    },
+    "gray16": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\curve_gray16.exr"
+    },
+    "gray16_32f": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\curve_gray16_32f.exr"
+    },
+    "grayf": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\curve_grayf.exr"
+    }
+  },
+  "ok": true
+}
