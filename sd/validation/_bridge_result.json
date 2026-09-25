@@ -1,6 +1,6 @@
 {
-  "probe": "param_effect",
+  "probe": "layout",
   "ok": false,
   "error": null,
-  "report": "E:/AI_Project/Anisotropic Lighting/sd\\validation\\probe_param_effect_report.json"
+  "report": "E:/AI_Project/Anisotropic Lighting/sd\\validation\\probe_layout_report.json"
 }

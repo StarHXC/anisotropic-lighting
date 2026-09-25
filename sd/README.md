@@ -2,6 +2,8 @@
 
 Phase-2 完成：aniso.frag 主链已完整迁移进 **Substance Designer Pixel Processor**，交付 `sd/aniso_lightmap.sbs`（v4，34 参数实时调参的自定义节点）。
 
+> **参数面板逐项说明（调参必读）**：`doc/PARAMETERS.md`
+
 > 依据 `doc/SD_MIGRATION_PLAN.md`（外部审核修订版）。Stage 0 探针 → Stage 1 主链 → Stage 2 wrapper → Stage 3 PP2 全部有数值证据，见 `validation/`。
 
 ## 快速使用
