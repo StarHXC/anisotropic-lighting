@@ -65,7 +65,7 @@ def main() -> int:
                     "u_detailNormal": tex_neutral}
 
         outs = {}
-        for dbg in (0, 2, 3, 4, 5, 9):
+        for dbg in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9):
             defines = build_defines(params)
             defines["DEBUG_MODE"] = str(dbg)
             fbo = rc.run_pass("aniso.frag", w, h, uniforms=uni,

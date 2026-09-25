@@ -33,7 +33,7 @@
       "step": "核心链发射",
       "ok": true,
       "detail": {
-        "fg_nodes": 630
+        "fg_nodes": 664
       }
     },
     {
@@ -49,7 +49,7 @@
     }
   ],
   "fail": null,
-  "fg_nodes": 630,
+  "fg_nodes": 664,
   "readback": {
     "path": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\stage1_core.exr",
     "size": [

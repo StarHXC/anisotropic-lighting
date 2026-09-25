@@ -302,23 +302,54 @@ def build_core(fg, texel: float = P['texel']):
 
     # ---- validity（aniso.frag:324）
     validity = em.mul(em.mul(coverage, nValid), em.mul(tValid, bValid))
+    uValid = em.mul(em.sw1(usN, 3), tValid)
+    tAnisoValid = em.mul(uValid, nValid)   # aniso.frag:274
 
-    # ---- DEBUG 级联（0=linear 2=dPdqx 9=dPdqy；后续补 1/3-8）
-    dbg_x = em.add(em.mulscalar(em.swizzle3_from_f4(dPdqx), em.c_f1(0.5)),
-                   em.bc_f3(em.c_f1(0.5)))
-    dbg_y = em.add(em.mulscalar(em.swizzle3_from_f4(dPdqy), em.c_f1(0.5)),
-                   em.bc_f3(em.c_f1(0.5)))
-    # pick3(linear, dbg_x, dbg_y, debug) + alpha 对应切换
-    rgb_sel = em.pick3(linear, dbg_x, dbg_y, em.c_f1(float(P['debug_mode'])))
-    # alpha：debug==2→dPdqx.w；==9→dPdqy.w；其余 validity
-    a_lin = validity
-    a_x = em.sw1(dPdqx, 3)
-    a_y = em.sw1(dPdqy, 3)
-    is2 = em.step(em.c_f1(0.5), em.c_f1(float(P['debug_mode'])))
-    is9 = em.step(em.c_f1(8.5), em.c_f1(float(P['debug_mode'])))
-    a_sel = em.add(em.mul(a_lin, em.sub(em.c_f1(1.0), is2)),
-                   em.add(em.mul(a_x, em.mul(is2, em.sub(em.c_f1(1.0), is9))),
-                          em.mul(a_y, is9)))
+    # ---- DEBUG 级联（aniso.frag:327-354；i=1→9 顺序构建，§3.4）
+    # 各候选 RGB 与 alpha 按 §5.4 对照表：
+    dbg_cands = []  # (rgb_node, a_node)
+    # cand0 = final linear
+    dbg_cands.append((linear, validity))
+    # cand1 = (coverage,0,0) / core validity
+    dbg_cands.append((em.v3(coverage, em.c_f1(0.0), em.c_f1(0.0)), validity))
+    # cand2 = dPdqx*0.5+0.5 / dPdqx.w
+    dbg_cands.append((em.add(em.mulscalar(em.swizzle3_from_f4(dPdqx),
+                                          em.c_f1(0.5)),
+                             em.bc_f3(em.c_f1(0.5))),
+                      em.sw1(dPdqx, 3)))
+    # cand3 = Tuv*0.5+0.5 / tValid
+    dbg_cands.append((em.add(em.mulscalar(Tuv, em.c_f1(0.5)),
+                             em.bc_f3(em.c_f1(0.5))), tValid))
+    # cand4 = Buv*0.5+0.5 / bValid
+    dbg_cands.append((em.add(em.mulscalar(Buv, em.c_f1(0.5)),
+                             em.bc_f3(em.c_f1(0.5))), bValid))
+    # cand5 = Ns*0.5+0.5 / nValid
+    dbg_cands.append((em.add(em.mulscalar(Ns, em.c_f1(0.5)),
+                             em.bc_f3(em.c_f1(0.5))), nValid))
+    # cand6 = TAniso*0.5+0.5 / tAnisoValid
+    dbg_cands.append((em.add(em.mulscalar(TAniso, em.c_f1(0.5)),
+                             em.bc_f3(em.c_f1(0.5))), tAnisoValid))
+    # cand7 = specLayer[spec_layer_index] rgb / hValid（§5.4：分段后+层色/强度后）
+    s_sel = em.step(em.c_f1(0.5), em.c_f1(float(P['spec_layer_index'])))
+    s7_rgb = em.lerp(em.swizzle3_from_f4(s1), em.swizzle3_from_f4(s2), s_sel)
+    s7_a = em.lerp(em.sw1(s1, 3), em.sw1(s2, 3), s_sel)
+    dbg_cands.append((s7_rgb, s7_a))
+    # cand8 = (ndl*0.5+0.5, 0, 0) / validity
+    dbg_cands.append((em.v3(em.add(em.mul(ndl, em.c_f1(0.5)), em.c_f1(0.5)),
+                            em.c_f1(0.0), em.c_f1(0.0)), validity))
+    # cand9 = dPdqy*0.5+0.5 / dPdqy.w
+    dbg_cands.append((em.add(em.mulscalar(em.swizzle3_from_f4(dPdqy),
+                                          em.c_f1(0.5)),
+                             em.bc_f3(em.c_f1(0.5))),
+                      em.sw1(dPdqy, 3)))
+
+    # 运行期级联（§3.4：i=1→9 顺序；SEL(gteq(debug, i-0.5), cand_i, prev)）
+    dbg = float(P['debug_mode'])
+    rgb_sel, a_sel = dbg_cands[0]
+    for i in range(1, 10):
+        cond = em.cmp('gteq', em.c_f1(dbg), em.c_f1(float(i) - 0.5))
+        rgb_sel = em.sel(cond, dbg_cands[i][0], rgb_sel)
+        a_sel = em.sel(cond, dbg_cands[i][1], a_sel)
     packed = em.v4_from_f3(rgb_sel, a_sel)
 
     meta['nodes'] = em.node_count

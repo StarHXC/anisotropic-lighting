@@ -1,0 +1,186 @@
+{
+  "probe": "dbg_matrix",
+  "steps": [
+    {
+      "step": "graph",
+      "ok": true,
+      "detail": {
+        "id": "test"
+      }
+    },
+    {
+      "step": "bitmap 定位",
+      "ok": true
+    },
+    {
+      "step": "10 模式 PP 构建",
+      "ok": true,
+      "detail": {
+        "debug0": 664,
+        "debug1": 664,
+        "debug2": 664,
+        "debug3": 664,
+        "debug4": 665,
+        "debug5": 665,
+        "debug6": 665,
+        "debug7": 665,
+        "debug8": 664,
+        "debug9": 665
+      }
+    },
+    {
+      "step": "读回 debug0",
+      "ok": true,
+      "detail": {
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    },
+    {
+      "step": "读回 debug1",
+      "ok": true,
+      "detail": {
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    },
+    {
+      "step": "读回 debug2",
+      "ok": true,
+      "detail": {
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    },
+    {
+      "step": "读回 debug3",
+      "ok": true,
+      "detail": {
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    },
+    {
+      "step": "读回 debug4",
+      "ok": true,
+      "detail": {
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    },
+    {
+      "step": "读回 debug5",
+      "ok": true,
+      "detail": {
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    },
+    {
+      "step": "读回 debug6",
+      "ok": true,
+      "detail": {
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    },
+    {
+      "step": "读回 debug7",
+      "ok": true,
+      "detail": {
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    },
+    {
+      "step": "读回 debug8",
+      "ok": true,
+      "detail": {
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    },
+    {
+      "step": "读回 debug9",
+      "ok": true,
+      "detail": {
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    }
+  ],
+  "fail": null,
+  "readbacks": {
+    "0": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\dbg_m0.exr",
+      "err": ""
+    },
+    "1": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\dbg_m1.exr",
+      "err": ""
+    },
+    "2": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\dbg_m2.exr",
+      "err": ""
+    },
+    "3": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\dbg_m3.exr",
+      "err": ""
+    },
+    "4": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\dbg_m4.exr",
+      "err": ""
+    },
+    "5": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\dbg_m5.exr",
+      "err": ""
+    },
+    "6": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\dbg_m6.exr",
+      "err": ""
+    },
+    "7": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\dbg_m7.exr",
+      "err": ""
+    },
+    "8": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\dbg_m8.exr",
+      "err": ""
+    },
+    "9": {
+      "ok": true,
+      "exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\dbg_m9.exr",
+      "err": ""
+    }
+  },
+  "ok": true
+}

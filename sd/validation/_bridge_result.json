@@ -1,6 +1,6 @@
 {
-  "probe": "scan",
+  "probe": "cleanup6",
   "ok": false,
   "error": null,
-  "report": "E:/AI_Project/Anisotropic Lighting/sd\\validation\\probe_scan_report.json"
+  "report": "E:/AI_Project/Anisotropic Lighting/sd\\validation\\probe_cleanup6_report.json"
 }
