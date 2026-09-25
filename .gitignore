@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+
+# 烘焙输出（可由 run_bake.bat 重新生成）
+out/
+
+# 验证/诊断产物（可由 suite.py / 诊断脚本重新生成）
+validation/out/
+
+# ImGui 窗口布局（本机状态，不入库）
+imgui.ini

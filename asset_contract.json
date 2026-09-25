@@ -1,0 +1,159 @@
+{
+  "textures": {
+    "bake_position.png": {
+      "path": "D:\\Unity_Project\\Chap06_Prop_C201_Tablecloth_01_Lod0\\5th\\Bake\\bake_position.png",
+      "width": 2048,
+      "height": 2048,
+      "source_bitdepth": 16,
+      "channels": 3,
+      "decoded_dtype": "uint16",
+      "sha256": "26284818bc0e00ac056fa99d8b6efdd017a63cb32f2a541a89fd4e6f63ec7981",
+      "semantic_state": "unverified",
+      "channel_semantics": {
+        "encoding": "unverified"
+      },
+      "notes": "16-bit RGB；coverage 内 R/G 覆盖 0..~65535、B 覆盖 0..44638"
+    },
+    "bake_normalobj.png": {
+      "path": "D:\\Unity_Project\\Chap06_Prop_C201_Tablecloth_01_Lod0\\5th\\Bake\\bake_normalobj.png",
+      "width": 2048,
+      "height": 2048,
+      "source_bitdepth": 16,
+      "channels": 3,
+      "decoded_dtype": "uint16",
+      "sha256": "9da904e3094de3db94802d632afa73d6273e40bcaa79323e8aa6f215d1d9aac4",
+      "semantic_state": "verified",
+      "channel_semantics": {
+        "encoding": "uint16/65535 -> *2-1",
+        "evidence": "解码后长度 p50≈1.0000，99.7% 样本 |L-1|<0.01（统计对照）",
+        "axis_convention": "unverified"
+      },
+      "notes": "16-bit RGB (48bpp)；单位向量编码 verified"
+    },
+    "bake_normal.png": {
+      "path": "D:\\Unity_Project\\Chap06_Prop_C201_Tablecloth_01_Lod0\\5th\\Bake\\bake_normal.png",
+      "width": 2048,
+      "height": 2048,
+      "source_bitdepth": 8,
+      "channels": 3,
+      "decoded_dtype": "uint8",
+      "sha256": "3774af5a12c63d46e17b041f3deb02b5851ceec3cdfec36119f0e5dc598077b7",
+      "semantic_state": "unverified",
+      "channel_semantics": {},
+      "notes": "8-bit RGB TS 法线；备用校验，不参与主 pass"
+    },
+    "bake_ao.png": {
+      "path": "D:\\Unity_Project\\Chap06_Prop_C201_Tablecloth_01_Lod0\\5th\\Bake\\bake_ao.png",
+      "width": 2048,
+      "height": 2048,
+      "source_bitdepth": 8,
+      "channels": 3,
+      "decoded_dtype": "uint8",
+      "sha256": "416dc17bb2e2d137b94252dba3a7dbfcc35c2f03a1bac54a527285e1625ecace",
+      "semantic_state": "verified",
+      "channel_semantics": {
+        "scalar_channel": "R",
+        "encoding": "uint8/255"
+      },
+      "notes": "AO；默认只压环境项（PLAN §5.4）"
+    },
+    "bake_thickness.png": {
+      "path": "D:\\Unity_Project\\Chap06_Prop_C201_Tablecloth_01_Lod0\\5th\\Bake\\bake_thickness.png",
+      "width": 2048,
+      "height": 2048,
+      "source_bitdepth": 8,
+      "channels": 3,
+      "decoded_dtype": "uint8",
+      "sha256": "a99509abebd8484e636db0ae1cb16c3b296dca59dae5bfe41589a0c4f5e231f8",
+      "semantic_state": "unverified",
+      "channel_semantics": {},
+      "notes": "可选透光调制；未启用"
+    },
+    "bake_curve.png": {
+      "path": "D:\\Unity_Project\\Chap06_Prop_C201_Tablecloth_01_Lod0\\5th\\Bake\\bake_curve.png",
+      "width": 2048,
+      "height": 2048,
+      "source_bitdepth": 8,
+      "channels": 3,
+      "decoded_dtype": "uint8",
+      "sha256": "a353d8f3d643f663a71b62b04bc6e53f417d53e0728290574d2470ffc237eb92",
+      "semantic_state": "unverified",
+      "channel_semantics": {},
+      "notes": "可选艺术调制；中性值/有符号映射 unverified"
+    },
+    "bake_matid.png": {
+      "path": "D:\\Unity_Project\\Chap06_Prop_C201_Tablecloth_01_Lod0\\5th\\Bake\\bake_matid.png",
+      "width": 2048,
+      "height": 2048,
+      "source_bitdepth": 8,
+      "channels": 4,
+      "decoded_dtype": "uint8",
+      "sha256": "3dd86cf5f114051a465be769103e734ed1cdca665c2043702d23071b46bd09a9",
+      "semantic_state": "unverified",
+      "channel_semantics": {},
+      "notes": "材质分区候选；非逐岛唯一 ID"
+    },
+    "mask1.png": {
+      "path": "D:\\Unity_Project\\Chap06_Prop_C201_Tablecloth_01_Lod0\\5th\\Bake\\mask1.png",
+      "width": 2048,
+      "height": 2048,
+      "source_bitdepth": 8,
+      "channels": 4,
+      "decoded_dtype": "uint8",
+      "sha256": "a5c91d47635fcc00f889e1ac2a76eb6be9102087240109a5cdca7655a7c38824",
+      "semantic_state": "verified",
+      "channel_semantics": {
+        "scalar_channel": "R",
+        "encoding": "uint8/255",
+        "coverage_threshold": 0.5,
+        "evidence": "干净双值分布（65.5% 前景），RGBA 四通道同值"
+      },
+      "notes": "coverage 候选 verified；不能证明 UV 无重叠（PLAN §2.3）"
+    },
+    "AnisotropicMap.tga": {
+      "path": "D:\\Unity_Project\\Chap06_Prop_C201_Tablecloth_01_Lod0\\AnisotropicTex\\AnisotropicMap.tga",
+      "width": 2048,
+      "height": 2048,
+      "source_bitdepth": 8,
+      "channels": 1,
+      "decoded_dtype": "uint8",
+      "sha256": "ca15087ad9ead6cf49fa02b08d132057ea237c4e90c04180240023277a79665a",
+      "semantic_state": "unverified",
+      "channel_semantics": {
+        "observed": "min41 max206 mean130，平滑渐变",
+        "hypothesis": "unverified"
+      },
+      "notes": "8-bit 单通道；语义 unverified，默认关闭（PLAN §2.2）"
+    },
+    "AnisotropicNormal.tga": {
+      "path": "D:\\Unity_Project\\Chap06_Prop_C201_Tablecloth_01_Lod0\\AnisotropicTex\\AnisotropicNormal.tga",
+      "width": 2048,
+      "height": 2048,
+      "source_bitdepth": 8,
+      "channels": 3,
+      "decoded_dtype": "uint8",
+      "sha256": "efcb1ad71397ffc14e3f6661d72b5780e59a9491aedd71371c0c4eca9d85fbd2",
+      "semantic_state": "unverified",
+      "channel_semantics": {
+        "observed": "99.6% 样本 |长度-1|<0.01（p50=1.002），且分量负值占比 R 45.6% / G 57.9% / B 23.5% → 全向单位方向场，不是普通 TS 细节法线（TS 法线 Z>=0）。2026-09-25 重算：修正 TGA BGR→RGB 字节序后的统计"
+      },
+      "notes": "语义 unverified，默认关闭（PLAN §2.2）"
+    }
+  },
+  "position_scale": null,
+  "position_bias": null,
+  "position_space": "unverified",
+  "position_unit": "unverified",
+  "normalobj_axis_convention": "unverified",
+  "normalobj_green_sign": 0,
+  "uv_v_direction": "unverified",
+  "uv_uniqueness_evidence": "完整 RGB 位置签名重复率 0.15%，>4px 重复仅 4 处（120px）；无大面积重叠证据，但不构成证明（PLAN §2.3）",
+  "coverage_source": "mask1.png R>0.5（verified）",
+  "island_source": "none",
+  "sampling": {
+    "mip_level": 0,
+    "filter": "nearest",
+    "address": "clamp",
+    "q_origin": "top-left"
+  }
+}

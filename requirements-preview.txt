@@ -1,0 +1,5 @@
+# 交互预览依赖（PLAN.md §8.2 --preview / §9）。
+# 缺少本文件依赖时 --bake 与 --selftest 仍可完整运行（PLAN §8.2：不阻塞离线导出）。
+moderngl-window==3.1.1
+imgui-bundle==1.92.900
+PyOpenGL==3.1.10

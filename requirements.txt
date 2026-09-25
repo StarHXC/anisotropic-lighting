@@ -1,0 +1,6 @@
+# 核心依赖（PLAN.md §9）：通过 RGB16 保真测试后锁定版本，不得随意升级。
+# 环境事实：Windows 11 / Python 3.12.10 / standalone OpenGL 3.3 (NVIDIA 610.88)
+moderngl==5.12.0
+numpy==2.5.3
+pypng==0.20220715.0
+Pillow==12.3.0
