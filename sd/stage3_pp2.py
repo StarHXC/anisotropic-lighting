@@ -239,6 +239,69 @@ def main():
     wrapper.setOutputNode(out_node, True)
     step('wrapper output → PP2', True)
 
+    # ---- 函数图拓扑分层排布（skill node-alignment.md auto_layout）----
+    from sd.api.sdproperty import SDPropertyCategory as _Cat
+    from sd.api.sdbasetypes import float2 as _f2
+
+    def auto_layout(fg, max_rows=4, sx=220.0, sy=140.0):
+        nodes_arr = fg.getNodes()
+        all_nodes = [nodes_arr.getItem(i) for i in range(nodes_arr.getSize())]
+        if not all_nodes:
+            return 0
+        uid_map = {id(n): n for n in all_nodes}
+        in_conns = {id(n): set() for n in all_nodes}
+        out_adj = {id(n): [] for n in all_nodes}
+        for n in all_nodes:
+            props = n.getProperties(_Cat.Input)
+            for j in range(props.getSize()):
+                p = props.getItem(j)
+                try:
+                    conns = n.getPropertyConnections(p)
+                    if conns:
+                        for k in range(conns.getSize()):
+                            c = conns.getItem(k)
+                            src = c.getInputPropertyNode()
+                            if id(src) in in_conns:
+                                in_conns[id(n)].add(id(src))
+                                out_adj[id(src)].append(id(n))
+                except BaseException:
+                    pass
+        in_deg = {nid: len(s) for nid, s in in_conns.items()}
+        queue = [nid for nid, d in in_deg.items() if d == 0]
+        ordered = []
+        while queue:
+            cur = queue.pop(0)
+            ordered.append(cur)
+            for nxt in out_adj[cur]:
+                in_deg[nxt] -= 1
+                if in_deg[nxt] == 0:
+                    queue.append(nxt)
+        ordered.extend([nid for nid in in_conns if nid not in ordered])
+        depth = {nid: 0 for nid in ordered}
+        for nid in ordered:
+            for nxt in out_adj[nid]:
+                if depth[nxt] < depth[nid] + 1:
+                    depth[nxt] = depth[nid] + 1
+        layers = {}
+        for nid in ordered:
+            layers.setdefault(depth[nid], []).append(nid)
+        x_offset = 0.0
+        for d in sorted(layers.keys()):
+            nids = layers[d]
+            layer_cols = (len(nids) + max_rows - 1) // max_rows
+            for idx, nid in enumerate(nids):
+                col = idx // max_rows
+                row = idx % max_rows
+                uid_map[nid].setPosition(
+                    _f2((x_offset + col) * sx, row * sy))
+            x_offset += layer_cols
+        return len(all_nodes)
+
+    auto_layout(fg1)
+    auto_layout(fg2)
+    step('函数图排布', True,
+         {'pp1': meta1['nodes'], 'pp2': em2.node_count})
+
     pkg_mgr.savePackageAs(pkg, SBS_OUT)
     step('保存 aniso_lightmap.sbs v4', os.path.getsize(SBS_OUT) > 0,
          {'size': os.path.getsize(SBS_OUT)})

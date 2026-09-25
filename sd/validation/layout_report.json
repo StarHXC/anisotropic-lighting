@@ -1,0 +1,70 @@
+{
+  "probe": "layout",
+  "steps": [
+    {
+      "step": "环境",
+      "ok": true,
+      "detail": {
+        "sd_api_version": "16.0.1"
+      }
+    },
+    {
+      "step": "清扫+重载",
+      "ok": true,
+      "detail": {
+        "swept": 8
+      }
+    },
+    {
+      "step": "PP 定位",
+      "ok": true,
+      "detail": {
+        "count": 2
+      }
+    },
+    {
+      "step": "PP1 排布",
+      "ok": true,
+      "detail": {
+        "nodes": 644
+      }
+    },
+    {
+      "step": "PP2 排布",
+      "ok": true,
+      "detail": {
+        "nodes": 56
+      }
+    },
+    {
+      "step": "保存",
+      "ok": true,
+      "detail": {
+        "size": 227331
+      }
+    },
+    {
+      "step": "位置回读分布",
+      "ok": true,
+      "detail": [
+        {
+          "pp": 1,
+          "nodes": 644,
+          "distinct_x": 161,
+          "distinct_y": 4,
+          "spread_x": 35200.0,
+          "at_origin": 1
+        },
+        {
+          "pp": 2,
+          "nodes": 56,
+          "distinct_x": 14,
+          "distinct_y": 4,
+          "spread_x": 2860.0,
+          "at_origin": 1
+        }
+      ]
+    }
+  ],
+  "ok": true
+}
