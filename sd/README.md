@@ -1,103 +1,96 @@
-# SD Pixel Processor 迁移 — Stage 0 探针包
+# SD Pixel Processor 迁移 — aniso_lightmap 交付包
 
-依据 `doc/SD_MIGRATION_PLAN.md`（2026-09-25 静态审核修订版）执行。**Stage 0（0A–0E）已全部完成并通过**，证据齐备待审核方裁定是否放行 Stage 1。
+Phase-2 完成：aniso.frag 主链已完整迁移进 **Substance Designer Pixel Processor**，交付 `sd/aniso_lightmap.sbs`（41 参数实时调参的自定义节点）。
 
-## Stage 0 裁定汇总（全部有实验证据，见 validation/）
+> 依据 `doc/SD_MIGRATION_PLAN.md`（外部审核修订版）。Stage 0 探针 → Stage 1 主链 → Stage 2 wrapper → Stage 3 PP2 全部有数值证据，见 `validation/`。
 
-| 门禁 | 核心裁定 | 证据文件 |
+## 快速使用
+
+1. **导入**：SD 里 File → Import 选择 `sd/aniso_lightmap.sbs`（贴图已 CopiedAndLinked 内嵌于 `.resources/`，随包走）
+2. **使用**：从 Library 拖 `aniso_lightmap` 进任意物质图；输出即成品 sRGB lightmap（2048² RGBA，A=1）
+3. **调参**：选中实例 → INSTANCE PARAMETERS 面板，6 个分组 41 个滑块实时生效
+4. **换资产**：重跑 `stage3_pp2.py`（改 `BAKE_ROOT` 指向新贴图目录）——图像输入无法经 Python API 创建（见「已知限制」），换资产=重新生成 wrapper
+
+## 参数分组（41 项）
+
+| 分组 | 内容 |
+|---|---|
+| 01_光照方向 | azimuth/elevation（图内角度公式生成光向）+ 强度 + 光色/环境色 |
+| 02_各向异性 | 主轴 u/v、旋转角（度）、各向异性度 |
+| 03_高光 | 双层 shift/exponent/颜色/强度、spec_mode、边缘阈值、front_k |
+| 04_漫反射_曝光 | diffuse_mode/边缘、ao_strength/ao_direct、**exposure_ev、validity_fill**（PP2） |
+| 05_观察模式 | directional/perspective/normal_proxy（int 滑块）、视向/相机 |
+| 06_调试与系统 | **debug_mode 0–9**（调试视图切换）、spec_layer_index、detail（未解锁）、texel |
+
+调试模式对照：0=成品线性 1=coverage 2=dPdqx 3=Tuv 4=Buv 5=Ns 6=TAniso 7=高光层（分段后） 8=N·L 9=dPdqy。
+
+## 架构
+
+```
+wrapper comp graph (aniso_lightmap)
+├── 41 参数（INSTANCE PARAMETERS 面板；0A 裁定的参数载体层）
+├── 4 bitmap（CopiedAndLinked，显式 $outputsize=2048²/$format=32F）
+├── PP1 主链（653 节点）：解码→差分→buildBasis→方向场→双层高光→漫反射/AO→linear→validity→DEBUG 级联
+│   └── 函数图内 get_float1/get_integer1→tofloat/get_float3 直读 wrapper 参数
+├── PP2 输出级（52 节点）：max(·,0)→2^EV→Reinhard→一次 sRGB→validityFill
+└── output（setOutputNode 标记）
+```
+
+## 数值验收（全部 PASS，证据在 validation/）
+
+| 层 | 域 | 结果 |
 |---|---|---|
-| 0A | 参数载体=comp graph 层（节点级只读+无注解 API；函数图 InvalidHandle）；"PP 节点面板"效果=.sbs 实例化（wrapper，Stage 1 立项） | probe_0a_report.json、probe_0a_node_param_verdict.json |
-| 0B | **bitmap 直连多输入 + sample(i,0) 0 基精确对应**（corr=1.0×4）；uniform/PP输出/shuffle 作源破坏索引（禁用）；$pos 恒等无翻转；API 读回链路（compute→SDValueTexture→save）全自动 | probe_0b_final_verdict.json |
-| 0C | 16-bit PNG 与 float32 TIFF 全链路逐位无损（负值/HDR/alpha 通畅）；EXR+空色彩变换=标准数值通路 | probe_0c_final_verdict.json |
-| 0D | §6 全部配方 228/228 PASS（1e-4）；**vector3 componentsin 单值端口**（多连覆盖，参考插件连法本版本损坏）；基准 planeFallback step 序曾写反已修正 | probe_0d_final_verdict.json |
-| 0E | 165 节点 DAG@2048²：构建 0.004s、发射 0.089s、首算 1.11s、热算 1.10s | probe_0e_final_verdict.json |
+| 数学层（DEBUG 0–9 全模式） | 逐 texel vs GLSL dump | max\|Δ\|≤5.5e-5（阈值 1e-4） |
+| 有效性 | bValid 分解对照 | 25 texel 阈值骑线（§8.2(5) 例外，RGB 零差异） |
+| 成品层（PP2 sRGB 域） | vs NumPy 复算 output.frag | 99.9995% ≤2LSB；14 超差全为上述例外传导；**真实超差 0** |
 
-### 自动化基础设施（本轮建成）
+## 实证坑位（SD 16.0.1 + Python 3.13.9，写 SD 自动化前必读）
 
-- **桥插件**（`bridge_plugin/`，装于 sduserplugins/aniso_pp_bridge）：文件协议轮询执行探针，
-  防重入+任务签名去重；执行者用 `run_probe.py`/`_dispatch.py` 派发并自动读结果。
-- **API 读回**（`aniso_pp/readback.py`）：`graph.compute() → getPropertyValue → SDTexture.save(path,'')`，
-  数值验证不再需要任何手动导出。
-- **实证坑位**（写代码前必读）：`SDApiError.APIException` 继承 **BaseException**（except Exception 接不住）；
-  int 属性注解 min/max/step 用 SDValueInt；float3 参数值需 ctypes float3；
-  PowerShell 写配置带 BOM 会让 json.load 崩（utf-8-sig 兜底）；非 2 幂参数图在 PP 中会被重采样混叠（参数图一律 2 幂 + PP 同尺寸 1:1）。
+- `APIException` 继承 **BaseException**——`except Exception` 接不住
+- **bitmap 节点必须显式 `$outputsize`+`$format`**：SD 默认把 bitmap 缩到父图默认尺寸（256²）→ 全图插值偏差
+- **`componentsin` 是单值端口**：vector2/3 多连覆盖（官方 sample 与 renderer 插件的连法在本版本损坏）；正确连法 = vector2(x→sin, y→last) → vector3(vec2→sin, z→last)
+- 图像类型图输入无法经 Python API 创建（`SDTypeTexture/Usage` InvalidType）→ 贴图走 bitmap 资源直连
+- comp graph 的 output 节点必须 `setOutputNode(True)`，否则实例求值 None
+- 实例输出引脚 id = wrapper 输出 identifier（非 `unique_filter_output`）
+- `test.compute()` 对孤立实例死码消除——外部验证必须接 output 节点
+- int 参数注解 min/max/step 用 `SDValueInt`；float3 参数值需 ctypes `float3`
+- samplecol 的 `int2(i,0)` 第二分量恒 0（0–4 实测无差别）
+- **仅 bitmap 直连可靠**：uniform/PP输出/shuffle 作 PP 输入会破坏资源索引（多轮实验复现）
+- 非幂等尺寸参数图在 PP 中被重采样混叠——参数图一律 2 幂 + PP 同尺寸 1:1
+- 桥协议：探针文件名必须 `probe_<name>.py`；任务签名去重需 nonce
+- imageio 写 EXR float32 必须 `flags=1`（EXR_FLOAT），默认 half
+
+## 已知限制（明确排除项，见 PLAN 契约）
+
+- **Unity 回贴**：不做（用户裁定）
+- **边界 padding/颜色延拓**：未实现（PLAN §6.1 独立规格；两侧一致地没有）
+- **同岛约束**：neighborValid 以 coverage 为候选（island ID 未落地，契约登记）
+- **角度图**（anisotropic_map）与 detail_normal：参数存在但 off（资产契约 unverified）
+- **位置 scale/bias**：假设 scale=1/bias=0（differential 方向不受等比缩放影响；报告留痕）
+- **图像输入**：换资产需重跑生成脚本（API 缺口，见坑位）
+- 参数仅 float1/int/float3；跨字段校验（edge0<edge1 等）未接入 SD 侧（本地 params.validate 可用）
 
 ## 目录
 
 ```
 sd/
-├── probe_0a.py … probe_0e.py   # 五个子门禁探针（SD Python 编辑器执行）
-├── dump_glsl_ref.py            # GLSL/NumPy 基准（本地 Python 执行）
-├── check_export.py             # 外部验收比对器（本地 Python 执行）
-├── aniso_pp/                   # 共享模块（api / emitter / __init__）
-└── validation/                 # 报告、fixture、manifest、证据归档
+├── aniso_lightmap.sbs        # ★ 交付物（v3：PP1+PP2 双链）
+├── aniso_pp/                 # 共享模块：api/emitter/params/readback
+├── stages.py                 # 主链发射（param_resolver 双模式）
+├── stage3_pp2.py             # wrapper 生成脚本（换资产时重跑）
+├── bridge_plugin/            # SD 自动化桥（validation 协议）
+├── dump_glsl_core.py         # GLSL 基准 dump（DEBUG 0-9）
+├── check_export.py           # 外部验收比对器
+└── validation/               # 全部证据：报告/裁定/基准/dump
 ```
 
-## 环境要求
+## 复现判定
 
-- **SD 侧**：Adobe Substance 3D Designer 已打开并加载目标物质图（compositing graph）。
-  - **模块缓存注意**：SD 会话内重复执行探针时，探针脚本会自动清除 `aniso_pp` 的
-    `sys.modules` 缓存强制重读磁盘——改完 aniso_pp 代码后直接重跑探针即可，无需重启 SD。
-  - **实测环境**：SD 16.0.1 + Python 3.13.9；`SDApplication.getUIMgr()` →
-    `getCurrentGraph()` 是取当前图的正确链路（无 `getUI_manager` 属性）。
-- **本地侧**：Python 3.12 + `imageio`（EXR 读写需 freeimage 插件，首次调用自动下载）+ `numpy`。
-  - **EXR float32 关键经验**：`iio.imwrite(..., format='EXR-FI', flags=1)` —— `flags=1`（EXR_FLOAT）才是真 float32；**默认 0（EXR_DEFAULT）写出的是 half**，低位会截断（0C 自测已验证两种模式行为）。
-
-## 执行顺序（每项通过才进下一项）
-
-### 0A — API/参数面板/作用域/持久化/安全重建
-
-1. SD → Python 编辑器执行：
-   ```python
-   exec(open(r'E:\AI_Project\Anisotropic Lighting\sd\probe_0a.py', encoding='utf-8').read())
-   ```
-2. 脚本自动：建 2 个 PP + 函数图 + 三层级参数（comp graph / PP 节点 / 函数图）+ 重建演练。
-3. **手动**：截图参数实际出现的面板层级；拖动 `p_probe_f1` 确认滑块/clamp 生效；保存 .sbs 重开确认持久化。
-4. 产出：`validation/probe_0a_report.json` + 截图。
-
-> **0A 裁定结论（SD 16.0.1 实测）**：参数载体三级裁定——
-> ① **PP 节点级**：`newProperty` 可建属性，但 `setPropertyValue` 报 `DataIsReadOnly`，且节点无 `setPropertyAnnotationValueFromId`（注解 API 仅 SDResource 层）→ 不可承载可调参数；
-> ② **perpixel 函数图级**：`newProperty` 报 `InvalidHandle`（内嵌属性图不接受动态参数）→ 同样不可承载；
-> ③ **comp graph 层**：float1/int/float3 注册+读回+slider 注解全部通过 → **唯一参数载体**。
-> 与参考插件 `node_builder.py:844-879`（`_expose_parameters` 只在 comp graph 建参数）实证一致。函数图内经 `get_float1/get_integer1` 读同名 comp graph 参数（0D 验证数值端点）。多 PP 实例天然共享 comp graph 参数（SD 标准行为），实例级隔离如需差异化再议（wrapper/实例参数覆盖）。
-
-### 0B — 输入槽位/采样/坐标
-
-1. SD 执行 `probe_0b.py`（自动建 4×4 PP + 5 个常数标记源 + 打包采样输出）。
-2. **手动**：导出 4×4 PP 输出（Raw/关色彩变换/非预乘）到 `validation/`。
-3. 本地：`python "sd/check_export.py" --probe 0b --sd-image <导出文件>`。
-4. 坐标适配（$pos→q、q→采样地址）第二轮用梯度标记图锁定。
-
-### 0C — 数据精度/Raw/导出读回
-
-1. 本地先跑 `python "sd/validation/selftest_0c.py"`（判定器自测，应双向通过）。
-2. SD 执行 `probe_0c.py`（生成 fixture + 建 8×8 直通 PP）。
-3. **手动**：把 `validation/fixture_lsb16.png` import（**Raw/关 sRGB**）接 input0 → 导出 PNG16；把 `fixture_neghdr.exr` import（**float32 保留**）→ 导出 EXR（**float32 非 half**，Straight 非预乘）。
-4. 本地：`python "sd/check_export.py" --probe 0c --png16 <导出> --exr <导出>`。
-
-### 0D — 安全数学/类型/旋转/单层高光
-
-1. SD 执行 `probe_0d.py`（建 PP-A/PP-B 两个 2048² 数学配方图；case 表写入 manifest）。
-2. 本地：`python "sd/dump_glsl_ref.py" --probe 0d`（生成 12 case 实数公式基准）。
-3. **手动**：导出 PP-A/PP-B 为 EXR float32。
-4. 本地：`python "sd/check_export.py" --probe 0d --sd-exr <A.exr> --sd-exr-b <B.exr>`。
-5. 判定顺序（§8.2）：有限性 → 有效性精确一致 → 有效域 `max|Δ|≤1e-4、RMSE≤1e-5`。
-
-### 0E — DAG 可执行性/成本
-
-1. SD 执行 `probe_0e.py`（40 层深度链 + 32 扇出 + 运行期选择 @2048²）。
-2. **手动**：秒表记录首次编译耗时、参数拖动后刷新表现、视图交互帧率主观评价。
-3. 产出：`validation/probe_0e_report.json`（无这些实测数字不得宣称"2048² 正常实时负载"）。
-
-## 红线（全程）
-
-- 只在明确选定的 comp graph 创建**带 owner 标识的新副本**；不按模糊名称清理用户图。
-- 不修改 `D:\SD_Project\Plugins\` 与 GLSL 侧现有文件。
-- 四张主输入全按 **Raw** 处理（无 sRGB 解码/自动法线转换/隐式 resize）。
-- `p_texel_u/v` 绑定位置图真实尺寸（生产 1/2048），非艺术滑块。
-- 失败即停：保留原始报错与 `probe_0x_report.json` 的 `fail` 字段，不靠改阈值绕过。
-- git 提交/推送仅在用户另行授权时执行。
-
-## 证据归档
-
-每个子门禁的 `validation/probe_0x_report.json` + `probe_0x_check.json` + 用户截图/导出文件 + 手动观测记录 = 该门禁的证据包。0A–0E 齐后汇总交审核方裁定是否放行 Stage 1。
+```powershell
+# GLSL 基准（DEBUG 0-9 逐模式）
+python "sd/dump_glsl_core.py"
+# Stage 1/2/3 判定
+python "sd/validation/_judge_dbg_matrix.py"
+python "sd/validation/_judge_stage2.py"   # linear 域（Stage 1 产物）
+python "sd/validation/_judge_stage3.py"   # 成品 sRGB 域（Stage 3 产物）
+```
