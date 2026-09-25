@@ -10,3 +10,6 @@ validation/out/
 
 # ImGui 窗口布局（本机状态，不入库）
 imgui.ini
+
+sd/.autosave/
+sd/*.algautosave/

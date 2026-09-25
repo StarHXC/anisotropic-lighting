@@ -7,9 +7,11 @@
 - $pos 恒等即 q（0B 裁定：无翻转）
 - 全部标量参数以常数注入（= out/bake_report.json 冻结快照）；参数面板经 wrapper
   于后续阶段接入
-- DEBUG 选择：pick3/ifelse 运行期级联（DEBUG 0/2/9 三个对照量先行）
+- DEBUG 选择：v4 起级联移除（验收证据由 Stage 1 判定链承担）
 
 配方逐条对应 shaders/aniso.frag:219-355 与 common.glsl，不修复任何边界行为。
+
+v4：DEBUG 1-9 级联移除（验收证据由 Stage 1 判定链承担，成品路径数值恒等）。
 """
 from __future__ import annotations
 
@@ -318,52 +320,11 @@ def build_core(fg, texel: float = P['texel'], param_resolver=None):
     uValid = em.mul(em.sw1(usN, 3), tValid)
     tAnisoValid = em.mul(uValid, nValid)   # aniso.frag:274
 
-    # ---- DEBUG 级联（aniso.frag:327-354；i=1→9 顺序构建，§3.4）
-    # 各候选 RGB 与 alpha 按 §5.4 对照表：
-    dbg_cands = []  # (rgb_node, a_node)
-    # cand0 = final linear
-    dbg_cands.append((linear, validity))
-    # cand1 = (coverage,0,0) / core validity
-    dbg_cands.append((em.v3(coverage, em.c_f1(0.0), em.c_f1(0.0)), validity))
-    # cand2 = dPdqx*0.5+0.5 / dPdqx.w
-    dbg_cands.append((em.add(em.mulscalar(em.swizzle3_from_f4(dPdqx),
-                                          em.c_f1(0.5)),
-                             em.bc_f3(em.c_f1(0.5))),
-                      em.sw1(dPdqx, 3)))
-    # cand3 = Tuv*0.5+0.5 / tValid
-    dbg_cands.append((em.add(em.mulscalar(Tuv, em.c_f1(0.5)),
-                             em.bc_f3(em.c_f1(0.5))), tValid))
-    # cand4 = Buv*0.5+0.5 / bValid
-    dbg_cands.append((em.add(em.mulscalar(Buv, em.c_f1(0.5)),
-                             em.bc_f3(em.c_f1(0.5))), bValid))
-    # cand5 = Ns*0.5+0.5 / nValid
-    dbg_cands.append((em.add(em.mulscalar(Ns, em.c_f1(0.5)),
-                             em.bc_f3(em.c_f1(0.5))), nValid))
-    # cand6 = TAniso*0.5+0.5 / tAnisoValid
-    dbg_cands.append((em.add(em.mulscalar(TAniso, em.c_f1(0.5)),
-                             em.bc_f3(em.c_f1(0.5))), tAnisoValid))
-    # cand7 = specLayer[spec_layer_index] rgb / hValid（§5.4：分段后+层色/强度后）
-    s_sel = em.step(em.c_f1(0.5), sc('spec_layer_index'))
-    s7_rgb = em.lerp(em.swizzle3_from_f4(s1), em.swizzle3_from_f4(s2), s_sel)
-    s7_a = em.lerp(em.sw1(s1, 3), em.sw1(s2, 3), s_sel)
-    dbg_cands.append((s7_rgb, s7_a))
-    # cand8 = (ndl*0.5+0.5, 0, 0) / validity
-    dbg_cands.append((em.v3(em.add(em.mul(ndl, em.c_f1(0.5)), em.c_f1(0.5)),
-                            em.c_f1(0.0), em.c_f1(0.0)), validity))
-    # cand9 = dPdqy*0.5+0.5 / dPdqy.w
-    dbg_cands.append((em.add(em.mulscalar(em.swizzle3_from_f4(dPdqy),
-                                          em.c_f1(0.5)),
-                             em.bc_f3(em.c_f1(0.5))),
-                      em.sw1(dPdqy, 3)))
-
-    # 运行期级联（§3.4：i=1→9 顺序；SEL(gteq(debug, i-0.5), cand_i, prev)）
-    dbg_f = sc('debug_mode')
-    rgb_sel, a_sel = dbg_cands[0]
-    for i in range(1, 10):
-        cond = em.cmp('gteq', dbg_f, em.c_f1(float(i) - 0.5))
-        rgb_sel = em.sel(cond, dbg_cands[i][0], rgb_sel)
-        a_sel = em.sel(cond, dbg_cands[i][1], a_sel)
-    packed = em.v4_from_f3(rgb_sel, a_sel)
+    # ---- DEBUG 级联（aniso.frag:327-354）
+    # v4：仅验收工具需要 → 级联移除，输出直连 cand0（final linear + validity）。
+    # debug=0 常数下级联恒选 cand0，数值恒等；DEBUG 1-9 对照证据由 Stage 1
+    # 判定链（glsl_core_debug{0..9}.npy + dbg_m*.exr）永久承担。
+    packed = em.v4_from_f3(linear, validity)
 
     meta['nodes'] = em.node_count
     meta['cache'] = dict(em._expr_cache)

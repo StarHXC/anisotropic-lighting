@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
 """参数 schema 单一来源（SD_MIGRATION_PLAN §7.4/§7.5）。
 
-41 项参数：id / 类型 / 默认 / UI 范围 / 分组 / GLSL uniform-define 映射。
+34 项参数（v4）：id / 类型 / 默认 / UI 范围 / 分组 / GLSL uniform-define 映射。
 默认值来源：out/bake_report.json 冻结快照（light_dir=(0.4,-0.6,0.7) 等）。
 角度参数由完整精度向量推导（显示近似 −56.3°/44.1° 不写回数值基准）。
+
+v4 变更（用户裁定）：
+- 移除 06_调试与系统组全部 7 项（debug_mode/spec_layer_index/detail_*/texel_u/v）
+  ——DEBUG 视图是迁移验收工具（Stage 1 证据承担），detail 未解锁、texel 由
+  输入图尺寸派生，均非用户可调项
+- float3 颜色参数面板用 Color(RGB) 编辑器（发射侧注解，见 stage3_pp2.py）
 
 校验器：跨字段规则在 validate() —— 滑块注解只管 UI，不替代校验。
 """
@@ -44,7 +50,6 @@ GROUPS = {
     '03': '03_高光',
     '04': '04_漫反射_曝光',
     '05': '05_观察模式',
-    '06': '06_调试与系统',
 }
 
 PARAMS: list[Param] = [
@@ -120,25 +125,6 @@ PARAMS: list[Param] = [
           glsl_map='u_viewDirection（宿主归一化语义必须复刻）'),
     Param('p_camera_position', 'float3', (0.0, 0.0, 1.0), GROUPS['05'],
           glsl_map='u_cameraPosition'),
-    # ---- 06 调试与系统
-    Param('p_debug_mode', 'int', 0, GROUPS['06'], 0, 9, step=1.0,
-          glsl_map='DEBUG_MODE define → 运行期级联 i=1→9'),
-    Param('p_spec_layer_index', 'int', 0, GROUPS['06'], 0, 1, step=1.0,
-          glsl_map='SPEC_LAYER_INDEX（DEBUG 7 层选择）'),
-    Param('p_detail_mode', 'int', 0, GROUPS['06'], 0, 1, step=1.0,
-          glsl_map='DETAIL_MODE define → 运行期选择',
-          note='真实资产未解锁时固定 off'),
-    Param('p_detail_strength', 'float1', 0.0, GROUPS['06'], 0.0, 1.0,
-          glsl_map='u_detailStrength'),
-    Param('p_detail_green_sign', 'int', 1, GROUPS['06'], 0, 1, step=1.0,
-          glsl_map='DETAIL_GREEN_SIGN',
-          note='UI int 0/1 映射 −1/+1；快照保存规范符号'),
-    Param('p_texel_u', 'float1', 1.0 / 2048.0, GROUPS['06'],
-          glsl_map='（无；系统参数）',
-          note='由输入位置图实际 W 派生，非艺术滑块；替换输入须重验'),
-    Param('p_texel_v', 'float1', 1.0 / 2048.0, GROUPS['06'],
-          glsl_map='（无；系统参数）',
-          note='由输入位置图实际 H 派生'),
 ]
 
 
@@ -178,8 +164,7 @@ def validate(values: dict) -> list[str]:
             errs.append(f'{pid} 必须为有限正数, 得到 {val}')
     # 枚举合法域
     for pid, lo, hi in (('p_spec_mode', 0, 2), ('p_diffuse_mode', 0, 2),
-                        ('p_view_mode', 0, 2), ('p_debug_mode', 0, 9),
-                        ('p_spec_layer_index', 0, 1), ('p_detail_mode', 0, 1),
+                        ('p_view_mode', 0, 2),
                         ('p_aniso_axis', 0, 1)):
         iv = int(v[pid])
         if not (lo <= iv <= hi):
@@ -194,14 +179,6 @@ def validate(values: dict) -> list[str]:
     ld = (math.cos(el) * math.cos(az), math.cos(el) * math.sin(az), math.sin(el))
     if math.hypot(*ld) < 1e-8:
         errs.append('光照方向合成向量退化')
-    # detail green sign 二值
-    if int(v['p_detail_green_sign']) not in (0, 1):
-        errs.append('p_detail_green_sign 仅允许 0/1（映射 −1/+1）')
-    # texel 正数且 ≤1
-    for pid in ('p_texel_u', 'p_texel_v'):
-        tv = f(pid)
-        if not (math.isfinite(tv) and 0 < tv <= 1.0):
-            errs.append(f'{pid} 必须在 (0,1], 得到 {tv}')
     return errs
 
 
@@ -217,7 +194,6 @@ if __name__ == '__main__':
     errs = validate({})
     assert not errs, errs
     print('默认值校验: OK')
-    bake = Path(__file__).resolve().parent.parent / 'out_placeholder.json'
     # bake_report 快照对照（若存在）
     report_p = Path(__file__).resolve().parent.parent.parent / 'out' / 'bake_report.json'
     if report_p.exists():

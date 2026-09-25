@@ -1,6 +1,6 @@
 {
-  "probe": "stage2_verify",
-  "ok": true,
+  "probe": "param_effect",
+  "ok": false,
   "error": null,
-  "report": "E:/AI_Project/Anisotropic Lighting/sd\\validation\\probe_stage2_verify_report.json"
+  "report": "E:/AI_Project/Anisotropic Lighting/sd\\validation\\probe_param_effect_report.json"
 }

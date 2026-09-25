@@ -9,22 +9,33 @@
       }
     },
     {
-      "step": "unload 旧包",
+      "step": "test graph",
       "ok": true
+    },
+    {
+      "step": "清理本工具旧实例",
+      "ok": true,
+      "detail": {
+        "deleted": 1
+      }
+    },
+    {
+      "step": "驻留包清扫",
+      "ok": true,
+      "detail": {
+        "swept": 1,
+        "remaining": 0
+      }
     },
     {
       "step": "重新加载 .sbs",
       "ok": true
     },
     {
-      "step": "wrapper graph 找回",
-      "ok": true
-    },
-    {
       "step": "参数持久化",
       "ok": true,
       "detail": {
-        "count": 41
+        "count": 34
       }
     },
     {
@@ -37,8 +48,11 @@
       }
     },
     {
-      "step": "test graph",
-      "ok": true
+      "step": "颜色编辑器注解(抽查3)",
+      "ok": true,
+      "detail": {
+        "ok": 3
+      }
     },
     {
       "step": "实例化到 test graph",
@@ -57,48 +71,7 @@
     }
   ],
   "fail": null,
-  "param_ids": [
-    "p_light_azimuth_deg",
-    "p_light_elevation_deg",
-    "p_light_intensity",
-    "p_light_color",
-    "p_ambient_color",
-    "p_ambient_intensity",
-    "p_aniso_angle_deg",
-    "p_aniso_axis",
-    "p_aniso_amount",
-    "p_shift1",
-    "p_shift2",
-    "p_exponent1",
-    "p_exponent2",
-    "p_spec1_color",
-    "p_spec1_intensity",
-    "p_spec2_color",
-    "p_spec2_intensity",
-    "p_spec_mode",
-    "p_spec_edge0",
-    "p_spec_edge1",
-    "p_spec_threshold",
-    "p_front_k",
-    "p_diffuse_mode",
-    "p_diffuse_color",
-    "p_diffuse_edge0",
-    "p_diffuse_edge1",
-    "p_diffuse_threshold",
-    "p_ao_strength",
-    "p_ao_direct_light",
-    "p_exposure_ev",
-    "p_validity_fill",
-    "p_view_mode",
-    "p_view_direction",
-    "p_camera_position",
-    "p_debug_mode",
-    "p_spec_layer_index",
-    "p_detail_mode",
-    "p_detail_strength",
-    "p_detail_green_sign",
-    "p_texel_u",
-    "p_texel_v"
-  ],
+  "swept": 1,
+  "deleted_inst": 1,
   "ok": true
 }

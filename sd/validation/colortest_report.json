@@ -1,0 +1,33 @@
+{
+  "probe": "colortest2",
+  "results": [
+    [
+      "editor",
+      "OK",
+      "'<readback fail: ValueError(\"could not convert string to float: \\'c\\'\")>'"
+    ],
+    [
+      "group",
+      "OK",
+      "'<readback fail: ValueError(\"could not convert string to float: \\'_\\'\")>'"
+    ],
+    [
+      "clamp",
+      "OK",
+      "'<readback fail: TypeError(\"\\'bool\\' object is not iterable\")>'"
+    ],
+    [
+      "min",
+      "FAIL",
+      "APIException(<SDApiError.InvalidValue: 11>)"
+    ],
+    [
+      "max",
+      "FAIL",
+      "APIException(<SDApiError.InvalidValue: 11>)"
+    ]
+  ],
+  "ok": true,
+  "graph": true,
+  "cleanup": "deleted"
+}

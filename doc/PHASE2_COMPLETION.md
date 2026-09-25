@@ -1,9 +1,14 @@
 # Phase-2 完成报告 — SD Pixel Processor 迁移
 
 > 日期：2026-09-26
-> 交付物：`sd/aniso_lightmap.sbs`（41 参数实时调参的自定义节点，双 PP 架构）
+> 交付物：`sd/aniso_lightmap.sbs`（v4，34 参数实时调参的自定义节点，双 PP 架构）
 > 依据：`doc/PLAN.md`（Phase-2 手工重建 PP）+ `doc/SD_MIGRATION_PLAN.md`（外部审核修订版）
 > 本文是完成状态与证据索引，供审核/交接。
+>
+> **v4 变更（用户裁定）**：06_调试与系统组 7 参数移除（DEBUG 级联为验收工具，
+> 数值证据由 Stage 1 判定链承担；成品路径 debug=0 恒等）；5 个颜色参数换
+> Color(RGB) 编辑器；texel 改为构建期从输入图尺寸派生。重验：Stage 3 成品域
+> PASS（真实超差 0）、azimuth 交互 2,508,875 像素响应。
 
 ---
 
@@ -38,12 +43,13 @@
 4. **25 texel bValid 分歧**：孔洞边缘 handed≈1e-6 骑 1e-12 阈值，两侧噪声(1e-5)下符号随机。RGB 输出零差异；成品域的 14 texel 超差即其传导。按 §8.2(5) 单列，未放宽阈值。
 5. **光照方向图内生成**：azimuth/elevation → sin/cos（替代 CPU 预归一化 uniform）；单位长度数值已对照。
 6. **图像输入 → bitmap 直连**：Python API 无法创建 image 图输入（实验定案）；换资产重跑脚本。
+7. **float3 注解 API 缺口**：min/max 注解拒收 SDValueFloat3、valueInterpretation 不可经 API 设置（colortest 实测）——Color(RGB) 编辑器由 API `editor='color'` + 保存后 XML 补写合成。
 
 ## 4. 过程资产
 
 - **自动化**：桥插件（SD 内轮询执行探针）+ API 读回（compute→SDTexture.save）——全程零手动导出/控制台转写
 - **参数化发射器**：`stages.build_core(param_resolver=…)` 双模式（常数快照/参数读取），数值一致
-- **41 参数 schema**：`aniso_pp/params.py`（含跨字段校验器 validate()）
+- **34 参数 schema**：`aniso_pp/params.py`（v4，含跨字段校验器 validate()）
 - **54 个探针脚本 + 70 份证据文件**：每项裁定可复现
 
 ## 5. 遗留与建议

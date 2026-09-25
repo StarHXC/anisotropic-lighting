@@ -39,29 +39,66 @@ def main():
     step('环境', True, {'sd_api_version': SDAPI.app_version()})
     pkg_mgr = sd.getContext().getSDApplication().getPackageMgr()
 
-    # ---- unload（若已加载）
-    existing = pkg_mgr.getUserPackageFromFilePath(SBS_OUT)
-    if existing is not None:
-        pkg_mgr.unloadUserPackage(existing)
-        step('unload 旧包', True)
+    # ---- 全量清扫：unload 一切含 aniso_lightmap 的驻留包（v4 实测：
+    # 重复 load 堆积同名包 + test graph 里本工具旧实例钉住旧包导致 unload 失败）
+    def _count_params(p_):
+        g_ = p_.findResourceFromUrl('pkg:///aniso_lightmap')
+        if g_ is None:
+            return None, -1
+        ps_ = g_.getProperties(SDPropertyCategory.Input)
+        return g_, sum(1 for i_ in range(ps_.getSize())
+                       if str(ps_.getItem(i_).getId()).startswith('p_'))
 
-    # ---- reload
+    # 先删 test graph 里本工具创建的 aniso 实例（按引用资源判定，不碰用户节点）
+    test = SDAPI.get_current_graph()
+    step('test graph', 'CompGraph' in type(test).__name__)
+    deleted_inst = 0
+    nodes_all = test.getNodes()
+    to_delete = []
+    for i_ in range(nodes_all.getSize()):
+        nd_ = nodes_all.getItem(i_)
+        try:
+            rr = nd_.getReferencedResource()
+            if rr is not None and 'aniso_lightmap' in str(rr.getUrl()):
+                to_delete.append(nd_)
+        except BaseException:
+            continue
+    for nd_ in to_delete:
+        try:
+            test.deleteNode(nd_)
+            deleted_inst += 1
+        except BaseException:
+            pass
+    step('清理本工具旧实例', True, {'deleted': deleted_inst})
+
+    swept = 0
+    remaining = -1
+    for _round in range(8):
+        pkgs_all = pkg_mgr.getPackages()
+        victims = []
+        for i_ in range(pkgs_all.getSize()):
+            p_ = pkgs_all.getItem(i_)
+            try:
+                if p_.findResourceFromUrl('pkg:///aniso_lightmap') is not None:
+                    victims.append(p_)
+            except BaseException:
+                continue
+        remaining = len(victims)
+        if not victims:
+            break
+        for v_ in victims:
+            try:
+                pkg_mgr.unloadUserPackage(v_)
+                swept += 1
+            except BaseException:
+                pass
+    step('驻留包清扫', remaining == 0, {'swept': swept, 'remaining': remaining})
+
+    # ---- reload 一次并断言 34
     pkg = pkg_mgr.loadUserPackage(SBS_OUT, True, True)
     step('重新加载 .sbs', pkg is not None)
-
-    # ---- 枚举 wrapper：参数与节点
-    graph = pkg.findResourceFromUrl('pkg:///aniso_lightmap')
-    step('wrapper graph 找回', graph is not None)
-
-    params = graph.getProperties(SDPropertyCategory.Input)
-    n_params = 0
-    param_ids = []
-    for i in range(params.getSize()):
-        pid = str(params.getItem(i).getId())
-        if pid.startswith('p_'):
-            n_params += 1
-            param_ids.append(pid)
-    step('参数持久化', n_params == 41, {'count': n_params})
+    graph, n_params = _count_params(pkg)
+    step('参数持久化', n_params == 34, {'count': n_params})
 
     nodes = graph.getNodes()
     kinds = {}
@@ -72,9 +109,21 @@ def main():
          and kinds.get('sbs::compositing::bitmap') == 4,
          kinds)
 
+    # ---- 颜色注解持久化抽查（API 读 editor 注解）
+    color_ok = 0
+    for cid in ('p_light_color', 'p_spec1_color', 'p_diffuse_color'):
+        pr = graph.getPropertyFromId(cid, SDPropertyCategory.Input)
+        if pr is None:
+            continue
+        try:
+            ed = graph.getPropertyAnnotationValueFromId(pr, 'editor')
+            if ed is not None and str(ed.get()) == 'color':
+                color_ok += 1
+        except BaseException:
+            pass
+    step('颜色编辑器注解(抽查3)', color_ok == 3, {'ok': color_ok})
+
     # ---- 在 test graph 实例化（接 output 节点防死码消除）
-    test = SDAPI.get_current_graph()
-    step('test graph', 'CompGraph' in type(test).__name__)
     res = pkg.findResourceFromUrl('pkg:///aniso_lightmap')
     inst = test.newInstanceNode(res)
     inst.setPosition(float2(5000.0, 2000.0))
@@ -92,7 +141,8 @@ def main():
     step('实例 compute+save', rb['ok'],
          {'size': rb['size'], 'err': (rb['error'] or '')[:200]})
 
-    report['param_ids'] = param_ids
+    report['swept'] = swept
+    report['deleted_inst'] = deleted_inst
     report['ok'] = True
 
 

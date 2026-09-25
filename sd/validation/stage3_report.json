@@ -13,10 +13,10 @@
       "ok": true
     },
     {
-      "step": "41 参数注册",
+      "step": "34 参数注册",
       "ok": true,
       "detail": {
-        "registered": 41
+        "registered": 34
       }
     },
     {
@@ -24,10 +24,24 @@
       "ok": true
     },
     {
+      "step": "texel 派生",
+      "ok": true,
+      "detail": {
+        "size": [
+          2048,
+          2048
+        ],
+        "texel": [
+          0.00048828125,
+          0.00048828125
+        ]
+      }
+    },
+    {
       "step": "PP1 主链发射",
       "ok": true,
       "detail": {
-        "fg_nodes": 653
+        "fg_nodes": 587
       }
     },
     {
@@ -42,15 +56,24 @@
       "ok": true
     },
     {
-      "step": "保存 aniso_lightmap.sbs v3",
+      "step": "保存 aniso_lightmap.sbs v4",
       "ok": true,
       "detail": {
-        "size": 217329
+        "size": 195848
+      }
+    },
+    {
+      "step": "颜色注解 XML 补写",
+      "ok": true,
+      "detail": {
+        "patched": 5,
+        "of": 5
       }
     }
   ],
   "fail": null,
-  "pp1_nodes": 653,
+  "pp1_nodes": 587,
   "pp2_nodes": 52,
+  "color_patch": 5,
   "ok": true
 }
