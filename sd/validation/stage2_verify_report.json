@@ -46,15 +46,59 @@
     },
     {
       "step": "实例 compute+save",
-      "ok": false,
+      "ok": true,
       "detail": {
-        "size": null,
-        "err": "getPropertyValue 返回 None"
+        "size": [
+          2048,
+          2048
+        ],
+        "err": ""
       }
     }
   ],
-  "fail": {
-    "error": "RuntimeError(\"stage2_verify 失败于: 实例 compute+save  ({'size': None, 'err': 'getPropertyValue 返回 None'})\")",
-    "traceback": "Traceback (most recent call last):\n  File \"E:/AI_Project/Anisotropic Lighting/sd\\probe_stage2_verify.py\", line 95, in <module>\n    main()\n    ~~~~^^\n  File \"E:/AI_Project/Anisotropic Lighting/sd\\probe_stage2_verify.py\", line 87, in main\n    step('实例 compute+save', rb['ok'],\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n         {'size': rb['size'], 'err': (rb['error'] or '')[:200]})\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:/AI_Project/Anisotropic Lighting/sd\\probe_stage2_verify.py\", line 29, in step\n    raise RuntimeError(f'stage2_verify 失败于: {name}  ({detail})')\nRuntimeError: stage2_verify 失败于: 实例 compute+save  ({'size': None, 'err': 'getPropertyValue 返回 None'})\n"
-  }
+  "fail": null,
+  "param_ids": [
+    "p_light_azimuth_deg",
+    "p_light_elevation_deg",
+    "p_light_intensity",
+    "p_light_color",
+    "p_ambient_color",
+    "p_ambient_intensity",
+    "p_aniso_angle_deg",
+    "p_aniso_axis",
+    "p_aniso_amount",
+    "p_shift1",
+    "p_shift2",
+    "p_exponent1",
+    "p_exponent2",
+    "p_spec1_color",
+    "p_spec1_intensity",
+    "p_spec2_color",
+    "p_spec2_intensity",
+    "p_spec_mode",
+    "p_spec_edge0",
+    "p_spec_edge1",
+    "p_spec_threshold",
+    "p_front_k",
+    "p_diffuse_mode",
+    "p_diffuse_color",
+    "p_diffuse_edge0",
+    "p_diffuse_edge1",
+    "p_diffuse_threshold",
+    "p_ao_strength",
+    "p_ao_direct_light",
+    "p_exposure_ev",
+    "p_validity_fill",
+    "p_view_mode",
+    "p_view_direction",
+    "p_camera_position",
+    "p_debug_mode",
+    "p_spec_layer_index",
+    "p_detail_mode",
+    "p_detail_strength",
+    "p_detail_green_sign",
+    "p_texel_u",
+    "p_texel_v"
+  ],
+  "ok": true
 }

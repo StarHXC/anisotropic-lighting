@@ -39,10 +39,10 @@
       }
     },
     {
-      "step": "核心链发射（常数快照版）",
+      "step": "核心链发射（参数读取版）",
       "ok": true,
       "detail": {
-        "fg_nodes": 664
+        "fg_nodes": 653
       }
     },
     {
@@ -54,18 +54,18 @@
       "ok": true,
       "detail": {
         "path": "E:\\AI_Project\\Anisotropic Lighting\\sd\\aniso_lightmap.sbs",
-        "size": 195448
+        "size": 202618
       }
     }
   ],
   "fail": null,
   "sbs_path": "E:\\AI_Project\\Anisotropic Lighting\\sd\\aniso_lightmap.sbs",
-  "fg_nodes": 664,
+  "fg_nodes": 653,
   "manual_checks": [
-    "① 在 test graph 导入 E:\\AI_Project\\Anisotropic Lighting\\sd\\aniso_lightmap.sbs（File → Import），拖入 aniso_lightmap 实例。",
-    "② 查看实例节点属性面板：应显示 41 参数（01_光照方向 … 06_调试与系统 分组）。",
-    "③ 截图参数面板发回核对。",
-    "④ 实例输出即成品 lightmap（当前常数快照版；参数读取版核心链在 A2 替换，届时面板调参才会真正生效）。"
+    "① 删除 test graph 里旧的 aniso_lightmap 实例，重新导入 E:\\AI_Project\\Anisotropic Lighting\\sd\\aniso_lightmap.sbs（File → Import 覆盖）并拖入新实例。",
+    "② 拖动 01_光照方向 组的 p_light_azimuth_deg 滑块：高光方位应实时变化。",
+    "③ 拖动 06_调试与系统 组的 p_debug_mode（0-9）：切换调试视图。",
+    "④ 全部调参实时生效（函数图内 get 节点直读参数）。"
   ],
   "ok": true
 }

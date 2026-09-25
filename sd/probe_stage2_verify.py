@@ -72,7 +72,7 @@ def main():
          and kinds.get('sbs::compositing::bitmap') == 4,
          kinds)
 
-    # ---- 在 test graph 实例化
+    # ---- 在 test graph 实例化（接 output 节点防死码消除）
     test = SDAPI.get_current_graph()
     step('test graph', 'CompGraph' in type(test).__name__)
     res = pkg.findResourceFromUrl('pkg:///aniso_lightmap')
@@ -80,9 +80,14 @@ def main():
     inst.setPosition(float2(5000.0, 2000.0))
     step('实例化到 test graph', inst is not None)
 
+    out_node = test.newNode('sbs::compositing::output')
+    out_node.setPosition(float2(5600.0, 2000.0))
+    outs = inst.getProperties(SDPropertyCategory.Output)
+    out_pin = str(outs.getItem(0).getId())
+    inst.newPropertyConnectionFromId(out_pin, out_node, 'inputNodeOutput')
+
     # ---- compute（含 wrapper 内 4 bitmap 相对路径解析）
     exr = os.path.join(VAL_DIR, 'stage2_inst.exr')
-    # 实例节点输出属性 = 第一个 Output
     rb = compute_and_save(test, inst, exr)
     step('实例 compute+save', rb['ok'],
          {'size': rb['size'], 'err': (rb['error'] or '')[:200]})

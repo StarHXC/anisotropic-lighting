@@ -69,10 +69,29 @@ def _norm3(v):
     return (v[0] / l, v[1] / l, v[2] / l)
 
 
-def build_core(fg, texel: float = P['texel']):
-    """发射 aniso.frag 主链到函数图 fg。返回 (packed_output_node, meta)。"""
+def build_core(fg, texel: float = P['texel'], param_resolver=None):
+    """发射 aniso.frag 主链到函数图 fg。返回 (packed_output_node, meta)。
+
+    param_resolver: None → 标量/颜色参数用常数（Stage 1 快照版）；
+                    callable(pid) → NodeRef（wrapper 参数读取版，A2）。
+                    f3 参数返回单个 NodeRef(f3)；标量返回 NodeRef(f1)。
+    """
     em = Emitter(fg, cache_scope='stage1_core')
     meta = {'nodes': 0}
+
+    # ---- 参数解析（常数 vs wrapper get 节点）
+    def sc(pid):
+        """标量参数 → f1 NodeRef。"""
+        if param_resolver is not None:
+            return param_resolver(pid)
+        return em.c_f1(float(P[pid]))
+
+    def v3p(pid):
+        """float3 参数 → f3 NodeRef。"""
+        if param_resolver is not None:
+            return param_resolver(pid)
+        c = P[pid]
+        return em.v3(em.c_f1(c[0]), em.c_f1(c[1]), em.c_f1(c[2]))
 
     pos = SDAPI.get_pos_node(fg)
     q = NodeRef(pos, 'f2')  # $pos 恒等 = 规范 q（0B 裁定）
@@ -207,68 +226,68 @@ def build_core(fg, texel: float = P['texel']):
     handed2 = em.dot3(em.cross3(N0, Tuv), dPdv)
     h = em.pick_sign(handed2)
     Vs = em.mulscalar(em.cross3(Ns, Us), h)
-    # A = pick3(Us, Vs, ?, axis)：两选一 → 用 pick3 带占位（axis∈{0,1}）
-    axis_sel = em.step(em.c_f1(0.5), em.c_f1(float(P['aniso_axis'])))
+    # A = 两选一（axis∈{0,1}）
+    axis_sel = em.step(em.c_f1(0.5), sc('aniso_axis'))
     A = em.lerp(Us, Vs, axis_sel)          # axis=0→Us, 1→Vs
-    ang = em.mul(em.c_f1(math.radians(P['aniso_angle_deg'])), em.c_f1(1.0))
+    ang = em.mul(sc('aniso_angle_deg'), em.c_f1(math.pi / 180.0))
     ct, st = em.cos(ang), em.sin(ang)
     TAniso = em.add(em.mulscalar(A, ct), em.mulscalar(em.cross3(Ns, A), st))
 
-    # ---- Vn（VIEW_MODE=2 normal_proxy：Vn=Ns；三模式运行期级联）
-    # directional: normalize(u_viewDirection) —— CPU 已归一化语义由常数保证
-    vd = _norm3(P['view_direction'])
-    Vn_dir = em.bc_f3(em.c_f1(0.0))
-    Vn_dir = em.v3(em.c_f1(vd[0]), em.c_f1(vd[1]), em.c_f1(vd[2]))
-    cp = P['camera_position']
-    vp = em.safe_normalize(em.sub(em.v3(em.c_f1(cp[0]), em.c_f1(cp[1]),
-                                        em.c_f1(cp[2])),
-                                  Pw),
+    # ---- Vn（VIEW_MODE 三模式运行期级联；§7.5：宿主归一化语义必须复刻）
+    # directional: 归一化由图内 sqrt(1/dot) 实现（render_setup 语义）——
+    # 归一化 view_direction 参数（graph 内完成，不依赖 CPU）
+    vd_raw = v3p('view_direction')
+    vd_len = em.sqrt(em.dot3(vd_raw, vd_raw))
+    vd_len_prot = em.max_f1(vd_len, em.c_f1(1e-8))  # render_setup: 拒绝 <1e-8
+    Vn_dir = em.div(vd_raw, vd_len_prot)
+    vp = em.safe_normalize(em.sub(v3p('camera_position'), Pw),
                            em.v3(em.c_f1(0.0), em.c_f1(0.0), em.c_f1(1.0)),
                            1e-12)
     Vn_persp = em.swizzle3_from_f4(vp)
     # pick3(Vn_dir, Vn_persp, Ns, view_mode)
-    Vn = em.pick3(Vn_dir, Vn_persp, Ns, em.c_f1(float(P['view_mode'])))
+    Vn = em.pick3(Vn_dir, Vn_persp, Ns, sc('view_mode'))
 
-    # ---- H（aniso.frag:287-289）
-    ld = _norm3(P['light_dir'])
-    L = em.v3(em.c_f1(ld[0]), em.c_f1(ld[1]), em.c_f1(ld[2]))
+    # ---- H（aniso.frag:287-289；light_dir 由图内角度公式生成并归一化校验）
+    az = em.mul(sc('p_light_azimuth_deg'), em.c_f1(math.pi / 180.0))
+    el = em.mul(sc('p_light_elevation_deg'), em.c_f1(math.pi / 180.0))
+    L = em.v3(em.mul(em.cos(el), em.cos(az)),
+              em.mul(em.cos(el), em.sin(az)),
+              em.sin(el))
     hN = em.safe_normalize(em.add(L, Vn),
                            em.v3(em.c_f1(0.0), em.c_f1(0.0), em.c_f1(1.0)),
                            1e-12)
     H = em.swizzle3_from_f4(hN)
     hValid = em.sw1(hN, 3)
 
-    # ---- specLayer ×2（aniso.frag:197-216）
-    def spec_layer(shift: float, exponent: float, color, intensity: float):
+    # ---- specLayer ×2（aniso.frag:197-216；参数读取版）
+    def spec_layer(shift_pid: str, exponent_pid: str, color_pid: str,
+                   intensity_pid: str):
         tiN = em.safe_normalize(
-            em.add(TAniso, em.mulscalar(Ns, em.c_f1(shift))),
+            em.add(TAniso, em.mulscalar(Ns, sc(shift_pid))),
             TAniso, 1e-12)
         Ti = em.swizzle3_from_f4(tiN)
         c_raw = em.dot3(Ti, H)
         c = em.min_f1(em.max_f1(c_raw, em.c_f1(-1.0)), em.c_f1(1.0))
         sin_th = em.sqrt(em.max_f1(em.sub(em.c_f1(1.0), em.mul(c, c)),
                                    em.c_f1(0.0)))
-        aniso = em.pow(sin_th, em.c_f1(exponent))
+        aniso = em.pow(sin_th, sc(exponent_pid))
         iso_in = em.min_f1(em.max_f1(em.dot3(Ns, H), em.c_f1(0.0)),
                            em.c_f1(1.0))
-        iso = em.pow(iso_in, em.c_f1(exponent))
-        raw = em.lerp(iso, aniso, em.c_f1(P['aniso_amount']))
-        shaped = em.segmented(raw, em.c_f1(float(P['spec_mode'])),
-                              em.c_f1(P['spec_edge0']), em.c_f1(P['spec_edge1']),
-                              em.c_f1(P['spec_threshold']))
-        col = em.mulscalar(em.v3(em.c_f1(color[0]), em.c_f1(color[1]),
-                                 em.c_f1(color[2])),
-                           em.mul(shaped, em.c_f1(intensity)))
+        iso = em.pow(iso_in, sc(exponent_pid))
+        raw = em.lerp(iso, aniso, sc('aniso_amount'))
+        shaped = em.segmented(raw, sc('spec_mode'),
+                              sc('spec_edge0'), sc('spec_edge1'),
+                              sc('spec_threshold'))
+        col = em.mulscalar(v3p(color_pid),
+                           em.mul(shaped, sc(intensity_pid)))
         return em.v4_from_f3(col, hValid)
 
-    s1 = spec_layer(P['shift1'], P['exponent1'], P['spec1_color'],
-                    P['spec1_intensity'])
-    s2 = spec_layer(P['shift2'], P['exponent2'], P['spec2_color'],
-                    P['spec2_intensity'])
+    s1 = spec_layer('shift1', 'exponent1', 'spec1_color', 'spec1_intensity')
+    s2 = spec_layer('shift2', 'exponent2', 'spec2_color', 'spec2_intensity')
 
     # ---- facing / specTotal（aniso.frag:300-305）
     ndl = em.dot3(Ns, L)
-    facing = em.min_f1(em.max_f1(em.mul(ndl, em.c_f1(P['front_k'])),
+    facing = em.min_f1(em.max_f1(em.mul(ndl, sc('front_k')),
                                  em.c_f1(0.0)), em.c_f1(1.0))
     spec_valid = em.mul(hValid, nValid)
     spec_total = em.mulscalar(em.add(em.swizzle3_from_f4(s1),
@@ -277,25 +296,19 @@ def build_core(fg, texel: float = P['texel']):
 
     # ---- 漫反射 / AO / linear（aniso.frag:308-321）
     diff_x = em.add(em.mul(ndl, em.c_f1(0.5)), em.c_f1(0.5))
-    diff = em.segmented(diff_x, em.c_f1(float(P['diffuse_mode'])),
-                        em.c_f1(P['diffuse_edge0']), em.c_f1(P['diffuse_edge1']),
-                        em.c_f1(P['diffuse_threshold']))
+    diff = em.segmented(diff_x, sc('diffuse_mode'),
+                        sc('diffuse_edge0'), sc('diffuse_edge1'),
+                        sc('diffuse_threshold'))
     ao_r = em.min_f1(em.max_f1(em.sw1(s_ao, 0), em.c_f1(0.0)), em.c_f1(1.0))
-    ao_factor = em.lerp(em.c_f1(1.0), ao_r, em.c_f1(P['ao_strength']))
-    ao_direct = em.lerp(em.c_f1(1.0), ao_factor, em.c_f1(P['ao_direct_light']))
+    ao_factor = em.lerp(em.c_f1(1.0), ao_r, sc('ao_strength'))
+    ao_direct = em.lerp(em.c_f1(1.0), ao_factor, sc('ao_direct_light'))
 
-    amb = em.mulscalar(em.v3(em.c_f1(P['ambient_color'][0]),
-                             em.c_f1(P['ambient_color'][1]),
-                             em.c_f1(P['ambient_color'][2])),
-                       em.c_f1(P['ambient_intensity']))
+    amb = em.mulscalar(v3p('ambient_color'),
+                       sc('ambient_intensity'))
     amb = em.mulscalar(amb, ao_factor)
-    diff_term = em.mulscalar(em.v3(em.c_f1(P['diffuse_color'][0]),
-                                   em.c_f1(P['diffuse_color'][1]),
-                                   em.c_f1(P['diffuse_color'][2])), diff)
-    light_rgb = em.mulscalar(em.v3(em.c_f1(P['light_color'][0]),
-                                   em.c_f1(P['light_color'][1]),
-                                   em.c_f1(P['light_color'][2])),
-                             em.c_f1(P['light_intensity']))
+    diff_term = em.mulscalar(v3p('diffuse_color'), diff)
+    light_rgb = em.mulscalar(v3p('light_color'),
+                             sc('light_intensity'))
     light_rgb = em.mulscalar(light_rgb, ao_direct)
     direct = em.mul(em.add(diff_term, spec_total), light_rgb)
     linear = em.add(amb, direct)
@@ -330,7 +343,7 @@ def build_core(fg, texel: float = P['texel']):
     dbg_cands.append((em.add(em.mulscalar(TAniso, em.c_f1(0.5)),
                              em.bc_f3(em.c_f1(0.5))), tAnisoValid))
     # cand7 = specLayer[spec_layer_index] rgb / hValid（§5.4：分段后+层色/强度后）
-    s_sel = em.step(em.c_f1(0.5), em.c_f1(float(P['spec_layer_index'])))
+    s_sel = em.step(em.c_f1(0.5), sc('spec_layer_index'))
     s7_rgb = em.lerp(em.swizzle3_from_f4(s1), em.swizzle3_from_f4(s2), s_sel)
     s7_a = em.lerp(em.sw1(s1, 3), em.sw1(s2, 3), s_sel)
     dbg_cands.append((s7_rgb, s7_a))
@@ -344,10 +357,10 @@ def build_core(fg, texel: float = P['texel']):
                       em.sw1(dPdqy, 3)))
 
     # 运行期级联（§3.4：i=1→9 顺序；SEL(gteq(debug, i-0.5), cand_i, prev)）
-    dbg = float(P['debug_mode'])
+    dbg_f = sc('debug_mode')
     rgb_sel, a_sel = dbg_cands[0]
     for i in range(1, 10):
-        cond = em.cmp('gteq', em.c_f1(dbg), em.c_f1(float(i) - 0.5))
+        cond = em.cmp('gteq', dbg_f, em.c_f1(float(i) - 0.5))
         rgb_sel = em.sel(cond, dbg_cands[i][0], rgb_sel)
         a_sel = em.sel(cond, dbg_cands[i][1], a_sel)
     packed = em.v4_from_f3(rgb_sel, a_sel)

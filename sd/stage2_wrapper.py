@@ -158,13 +158,50 @@ def main():
     for idx, node in enumerate(bmp_nodes):
         SDAPI.connect_pp_input(node, pp)
 
-    # ---- 5. 核心链发射（constants 快照版；参数 get 版本 A2 替换）
+    # ---- 5. 核心链发射（参数读取版：函数图内 get_float1/get_integer1/get_float3
+    #      读 wrapper 图层参数 —— 0A 裁定的参数载体 + 0D 验证的读取链）
     from aniso_pp.emitter import Emitter, NodeRef
+    from sd.api.sdvaluestring import SDValueString as _SVS
     import stages
+
     fg, created = SDAPI.get_perpixel_graph(pp)
-    packed, meta = stages.build_core(fg)
+
+    _scalar_map = {p.pid: p for p in PARAMS if p.ptype != 'float3'}
+    _f3_map = {p.pid: p for p in PARAMS if p.ptype == 'float3'}
+
+    def resolve_scalar(pid: str) -> NodeRef:
+        """标量参数 → get 节点。int 参数走 get_integer1→tofloat。
+        stages 传短名（'aniso_axis'）→ 补 p_ 前缀。"""
+        full = pid if pid.startswith('p_') else f'p_{pid}'
+        p = _scalar_map[full]
+        if p.ptype == 'int':
+            gi = fg.newNode('sbs::function::get_integer1')
+            gi.setInputPropertyValueFromId('__constant__',
+                                           _SVS.sNew(full))
+            tf = fg.newNode('sbs::function::tofloat')
+            SDAPI.fg_connect(NodeRef(gi, 'f1'), tf, 'value')
+            return NodeRef(tf, 'f1')
+        gf = fg.newNode('sbs::function::get_float1')
+        gf.setInputPropertyValueFromId('__constant__', _SVS.sNew(full))
+        return NodeRef(gf, 'f1')
+
+    def resolve_f3(pid: str) -> NodeRef:
+        full = pid if pid.startswith('p_') else f'p_{pid}'
+        gf3 = fg.newNode('sbs::function::get_float3')
+        gf3.setInputPropertyValueFromId('__constant__', _SVS.sNew(full))
+        return NodeRef(gf3, 'f3')
+
+    def resolver(pid: str) -> NodeRef:
+        full = pid if pid.startswith('p_') else f'p_{pid}'
+        if full in _f3_map:
+            return resolve_f3(pid)
+        return resolve_scalar(pid)
+
+    # debug_mode 的 get_integer1→tofloat 是 f1，但 stages 级联用 cmp('gteq',
+    # dbg_f, …) 比较 —— f1 兼容 ✓。spec_layer_index/aniso_axis 同理。
+    packed, meta = stages.build_core(fg, param_resolver=resolver)
     fg.setOutputNode(packed.node, True)
-    step('核心链发射（常数快照版）', True, {'fg_nodes': meta['nodes']})
+    step('核心链发射（参数读取版）', True, {'fg_nodes': meta['nodes']})
 
     # ---- 6. wrapper output（必须 setOutputNode 标记为图输出，否则实例求值 None）
     out_node = wrapper.newNode('sbs::compositing::output')
@@ -182,11 +219,11 @@ def main():
     report['sbs_path'] = SBS_OUT
     report['fg_nodes'] = meta['nodes']
     report['manual_checks'] = [
-        f'① 在 test graph 导入 {SBS_OUT}（File → Import），拖入 aniso_lightmap 实例。',
-        '② 查看实例节点属性面板：应显示 41 参数（01_光照方向 … 06_调试与系统 分组）。',
-        '③ 截图参数面板发回核对。',
-        '④ 实例输出即成品 lightmap（当前常数快照版；参数读取版核心链在 A2 替换，'
-        '届时面板调参才会真正生效）。',
+        f'① 删除 test graph 里旧的 aniso_lightmap 实例，重新导入 {SBS_OUT}'
+        '（File → Import 覆盖）并拖入新实例。',
+        '② 拖动 01_光照方向 组的 p_light_azimuth_deg 滑块：高光方位应实时变化。',
+        '③ 拖动 06_调试与系统 组的 p_debug_mode（0-9）：切换调试视图。',
+        '④ 全部调参实时生效（函数图内 get 节点直读参数）。',
     ]
     report['ok'] = True
 

@@ -1,0 +1,22 @@
+{
+  "verdict": "Stage 2 终版裁定（参数面板交互交付达成）",
+  "deliverable": "sd/aniso_lightmap.sbs（202618 bytes）",
+  "contents": {
+    "parameters": "41 项（6 分组 slider 注解），注册于 wrapper 图层（0A 裁定载体）",
+    "core": "主链 PP 653 节点，函数图内 get_float1/get_integer1→tofloat/get_float3 直读 wrapper 参数",
+    "bitmaps": "4 张 CopiedAndLinked 相对路径内嵌（2048²/32F）",
+    "light_dir": "图内角度公式生成（p_light_azimuth_deg/p_light_elevation_deg → sin/cos 弧度），参数实时驱动"
+  },
+  "verification": {
+    "persist": "unload→reload 41 参数全数找回",
+    "instantiate": "test graph 实例 + setOutputNode 修复 + 动态输出引脚",
+    "numeric": "严格内域（双有效 2742859 texel）max|Δ|=0.000015 PASS（与 Stage1 一致 → get 链注入正确）",
+    "param_effect": "p_light_azimuth_deg -56.3°→90°：2538923/4194304 像素变化，max|Δ|=2.44 —— 参数实时驱动实锤"
+  },
+  "api_gaps_documented": [
+    "图像类型图输入无法经 Python API 创建（SDTypeTexture/Usage InvalidType）→ bitmap 资源直连，换资产=重跑脚本",
+    "comp graph 的 output 节点必须 setOutputNode(True) 否则实例求值 None",
+    "实例输出引脚 id = wrapper 输出 identifier（非 unique_filter_output）",
+    "test.compute() 对孤立实例死码消除——外部验证必须接 output 节点"
+  ]
+}
