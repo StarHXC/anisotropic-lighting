@@ -359,6 +359,15 @@ class Emitter:
         n.t = 'f1'
         return n
 
+    def max_f3(self, a: NodeRef, b: NodeRef) -> NodeRef:
+        """f3 逐分量 max（§5.3：vecN×vecN 同型原生运算）。"""
+        assert a.t == 'f3' and b.t == 'f3'
+        n = self._new('sbs::function::max')
+        SDAPI.fg_connect(a, n, 'a')
+        SDAPI.fg_connect(b, n, 'b')
+        n.t = 'f3'
+        return n
+
     def plane_fallback(self, n: NodeRef) -> NodeRef:
         """§6 planeFallback(n) → f3；含 1e-6 防零偏置；cn.w 另存（触发诊断）。"""
         assert n.t == 'f3'

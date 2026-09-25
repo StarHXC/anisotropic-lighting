@@ -68,7 +68,7 @@ def main():
     for i in range(nodes.getSize()):
         d = str(nodes.getItem(i).getDefinition().getId())
         kinds[d] = kinds.get(d, 0) + 1
-    step('节点持久化', kinds.get('sbs::compositing::pixelprocessor') == 1
+    step('节点持久化', kinds.get('sbs::compositing::pixelprocessor') == 2
          and kinds.get('sbs::compositing::bitmap') == 4,
          kinds)
 

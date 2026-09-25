@@ -1,0 +1,16 @@
+{
+  "verdict": "Stage 3 终版裁定（PP2 输出级 + 成品域对照 PASS）",
+  "wrapper_contents": {
+    "PP1": "主链 653 节点（参数读取版）",
+    "PP2": "输出级 52 节点（曝光/Reinhard/一次 sRGB/validityFill，output.frag 逐式）",
+    "parameters": "41 项（p_exposure_ev/p_validity_fill 经 get_float1 实时驱动 PP2）"
+  },
+  "acceptance": {
+    "domain": "有效内域 2742873 texel",
+    "within_2lsb": "2742859（99.9995%）",
+    "over_2lsb": "14 —— 全部为 bValid 阈值骑线例外（GLSL 填白 vs SD 输出 srgb 的 A 分歧传导，§8.2(5)）",
+    "real_over": 0,
+    "finite": "0 NaN/Inf"
+  },
+  "note": "成品层阈值 2/255 按审核稿 §8.2(4)；sRGB 编码域对比（glsl_output_debug0.npy 为 NumPy 复算 output.frag 基准）"
+}

@@ -1,0 +1,56 @@
+{
+  "probe": "stage3",
+  "steps": [
+    {
+      "step": "环境",
+      "ok": true,
+      "detail": {
+        "sd_api_version": "16.0.1"
+      }
+    },
+    {
+      "step": "wrapper graph v3",
+      "ok": true
+    },
+    {
+      "step": "41 参数注册",
+      "ok": true,
+      "detail": {
+        "registered": 41
+      }
+    },
+    {
+      "step": "4 bitmap 导入",
+      "ok": true
+    },
+    {
+      "step": "PP1 主链发射",
+      "ok": true,
+      "detail": {
+        "fg_nodes": 653
+      }
+    },
+    {
+      "step": "PP2 输出级发射",
+      "ok": true,
+      "detail": {
+        "fg_nodes": 52
+      }
+    },
+    {
+      "step": "wrapper output → PP2",
+      "ok": true
+    },
+    {
+      "step": "保存 aniso_lightmap.sbs v3",
+      "ok": true,
+      "detail": {
+        "size": 217329
+      }
+    }
+  ],
+  "fail": null,
+  "pp1_nodes": 653,
+  "pp2_nodes": 52,
+  "ok": true
+}

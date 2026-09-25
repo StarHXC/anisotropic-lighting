@@ -32,7 +32,7 @@
       "ok": true,
       "detail": {
         "sbs::compositing::bitmap": 4,
-        "sbs::compositing::pixelprocessor": 1,
+        "sbs::compositing::pixelprocessor": 2,
         "sbs::compositing::output": 1
       }
     },
