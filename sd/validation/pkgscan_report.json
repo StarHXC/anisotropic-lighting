@@ -70,87 +70,8 @@
       "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
       "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
       "aniso_params": null
-    },
-    {
-      "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
-      "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
-      "aniso_params": null
-    },
-    {
-      "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
-      "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
-      "aniso_params": null
-    },
-    {
-      "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
-      "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
-      "aniso_params": null
-    },
-    {
-      "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
-      "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
-      "aniso_params": null
-    },
-    {
-      "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
-      "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
-      "aniso_params": null
-    },
-    {
-      "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
-      "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
-      "aniso_params": null
-    },
-    {
-      "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
-      "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
-      "aniso_params": null
-    },
-    {
-      "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
-      "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
-      "aniso_params": null
-    },
-    {
-      "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
-      "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
-      "aniso_params": null
-    },
-    {
-      "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
-      "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
-      "aniso_params": 41,
-      "aniso_err": "AttributeError(\"'SDSBSCompGraph' object has no attribute 'getUid'\")"
-    },
-    {
-      "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
-      "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
-      "aniso_params": 34,
-      "aniso_err": "AttributeError(\"'SDSBSCompGraph' object has no attribute 'getUid'\")"
-    },
-    {
-      "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
-      "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
-      "aniso_params": null
-    },
-    {
-      "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
-      "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
-      "aniso_params": null
-    },
-    {
-      "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
-      "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
-      "aniso_params": 34,
-      "aniso_err": "AttributeError(\"'SDSBSCompGraph' object has no attribute 'getUid'\")"
-    },
-    {
-      "identifier": "<AttributeError(\"'SDPackage' object has no attribute 'getIdentifier'\")>",
-      "url": "<AttributeError(\"'SDPackage' object has no attribute 'getUrl'\")>",
-      "aniso_params": 34,
-      "aniso_err": "AttributeError(\"'SDSBSCompGraph' object has no attribute 'getUid'\")"
     }
   ],
   "ok": true,
-  "total": 29
+  "total": 14
 }
