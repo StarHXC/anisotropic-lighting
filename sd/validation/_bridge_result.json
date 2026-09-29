@@ -1,14 +1,16 @@
 {
   "protocol": 2,
-  "request_id": "f2dae04013b445ff90eeb82377af76b0",
-  "probe": "v6_verify",
+  "request_id": "1af2b92f49374c998dfd95335cabe803",
+  "probe": "v62_verify",
   "ok": true,
   "error": null,
   "report": {
-    "probe": "v6_verify",
+    "probe": "v62_verify",
     "ok": true,
-    "v6_off.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v6_off.exr",
-    "v6_flip.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v6_flip.exr",
-    "v6_full.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v6_full.exr"
+    "v62_off.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v62_off.exr",
+    "v62_flip.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v62_flip.exr",
+    "v62_ao25.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v62_ao25.exr",
+    "v62_full.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v62_full.exr",
+    "v62_default.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v62_default.exr"
   }
 }

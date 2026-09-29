@@ -77,7 +77,7 @@ PARAMS: list[Param] = [
           note='v5: 平面项=所选颜色精确常量（不乘 intensity/AO）'),
     Param('p_two_sided', 'int', 1, GROUPS['01'], 0, 1,
           step=1.0, glsl_map='v6 新增：双面光照开关',
-          note='1=背面法线翻向观察侧（N·V<0 时翻转）'),
+          note='1=背向光源的法线翻向受光侧（N·L<0 时翻转）；受光区逐像素不动'),
     Param('p_ambient_ao', 'float1', 0.5, GROUPS['01'], 0.0, 1.0,
           glsl_map='v6 新增：环境光 AO 调制强度',
           note='0=v5 平面 / 1=v4 全量 AO；默认 0.5 有界调制'),

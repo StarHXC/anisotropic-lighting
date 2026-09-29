@@ -16,7 +16,7 @@
       "step": "清理本工具旧实例",
       "ok": true,
       "detail": {
-        "deleted": 1
+        "deleted": 2
       }
     },
     {
@@ -77,6 +77,6 @@
   ],
   "fail": null,
   "swept": 2,
-  "deleted_inst": 1,
+  "deleted_inst": 2,
   "ok": true
 }

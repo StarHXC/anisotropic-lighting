@@ -41,7 +41,7 @@
       "step": "PP1 主链发射",
       "ok": true,
       "detail": {
-        "fg_nodes": 622
+        "fg_nodes": 604
       }
     },
     {
@@ -59,15 +59,15 @@
       "step": "函数图排布",
       "ok": true,
       "detail": {
-        "pp1": 622,
+        "pp1": 604,
         "pp2": 52
       }
     },
     {
-      "step": "保存 aniso_lightmap.sbs v6",
+      "step": "保存 aniso_lightmap.sbs v6.2",
       "ok": true,
       "detail": {
-        "size": 239758
+        "size": 233693
       }
     },
     {
@@ -80,7 +80,7 @@
     }
   ],
   "fail": null,
-  "pp1_nodes": 622,
+  "pp1_nodes": 604,
   "pp2_nodes": 52,
   "color_patch": 5,
   "ok": true

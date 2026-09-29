@@ -12,9 +12,11 @@
 配方逐条对应 shaders/aniso.frag:219-355 与 common.glsl，不修复任何边界行为。
 
 v4：DEBUG 1-9 级联移除（验收证据由 Stage 1 判定链承担，成品路径数值恒等）。
-v6（用户裁定，差异 #8）：
-- 双面翻转：N·V<0 的 texel 法线翻向观察侧（p_two_sided，默认开）——
-  背光暗区重新吃到直射光（提亮+恢复各向异性高光），正面亮区逐像素不动
+v6（用户裁定，差异 #8；v6.2 门控修正见翻转块）：
+- 双面翻转：背向光源的 texel 法线翻向受光侧（p_two_sided，默认开）——
+  背光暗区重新吃到直射光（提亮+恢复各向异性高光），受光亮区逐像素不动
+  （门控 ndl<0；v6.0/6.1 的 ndv<0/ndv<0∧ndl<0 会漏翻背光却朝向相机的褶皱内壁，
+  形成 T_Render_03 黑斑）
 - ambient 有界 AO 调制：amb = ambient_color × lerp(1, AO, p_ambient_ao)
   （默认 0.5）——恢复褶皱暗部层次但有界（不回近黑）；v5 平面化 = s=0
 """
@@ -124,7 +126,8 @@ def build_core(fg, texel: float = P['texel'], param_resolver=None):
     coverage = em.step(em.c_f1(0.5), em.sw1(s_mask, 0))          # step(0.5, mask.r)
     Pw = em.v3(em.sw1(s_pos, 0), em.sw1(s_pos, 1), em.sw1(s_pos, 2))
 
-    # ---- 观察向量（v6 上移：供双面翻转的 V 参考；与下方 Vn 级联同源）
+    # ---- 观察向量（v6 上移：Vn_dir/Vn_persp 供下方 Vn 级联复用；v6.2 起翻转不再
+    # 依赖 V 参考，此处仅服务于视向量本身）
     # directional: 归一化由图内 sqrt(1/dot) 实现（render_setup 语义）——
     # 归一化 view_direction 参数（graph 内完成，不依赖 CPU）
     vd_raw = v3p('view_direction')
@@ -135,10 +138,6 @@ def build_core(fg, texel: float = P['texel'], param_resolver=None):
                            em.v3(em.c_f1(0.0), em.c_f1(0.0), em.c_f1(1.0)),
                            1e-12)
     Vn_persp = em.swizzle3_from_f4(vp)
-    # 翻转参考 V（v6）：mode2 代理 Vn=Ns 对翻转是循环引用 → 第三支用世界上向常数
-    Vref = em.pick3(Vn_dir, Vn_persp,
-                    em.v3(em.c_f1(0.0), em.c_f1(0.0), em.c_f1(1.0)),
-                    sc('view_mode'))
     # 翻转参考 L（v6.1 门控）：与下方 H 块同一角度公式（az/el 参数驱动）
     az_f = em.mul(sc('p_light_azimuth_deg'), em.c_f1(math.pi / 180.0))
     el_f = em.mul(sc('p_light_elevation_deg'), em.c_f1(math.pi / 180.0))
@@ -162,16 +161,16 @@ def build_core(fg, texel: float = P['texel'], param_resolver=None):
                                               1e-12))
     n0N = em.safe_normalize(N0raw, pf, 1e-12)
     N0 = em.swizzle3_from_f4(n0N)
-    # v6 双面翻转（用户裁定，差异 #8）：仅翻转既背向相机、又背向光源的 texel
-    #（ndv<0 AND ndl<0）。v6.0 单条件 ndv<0 实测把亮区里朝下但被光照到的
-    # 垂边 texel 也翻转（亮区最大变化 0.147，违反"其他位置不变"）；加 ndl<0
-    # 门控后亮区（ndl>0）逐像素不动，翻转只发生在本来要提亮的暗区。
-    # 翻转不改长度 → nValid（safe_normalize w 分量）与 validity 链完全不变。
-    ndv_pre = em.dot3(N0, Vref)
+    # v6 双面翻转（用户裁定，差异 #8；v6.2 门控修正）：翻转所有背向光源的
+    # texel（ndl<0）。历史：v6.0 单条件 ndv<0 把亮区里朝下但被光照到的垂边也
+    # 翻转（亮区最大变化 0.147，违反"其他位置不变"）；v6.1 改 ndv<0 AND ndl<0
+    # 后，背光但朝向相机的褶皱内壁（ndv>0, ndl<0）漏翻 → 周围翻亮、自身死黑，
+    # 形成 T_Render_03 不自然黑斑。改为纯 ndl<0 门控：受光区（ndl>0）逐像素
+    # 不动，暗区（ndl<0）整体翻向受光侧，根除漏翻。翻转不改长度 → nValid 与
+    # validity 链完全不变。
     ndl_pre = em.dot3(N0, L_ref)
-    # step(edge,x)=1 当 x>=edge → 反向用：step(ndv,0)=1 当 ndv<=0（背面）
-    flip_gate = em.mul(em.step(ndv_pre, em.c_f1(0.0)),
-                       em.step(ndl_pre, em.c_f1(0.0)))  # 1=翻转，0=保持
+    # step(edge,x)=1 当 x>=edge → 反向用：step(ndl,0)=1 当 ndl<=0（背光）
+    flip_gate = em.step(ndl_pre, em.c_f1(0.0))  # 1=背光（翻转），0=受光（保持）
     flip_sign = em.lerp(em.c_f1(1.0), em.c_f1(-1.0), flip_gate)
     flip_mult = em.lerp(em.c_f1(1.0), flip_sign, sc('two_sided'))
     N0 = em.mulscalar(N0, flip_mult)
@@ -277,7 +276,7 @@ def build_core(fg, texel: float = P['texel'], param_resolver=None):
     TAniso = em.add(em.mulscalar(A, ct), em.mulscalar(em.cross3(Ns, A), st))
 
     # ---- Vn（VIEW_MODE 三模式运行期级联；§7.5：宿主归一化语义必须复刻）
-    # Vn_dir / Vn_persp 已上移到解码前（v6：双面翻转需要 V 参考），此处复用
+    # Vn_dir / Vn_persp 已上移到解码前（供 Vn 级联复用），此处直接引用
     Vn = em.pick3(Vn_dir, Vn_persp, Ns, sc('view_mode'))
 
     # ---- H（aniso.frag:287-289；light_dir 由图内角度公式生成并归一化校验）

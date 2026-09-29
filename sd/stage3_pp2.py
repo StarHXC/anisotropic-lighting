@@ -7,6 +7,8 @@ v4：34 参数（06 调试组移除）；float3 颜色参数用 Color(RGB) 编�
 资源注解）；texel 由 bake_position.png 实际尺寸派生（构建期常数）。
 v5：ambient 项平面化（不乘 intensity/AO），移除 p_ambient_intensity（33 参数）。
 v6：双面法线翻转 + ambient 有界 AO 调制（+p_two_sided、+p_ambient_ao，35 参数）。
+v6.2：翻转门控由 (ndv<0 AND ndl<0) 改为 ndl<0（根除背光朝相机褶皱内壁漏翻黑斑），
+节点数微降（去掉 Vref pick3）；参数/默认不变。
 输出：sd/aniso_lightmap.sbs（v6）+ sd/validation/stage3_report.json
 """
 import json
@@ -305,7 +307,7 @@ def main():
          {'pp1': meta1['nodes'], 'pp2': em2.node_count})
 
     pkg_mgr.savePackageAs(pkg, SBS_OUT)
-    step('保存 aniso_lightmap.sbs v6', os.path.getsize(SBS_OUT) > 0,
+    step('保存 aniso_lightmap.sbs v6.2', os.path.getsize(SBS_OUT) > 0,
          {'size': os.path.getsize(SBS_OUT)})
 
     # ---- XML 后处理：为颜色参数补 valueInterpretation/min/max 注解 ----

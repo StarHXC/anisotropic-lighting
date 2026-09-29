@@ -1,6 +1,6 @@
 ﻿# SD Pixel Processor 迁移 — aniso_lightmap 交付包
 
-Phase-2 完成：aniso.frag 主链已完整迁移进 **Substance Designer Pixel Processor**，交付 `sd/aniso_lightmap.sbs`（v6，35 参数实时调参的自定义节点）。
+Phase-2 完成：aniso.frag 主链已完整迁移进 **Substance Designer Pixel Processor**，交付 `sd/aniso_lightmap.sbs`（v6.2，35 参数实时调参的自定义节点）。
 
 > **参数面板逐项说明（调参必读）**：`doc/PARAMETERS.md`
 

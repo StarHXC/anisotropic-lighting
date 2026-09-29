@@ -1,0 +1,9 @@
+{
+  "probe": "v62_verify",
+  "ok": true,
+  "v62_off.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v62_off.exr",
+  "v62_flip.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v62_flip.exr",
+  "v62_ao25.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v62_ao25.exr",
+  "v62_full.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v62_full.exr",
+  "v62_default.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v62_default.exr"
+}

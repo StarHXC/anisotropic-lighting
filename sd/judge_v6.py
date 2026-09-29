@@ -4,9 +4,8 @@ r"""v6.2 数值判定（本地 imageio，模式同 _judge_*.py）。
 检查标准（v6.2 修正：以门控语义为准，而非亮度阈值）：
 1. 回归不变量：v6_off == v5 ambient_white（两新参数归零 → 精确回到 v5）
 2. 受光区不变（"其他位置不变"的严格形式）：ndl_pre>0 的像素在 flip 态逐像素
-   等于 off 态 —— 门控 (ndv<=0 AND ndl<=0) 永不触碰它们
-3. 翻转作用域：变更像素 ⊆ {ndv_pre<=0 AND ndl_pre<=0}（∪ 退化法线），
-   且方向全部为提亮
+   等于 off 态 —— 门控 (ndl<=0) 永不触碰它们
+3. 翻转作用域：变更像素 ⊆ {ndl_pre<=0}（∪ 退化法线），且方向全部为提亮
 4. 过渡带量化：亮区（v5>0.8）内被变更的像素数量/最大幅度 —— 属 ndl∈(-0.25,0)
    平滑漫反射尾部，翻转边界 ndl=0 处 diff(±) 对称无接缝，如实记录
 5. 褶皱细节：暗区局部标准差 full > off
@@ -45,9 +44,9 @@ def check(name, ok, detail):
 
 
 def main() -> int:
-    off, _ = load_image_any(VAL / 'v6_off.exr')
-    flip, _ = load_image_any(VAL / 'v6_flip.exr')
-    full, _ = load_image_any(VAL / 'v6_full.exr')
+    off, _ = load_image_any(VAL / 'v62_off.exr')
+    flip, _ = load_image_any(VAL / 'v62_flip.exr')
+    full, _ = load_image_any(VAL / 'v62_full.exr')
     v5, _ = load_image_any(VAL / 'ambient_white.exr')
     h = min(off.shape[0], v5.shape[0])
     w = min(off.shape[1], v5.shape[1])
@@ -67,9 +66,8 @@ def main() -> int:
     L = np.array((0.4, -0.6, 0.7), np.float32)
     L /= np.linalg.norm(L)
     ndl_pre = nn @ L
-    ndv_pre = nn[..., 2]
     degenerate = np.abs(nlen - 1.0) > 0.1
-    gate = (ndv_pre <= 0) & (ndl_pre <= 0)          # 链内翻转门控
+    gate = ndl_pre <= 0                                # 链内翻转门控（v6.2：纯背光）
     lit = ndl_pre > 0                                # 受光区（永不翻转）
 
     dark = m & (np.abs(v5.mean(axis=2) - V5_GRAY) < 0.03)
@@ -91,7 +89,7 @@ def main() -> int:
     outside = changed & ~gate & ~degenerate
     up = (lum_flip > lum_off + EPS) & changed
     down = (lum_flip < lum_off - EPS) & changed
-    check('翻转作用域⊆门控(ndv<=0∧ndl<=0)∪退化',
+    check('翻转作用域⊆门控(ndl<=0)∪退化',
           float(diff_fo[outside].max() if outside.any() else 0.0) <= TOL_2LSB,
           {'changed_px': int(changed.sum()), 'outside_gate': int(outside.sum()),
            'outside_max_diff': float(diff_fo[outside].max()) if outside.any() else 0.0,

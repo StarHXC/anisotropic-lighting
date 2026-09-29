@@ -18,11 +18,11 @@
       }
     },
     {
-      "check": "翻转作用域⊆门控(ndv<=0∧ndl<=0)∪退化",
+      "check": "翻转作用域⊆门控(ndl<=0)∪退化",
       "ok": true,
       "detail": {
-        "changed_px": 1164161,
-        "outside_gate": 107,
+        "changed_px": 2000841,
+        "outside_gate": 498,
         "outside_max_diff": 0.00044351816177368164,
         "degenerate_px": 2274
       }
@@ -31,7 +31,7 @@
       "check": "变更方向全为提亮",
       "ok": true,
       "detail": {
-        "up_px": 1164161,
+        "up_px": 2000841,
         "down_px": 0
       }
     },
@@ -40,8 +40,8 @@
       "ok": true,
       "detail": {
         "mean_off": 0.7357701063156128,
-        "mean_flip": 0.8143324851989746,
-        "up_ratio_in_dark": 0.607435065828782,
+        "mean_flip": 0.8629521131515503,
+        "up_ratio_in_dark": 1.0,
         "dark_px": 1852761
       }
     },
@@ -50,23 +50,23 @@
       "ok": true,
       "detail": {
         "local_std_off": 0.0011967438040301204,
-        "local_std_full": 0.003767716232687235,
-        "ratio": 3.148306446207769
+        "local_std_full": 0.0013921824283897877,
+        "ratio": 1.163308657794186
       }
     },
     {
       "check": "有界性（不回近黑）",
       "ok": true,
       "detail": {
-        "dark_min_full": 0.6125010251998901,
+        "dark_min_full": 0.7977377772331238,
         "theory_floor": 0.6104
       }
     }
   ],
   "ok": true,
   "transitional_band": {
-    "changed_in_bright_px": 22163,
-    "max_diff": 0.053119540214538574,
+    "changed_in_bright_px": 99757,
+    "max_diff": 0.05313390493392944,
     "note": "ndl∈(-0.25,0) 平滑漫反射尾部；翻转边界 ndl=0 处对称无接缝"
   }
 }

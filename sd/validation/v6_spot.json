@@ -1,0 +1,6 @@
+{
+  "probe": "v6_spot",
+  "ok": true,
+  "spot_s0.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\spot_s0.exr",
+  "spot_s25.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\spot_s25.exr"
+}
