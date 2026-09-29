@@ -78,12 +78,19 @@ def _norm3(v):
     return (v[0] / l, v[1] / l, v[2] / l)
 
 
-def build_core(fg, texel: float = P['texel'], param_resolver=None):
+def build_core(fg, texel: float = P['texel'], param_resolver=None,
+               *, frame_out=None):
     """发射 aniso.frag 主链到函数图 fg。返回 (packed_output_node, meta)。
 
     param_resolver: None → 标量/颜色参数用常数（Stage 1 快照版）；
                     callable(pid) → NodeRef（wrapper 参数读取版，A2）。
                     f3 参数返回单个 NodeRef(f3)；标量返回 NodeRef(f1)。
+
+    frame_out（aniso_mask 兼容出口，ANISO_MASK_PLAN §5.1）：None（默认）时
+    行为与旧版完全一致；传入 dict 时在其上填充已有中间量 NodeRef
+    （normal/tangent_u/light/half_vector=f3，geometry_validity/tangent_validity/
+    half_validity=f1）。不新增图节点、不改旧返回值与求值公式；出口 NodeRef
+    属调用者的 fg，不跨图共享。判空必须用 `is not None`。
     """
     em = Emitter(fg, cache_scope='stage1_core')
     meta = {'nodes': 0}
@@ -360,6 +367,17 @@ def build_core(fg, texel: float = P['texel'], param_resolver=None):
     # debug=0 常数下级联恒选 cand0，数值恒等；DEBUG 1-9 对照证据由 Stage 1
     # 判定链（glsl_core_debug{0..9}.npy + dbg_m*.exr）永久承担。
     packed = em.v4_from_f3(linear, validity)
+
+    # ---- frame_out 兼容出口（aniso_mask；§5.1：只登记已存在的局部量，
+    # 不为出口增加重复运算；默认 frame_out=None 时此块整体跳过）
+    if frame_out is not None:
+        frame_out['normal'] = Ns
+        frame_out['tangent_u'] = Us
+        frame_out['light'] = L
+        frame_out['half_vector'] = H
+        frame_out['geometry_validity'] = validity
+        frame_out['tangent_validity'] = tValid
+        frame_out['half_validity'] = hValid
 
     meta['nodes'] = em.node_count
     meta['cache'] = dict(em._expr_cache)

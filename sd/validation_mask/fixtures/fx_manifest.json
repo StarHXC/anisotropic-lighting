@@ -1,0 +1,60 @@
+{
+  "size": [
+    256,
+    256
+  ],
+  "texel": 0.00390625,
+  "regions": {
+    "plane": [
+      0,
+      0,
+      128,
+      128
+    ],
+    "slope": [
+      128,
+      0,
+      256,
+      128
+    ],
+    "mirror": [
+      0,
+      128,
+      128,
+      256
+    ],
+    "hole": [
+      128,
+      128,
+      256,
+      256
+    ]
+  },
+  "degenerate": {
+    "from": [
+      136,
+      8
+    ],
+    "to": [
+      140,
+      12
+    ]
+  },
+  "slope_dzdx": 0.6,
+  "probe": {
+    "center": [
+      64,
+      64
+    ],
+    "radius": 24,
+    "tilt_az_deg": -56.309932474020215,
+    "max_tilt_deg": 55.0
+  },
+  "last_row_valid_count": 511,
+  "files": {
+    "fx_position": "fx_position.png",
+    "fx_normalobj": "fx_normalobj.png",
+    "fx_mask": "fx_mask.png",
+    "fx_ao": "fx_ao.png"
+  }
+}
