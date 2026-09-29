@@ -16,7 +16,7 @@
       "step": "清理本工具旧实例",
       "ok": true,
       "detail": {
-        "deleted": 1
+        "deleted": 2
       }
     },
     {
@@ -24,7 +24,8 @@
       "ok": true,
       "detail": {
         "swept": 1,
-        "remaining": 0
+        "remaining": 0,
+        "fails": []
       }
     },
     {
@@ -32,10 +33,11 @@
       "ok": true
     },
     {
-      "step": "参数持久化",
+      "step": "参数持久化(返回包对象)",
       "ok": true,
       "detail": {
-        "count": 34
+        "count": 33,
+        "expected": 33
       }
     },
     {
@@ -56,7 +58,10 @@
     },
     {
       "step": "实例化到 test graph",
-      "ok": true
+      "ok": true,
+      "detail": {
+        "res_class": "SDSBSCompGraph"
+      }
     },
     {
       "step": "实例 compute+save",
@@ -72,6 +77,6 @@
   ],
   "fail": null,
   "swept": 1,
-  "deleted_inst": 1,
+  "deleted_inst": 2,
   "ok": true
 }

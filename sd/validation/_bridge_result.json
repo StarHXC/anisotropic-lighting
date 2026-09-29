@@ -1,5 +1,11 @@
 {
-  "probe": "locate",
+  "protocol": 2,
+  "request_id": "05bee420f4c147299d6cd0787553361b",
+  "probe": "ambient_fix",
   "ok": true,
-  "error": null
+  "error": null,
+  "report": {
+    "probe": "ambient_fix",
+    "ok": true
+  }
 }

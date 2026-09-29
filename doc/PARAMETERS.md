@@ -1,6 +1,6 @@
 # aniso_lightmap 参数面板说明
 
-> 适用交付物：`sd/aniso_lightmap.sbs`（v4，34 参数）
+> 适用交付物：`sd/aniso_lightmap.sbs`（v5，33 参数）
 > 面板位置：选中实例 → **INSTANCE PARAMETERS**（5 个分组，折叠展示）
 > 数学依据与验收证据见 `PHASE2_COMPLETION.md`；本文面向日常调参。
 
@@ -21,7 +21,7 @@
 
 ---
 
-## 01_光照方向（6 项）
+## 01_光照方向（5 项）
 
 光源方向在图内由角度实时合成（与烘焙端 `light_dir=(0.4,−0.6,0.7)` 同一语义）。
 
@@ -31,8 +31,7 @@
 | p_light_elevation_deg | 滑块 | 44.1489° | [−89, 89] | 仰角：光源抬升/压低。越高 N·L 直射分量越强 |
 | p_light_intensity | 滑块 | 1.0 | [0, 4] | 直射光倍率 |
 | p_light_color | **Color** | 白 (1,1,1) | — | 直射光颜色（乘进高光+漫反射直射项） |
-| p_ambient_color | **Color** | (0.06, 0.07, 0.09) | — | 环境光颜色。默认刻意偏暗偏蓝，接近烘焙基准 |
-| p_ambient_intensity | 滑块 | 1.0 | [0, 4] | 环境光倍率 |
+| p_ambient_color | **Color** | (0.06, 0.07, 0.09) | — | 环境光颜色。**平面项：输出=所选颜色精确值**（v5，不乘 intensity/AO），阴影区选什么色就是什么色，投影形态不受影响 |
 
 > ⚠️ azimuth 与 elevation 合成向量若退化（极端组合），输出无定义——保持在滑块范围内即不会触发。
 
@@ -75,8 +74,8 @@
 | p_diffuse_color | **Color** | 白 | — | 漫反射颜色（乘在分段后的 N·L 上；染非白即整体偏色） |
 | p_diffuse_edge0 / p_diffuse_edge1 | 滑块 | 0.30 / 0.50 | [0,1] | smooth 模式过渡边。**必须 edge0 < edge1** |
 | p_diffuse_threshold | 滑块 | 0.5 | [0,1] | hard 模式阈值 |
-| p_ao_strength | 滑块 | 1.0 | [0, 1] | AO 压制强度：1=按 mask1 的 AO 全量压环境光，0=不压 |
-| p_ao_direct_light | 滑块 | 0.0 | [0, 1] | AO 是否也压直射光：0=只压环境（默认），1=直射同压 |
+| p_ao_strength | 滑块 | 1.0 | [0, 1] | AO 压制强度（经 ao_direct_light 作用于直射光；ambient 已平面化不受 AO 影响） |
+| p_ao_direct_light | 滑块 | 0.0 | [0, 1] | AO 压直射光：0=直射不受 AO（默认），1=直射同压 |
 | p_exposure_ev | 滑块 | 0.0 | [−10, 10] | 输出级曝光（EV）：每 +1 亮度×2，在 tone map 之前生效 |
 | p_validity_fill | 滑块 | 1.0 | [0, 1] | 无效区（coverage 外）填充色灰度：1=白，0=黑 |
 
@@ -108,9 +107,10 @@
 4. 想恢复烘焙基准：面板右上角实例参数菜单 → **Reset parameters**（全部回到上表默认值）
 5. **换资产**（不同贴图/尺寸）：重跑 `sd/stage3_pp2.py`（改 `BAKE_ROOT`），不要在旧实例上换图——图像输入无法经 Python API 注入
 
-## 参数为什么是 34 个（v4 裁定记录）
+## 参数为什么是 33 个（v4/v5 裁定记录）
 
-原 41 个。移除的 7 个均与日常调参无关（详见 `PHASE2_COMPLETION.md` §v4）：
+原 41 个。移除的 8 个均与日常调参无关（详见 `PHASE2_COMPLETION.md` §3）：
 - `debug_mode`、`spec_layer_index` —— 迁移验收用的中间量视图（DEBUG 0–9），证据已固化，成品路径无数值影响
 - `detail_mode/strength/green_sign` —— detail 法线功能未解锁，节点图根本不读取
 - `texel_u/v` —— 系统参数（由输入图尺寸派生），不应手工调节
+- `ambient_intensity` —— v5 裁定：ambient 平面化为精确常量（修复背光/高 AO 区选色被压暗），无需倍率

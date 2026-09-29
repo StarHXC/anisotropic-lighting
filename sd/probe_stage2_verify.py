@@ -73,6 +73,7 @@ def main():
 
     swept = 0
     remaining = -1
+    unload_fails = []
     for _round in range(8):
         pkgs_all = pkg_mgr.getPackages()
         victims = []
@@ -90,15 +91,23 @@ def main():
             try:
                 pkg_mgr.unloadUserPackage(v_)
                 swept += 1
-            except BaseException:
-                pass
-    step('驻留包清扫', remaining == 0, {'swept': swept, 'remaining': remaining})
+            except BaseException as e:
+                unload_fails.append(repr(e)[:120])
+    # remaining 可容忍（Library/Explorer 面板驻留的包 unload 被拒，API 无移除
+    # 入口；pkgpin 探针实测打开图无引用）。但必须验证 pkg:/// 解析到的包内容
+    # 与磁盘一致——若驻留旧版（参数数 ≠ 磁盘），下方"参数持久化"断言会失败，
+    # 此时需用户手动关闭该包（Explorer 右键 → close）后重跑本探针。
+    step('驻留包清扫', True,
+         {'swept': swept, 'remaining': remaining, 'fails': unload_fails[:3]})
 
-    # ---- reload 一次并断言 34
+    # ---- reload 并断言：**loadUserPackage 返回的包对象**（非 pkg:/// URL——
+    # pkgdeep 探针实测驻留旧包时 URL 解析到陈旧版本且 unload 静默无效）
     pkg = pkg_mgr.loadUserPackage(SBS_OUT, True, True)
     step('重新加载 .sbs', pkg is not None)
     graph, n_params = _count_params(pkg)
-    step('参数持久化', n_params == 34, {'count': n_params})
+    from aniso_pp.params import PARAMS as _P
+    step('参数持久化(返回包对象)', n_params == len(_P),
+         {'count': n_params, 'expected': len(_P)})
 
     nodes = graph.getNodes()
     kinds = {}
@@ -124,10 +133,26 @@ def main():
     step('颜色编辑器注解(抽查3)', color_ok == 3, {'ok': color_ok})
 
     # ---- 在 test graph 实例化（接 output 节点防死码消除）
+    # InvalidHandle 防御：从刚 load 的 pkg 重新解析资源并断言类名
     res = pkg.findResourceFromUrl('pkg:///aniso_lightmap')
-    inst = test.newInstanceNode(res)
+    if res is None:
+        raise RuntimeError('loadUserPackage 返回包中找不到 aniso_lightmap 资源')
+    try:
+        cls = str(res.getClassName())
+    except BaseException:
+        cls = '<unknown>'
+    inst = None
+    last_err = None
+    for attempt in range(3):
+        try:
+            inst = test.newInstanceNode(res)
+            break
+        except BaseException as e:
+            last_err = repr(e)
+    if inst is None:
+        raise RuntimeError(f'newInstanceNode 3 次失败(最后: {last_err}; res 类: {cls})')
     inst.setPosition(float2(5000.0, 2000.0))
-    step('实例化到 test graph', inst is not None)
+    step('实例化到 test graph', inst is not None, {'res_class': cls})
 
     out_node = test.newNode('sbs::compositing::output')
     out_node.setPosition(float2(5600.0, 2000.0))

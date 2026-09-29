@@ -11,6 +11,10 @@ v4 变更（用户裁定）：
   输入图尺寸派生，均非用户可调项
 - float3 颜色参数面板用 Color(RGB) 编辑器（发射侧注解，见 stage3_pp2.py）
 
+v5 变更（用户裁定）：
+- 移除 p_ambient_intensity——ambient 项平面化为精确常量（不乘 intensity/AO），
+  修复法线背光/高 AO 区选色被压暗问题（完成报告差异 #7）
+
 校验器：跨字段规则在 validate() —— 滑块注解只管 UI，不替代校验。
 """
 from __future__ import annotations
@@ -63,9 +67,8 @@ PARAMS: list[Param] = [
     Param('p_light_color', 'float3', (1.0, 1.0, 1.0), GROUPS['01'],
           glsl_map='u_lightColor'),
     Param('p_ambient_color', 'float3', (0.06, 0.07, 0.09), GROUPS['01'],
-          glsl_map='u_ambientColor'),
-    Param('p_ambient_intensity', 'float1', 1.0, GROUPS['01'], 0.0, 4.0,
-          glsl_map='u_ambientIntensity'),
+          glsl_map='u_ambientColor',
+          note='v5: 平面项=所选颜色精确常量（不乘 intensity/AO）'),
     # ---- 02 各向异性
     Param('p_aniso_angle_deg', 'float1', 0.0, GROUPS['02'], -180.0, 180.0,
           glsl_map='u_anisoAngle（度→图内转弧度）'),
@@ -157,7 +160,7 @@ def validate(values: dict) -> list[str]:
     if not f('p_diffuse_edge0') < f('p_diffuse_edge1'):
         errs.append(f'p_diffuse_edge0 ({f("p_diffuse_edge0")}) 必须 < p_diffuse_edge1 ({f("p_diffuse_edge1")})')
     # 有限正数
-    for pid in ('p_front_k', 'p_light_intensity', 'p_ambient_intensity',
+    for pid in ('p_front_k', 'p_light_intensity',
                 'p_exponent1', 'p_exponent2'):
         val = f(pid)
         if not (math.isfinite(val) and val > 0):

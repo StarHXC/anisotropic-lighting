@@ -1,0 +1,13 @@
+{
+  "probe": "pkgpin2",
+  "views": [
+    {
+      "view_index": 0,
+      "view_id": "2674093214368",
+      "graph": "Chap05_BaseMat_Ind_Fabric_02",
+      "aniso_refs": []
+    }
+  ],
+  "ok": true,
+  "n_views": 1
+}

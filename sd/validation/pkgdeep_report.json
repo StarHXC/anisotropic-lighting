@@ -1,0 +1,44 @@
+{
+  "probe": "pkgdeep",
+  "ok": true,
+  "before": [
+    {
+      "idx": 81,
+      "params": 34,
+      "obj": "<sd.api.sdpackage.SDPackage object at 0x0000026F06165D90>"
+    }
+  ],
+  "unload_log": [
+    {
+      "round": 0,
+      "idx": 81,
+      "params": 34,
+      "ret": "None"
+    },
+    {
+      "round": 1,
+      "idx": 81,
+      "params": 34,
+      "ret": "None"
+    },
+    {
+      "round": 2,
+      "idx": 81,
+      "params": 34,
+      "ret": "None"
+    },
+    {
+      "round": 3,
+      "idx": 81,
+      "params": 34,
+      "ret": "None"
+    }
+  ],
+  "after": [
+    {
+      "idx": 81,
+      "params": 34,
+      "obj": "<sd.api.sdpackage.SDPackage object at 0x0000026F06164D70>"
+    }
+  ]
+}

@@ -305,9 +305,13 @@ def build_core(fg, texel: float = P['texel'], param_resolver=None):
     ao_factor = em.lerp(em.c_f1(1.0), ao_r, sc('ao_strength'))
     ao_direct = em.lerp(em.c_f1(1.0), ao_factor, sc('ao_direct_light'))
 
-    amb = em.mulscalar(v3p('ambient_color'),
-                       sc('ambient_intensity'))
-    amb = em.mulscalar(amb, ao_factor)
+    # ---- ambient（v5 用户裁定：平面化）----
+    # 源语义 amb = ambient_color × intensity × AO 在法线背光/高 AO 区产生
+    # 无法靠选色消除的暗斑（白也发暗）。裁定：ambient 项 = 所选颜色精确常量，
+    # 不乘 intensity、不乘 AO——"选择什么颜色就是什么颜色"；direct 项（投影
+    # /明暗）不动，投影范围不受影响。参数面板随之移除 p_ambient_intensity。
+    # AO 对直射光的压制仍由 ao_direct 保留。
+    amb = v3p('ambient_color')
     diff_term = em.mulscalar(v3p('diffuse_color'), diff)
     light_rgb = em.mulscalar(v3p('light_color'),
                              sc('light_intensity'))
