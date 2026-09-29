@@ -16,14 +16,14 @@
       "step": "清理本工具旧实例",
       "ok": true,
       "detail": {
-        "deleted": 2
+        "deleted": 1
       }
     },
     {
       "step": "驻留包清扫",
       "ok": true,
       "detail": {
-        "swept": 1,
+        "swept": 2,
         "remaining": 0,
         "fails": []
       }
@@ -36,8 +36,8 @@
       "step": "参数持久化(返回包对象)",
       "ok": true,
       "detail": {
-        "count": 33,
-        "expected": 33
+        "count": 35,
+        "expected": 35
       }
     },
     {
@@ -76,7 +76,7 @@
     }
   ],
   "fail": null,
-  "swept": 1,
-  "deleted_inst": 2,
+  "swept": 2,
+  "deleted_inst": 1,
   "ok": true
 }

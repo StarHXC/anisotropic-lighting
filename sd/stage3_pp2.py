@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 r"""Stage 3 — PP2 输出级：曝光/Reinhard/sRGB/validityFill（output.frag 对应）。
 
-wrapper 重建 v5：PP1（主链参数读取版）→ PP2（输出级）→ wrapper output。
+wrapper 重建 v6：PP1（主链参数读取版）→ PP2（输出级）→ wrapper output。
 v4：34 参数（06 调试组移除）；float3 颜色参数用 Color(RGB) 编辑器
 （editor='color' + valueInterpretation='color'，取自官方 3d_texture_render.sbs
 资源注解）；texel 由 bake_position.png 实际尺寸派生（构建期常数）。
 v5：ambient 项平面化（不乘 intensity/AO），移除 p_ambient_intensity（33 参数）。
-输出：sd/aniso_lightmap.sbs（v5）+ sd/validation/stage3_report.json
+v6：双面法线翻转 + ambient 有界 AO 调制（+p_two_sided、+p_ambient_ao，35 参数）。
+输出：sd/aniso_lightmap.sbs（v6）+ sd/validation/stage3_report.json
 """
 import json
 import math
@@ -304,7 +305,7 @@ def main():
          {'pp1': meta1['nodes'], 'pp2': em2.node_count})
 
     pkg_mgr.savePackageAs(pkg, SBS_OUT)
-    step('保存 aniso_lightmap.sbs v5', os.path.getsize(SBS_OUT) > 0,
+    step('保存 aniso_lightmap.sbs v6', os.path.getsize(SBS_OUT) > 0,
          {'size': os.path.getsize(SBS_OUT)})
 
     # ---- XML 后处理：为颜色参数补 valueInterpretation/min/max 注解 ----

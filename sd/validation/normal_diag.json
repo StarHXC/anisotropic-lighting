@@ -1,0 +1,31 @@
+{
+  "ok": true,
+  "probe": "normal_diag",
+  "inputs": {
+    "normal": "D:\\Unity_Project\\Chap06_Prop_C201_Tablecloth_01_Lod0\\5th\\Bake\\bake_normalobj.png",
+    "mask": "D:\\Unity_Project\\Chap06_Prop_C201_Tablecloth_01_Lod0\\5th\\Bake\\mask1.png",
+    "v5_exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\ambient_white.exr"
+  },
+  "v5_gray": 0.735357,
+  "eps_band": 0.02,
+  "light_dir": [
+    0.3980148760839957,
+    -0.5970223141259935,
+    0.6965260331469924
+  ],
+  "view": [
+    0.0,
+    0.0,
+    1.0
+  ],
+  "stats": {
+    "dark_px": 1837738,
+    "dark_ratio_of_mask": 0.6686732148737327,
+    "degenerate_len2_10pct": 0.0006464468819820889,
+    "nz_negative": 0.6094775207347293,
+    "backlight_ndl_lt0": 1.0,
+    "backcam_ndv_lt0": 0.6094775207347293,
+    "degenerate_or_backcam": 0.6095950565314533
+  },
+  "verdict": "flip_effective"
+}

@@ -1,11 +1,14 @@
 {
   "protocol": 2,
-  "request_id": "05bee420f4c147299d6cd0787553361b",
-  "probe": "ambient_fix",
+  "request_id": "f2dae04013b445ff90eeb82377af76b0",
+  "probe": "v6_verify",
   "ok": true,
   "error": null,
   "report": {
-    "probe": "ambient_fix",
-    "ok": true
+    "probe": "v6_verify",
+    "ok": true,
+    "v6_off.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v6_off.exr",
+    "v6_flip.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v6_flip.exr",
+    "v6_full.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v6_full.exr"
   }
 }

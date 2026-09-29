@@ -1,6 +1,6 @@
 # aniso_lightmap 参数面板说明
 
-> 适用交付物：`sd/aniso_lightmap.sbs`（v5，33 参数）
+> 适用交付物：`sd/aniso_lightmap.sbs`（v6，35 参数）
 > 面板位置：选中实例 → **INSTANCE PARAMETERS**（5 个分组，折叠展示）
 > 数学依据与验收证据见 `PHASE2_COMPLETION.md`；本文面向日常调参。
 
@@ -14,14 +14,15 @@
 | 光强/色调 | 光 强度、光颜色(Color) | 01 |
 | 高光锐度（拉丝聚拢/发散） | exponent1（主层） | 03 |
 | 高光强度 | spec1_intensity | 03 |
-| 暗部环境色/强度 | ambient_color(Color)、ambient_intensity | 01 |
+| 暗部环境色/强度 | ambient_color(Color)、ambient_ao | 01 |
+| 背面过暗/穿帮 | two_sided（默认开） | 01 |
 | 整体明暗 | exposure_ev | 04 |
 
 多数场景只需要这一张表。下面是全量参考。
 
 ---
 
-## 01_光照方向（5 项）
+## 01_光照方向（7 项）
 
 光源方向在图内由角度实时合成（与烘焙端 `light_dir=(0.4,−0.6,0.7)` 同一语义）。
 
@@ -31,7 +32,9 @@
 | p_light_elevation_deg | 滑块 | 44.1489° | [−89, 89] | 仰角：光源抬升/压低。越高 N·L 直射分量越强 |
 | p_light_intensity | 滑块 | 1.0 | [0, 4] | 直射光倍率 |
 | p_light_color | **Color** | 白 (1,1,1) | — | 直射光颜色（乘进高光+漫反射直射项） |
-| p_ambient_color | **Color** | (0.06, 0.07, 0.09) | — | 环境光颜色。**平面项：输出=所选颜色精确值**（v5，不乘 intensity/AO），阴影区选什么色就是什么色，投影形态不受影响 |
+| p_ambient_color | **Color** | (0.06, 0.07, 0.09) | — | 环境光颜色。暗部基色（v6 默认乘 0.5 幅度的 AO 调制——见 ambient_ao） |
+| p_two_sided | int | 1（开） | 0/1 | **双面光照（v6）**：既背向相机、又背向光源的 texel 法线翻向观察侧。修复褶皱底面/布片背面法线背光导致的整片死黑，让该区域重新吃到直射光+各向异性高光。**受光区逐像素不受影响**（门控 ndl>0 永不翻转）。0=关（回到源 shader 语义） |
+| p_ambient_ao | 滑块 | 0.5 | [0, 1] | **环境光 AO 调制强度（v6）**：褶皱暗部层次的来源。0=平面（v5 语义，暗部无变化）；1=全量 AO（v4 语义，深褶皱可能很暗）；0.5 默认——恢复明暗层次但有界（白环境光下最暗 ≈ 0.61 灰，不会回到近黑） |
 
 > ⚠️ azimuth 与 elevation 合成向量若退化（极端组合），输出无定义——保持在滑块范围内即不会触发。
 
@@ -66,7 +69,7 @@
 
 > 💡 卡通三段形状由 `spec_mode` + `edge0/edge1/threshold` 共同决定；想要连续写实高光就停在 mode 0。
 
-## 04_漫反射_曝光（10 项）
+## 04_漫反射_曝光（9 项）
 
 | 参数 | 类型 | 默认 | 范围 | 说明 |
 |---|---|---|---|---|
@@ -74,7 +77,7 @@
 | p_diffuse_color | **Color** | 白 | — | 漫反射颜色（乘在分段后的 N·L 上；染非白即整体偏色） |
 | p_diffuse_edge0 / p_diffuse_edge1 | 滑块 | 0.30 / 0.50 | [0,1] | smooth 模式过渡边。**必须 edge0 < edge1** |
 | p_diffuse_threshold | 滑块 | 0.5 | [0,1] | hard 模式阈值 |
-| p_ao_strength | 滑块 | 1.0 | [0, 1] | AO 压制强度（经 ao_direct_light 作用于直射光；ambient 已平面化不受 AO 影响） |
+| p_ao_strength | 滑块 | 1.0 | [0, 1] | AO 压制强度（直射光经 ao_direct_light；环境光经 ambient_ao 调制幅度） |
 | p_ao_direct_light | 滑块 | 0.0 | [0, 1] | AO 压直射光：0=直射不受 AO（默认），1=直射同压 |
 | p_exposure_ev | 滑块 | 0.0 | [−10, 10] | 输出级曝光（EV）：每 +1 亮度×2，在 tone map 之前生效 |
 | p_validity_fill | 滑块 | 1.0 | [0, 1] | 无效区（coverage 外）填充色灰度：1=白，0=黑 |
@@ -107,10 +110,14 @@
 4. 想恢复烘焙基准：面板右上角实例参数菜单 → **Reset parameters**（全部回到上表默认值）
 5. **换资产**（不同贴图/尺寸）：重跑 `sd/stage3_pp2.py`（改 `BAKE_ROOT`），不要在旧实例上换图——图像输入无法经 Python API 注入
 
-## 参数为什么是 33 个（v4/v5 裁定记录）
+## 参数为什么是 35 个（v4/v5/v6 裁定记录）
 
 原 41 个。移除的 8 个均与日常调参无关（详见 `PHASE2_COMPLETION.md` §3）：
 - `debug_mode`、`spec_layer_index` —— 迁移验收用的中间量视图（DEBUG 0–9），证据已固化，成品路径无数值影响
 - `detail_mode/strength/green_sign` —— detail 法线功能未解锁，节点图根本不读取
 - `texel_u/v` —— 系统参数（由输入图尺寸派生），不应手工调节
 - `ambient_intensity` —— v5 裁定：ambient 平面化为精确常量（修复背光/高 AO 区选色被压暗），无需倍率
+
+v6 净 +2（33→35，完成报告差异 #8）：
+- `+two_sided` —— 用户反馈 v5 暗区虽不再被 AO 压黑，但整片死灰且各向异性消失（褶皱底面法线背光背相机 → N·L 归零、facing=0 关断高光）。修复法线朝向（双面翻转）而非均一化：链内法线早已 safe_normalize，问题不在长度在方向
+- `+ambient_ao` —— v5 平面化把褶皱暗部层次一并拿掉（T_Render_02 反馈"很多褶皱细节消失"）。以有界调制恢复：0=v5 / 1=v4 / 0.5 默认

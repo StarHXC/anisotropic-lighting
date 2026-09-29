@@ -48,6 +48,7 @@
 6. **图像输入 → bitmap 直连**：Python API 无法创建 image 图输入（实验定案）；换资产重跑脚本。
 7. **float3 注解 API 缺口**：min/max 注解拒收 SDValueFloat3、valueInterpretation 不可经 API 设置（colortest 实测）——Color(RGB) 编辑器由 API `editor='color'` + 保存后 XML 补写合成。
 8. **v5 ambient 平面化（用户裁定）**：源语义 `amb = ambient_color × intensity × AO` 在法线背光/高 AO 区产生选色无法消除的暗斑（白也发暗）。裁定 ambient 项 = 所选颜色精确常量（不乘 intensity/AO），direct 项不动——投影形态不受影响；移除 p_ambient_intensity（34→33 参数）。GLSL 对照基准自此不再适用（属预期）。
+9. **v6 双面翻转 + 有界 AO 调制（用户裁定）**：Unity 实测（T_Render_02）v5 暗区呈 0.735 灰（Reinhard 不动点）且褶皱细节消失。诊断（validation/normal_diag.json）确认暗区 60.9% 法线背向相机、92% 背光、退化仅 0.06%——问题是朝向而非长度。裁定：(a) 双面翻转——仅 ndv≤0 且 ndl≤0 的 texel 法线翻向观察侧（p_two_sided，默认开），受光区逐像素不变（ndl>0 门控）；(b) ambient 有界 AO 调制——`amb = ambient_color × lerp(1, AO, p_ambient_ao)`，默认 0.5（0=v5 平面 / 1=v4 全量），恢复褶皱暗部层次且有界（白环境光最暗 ≈ sRGB 0.6125，实测验证）。新增 2 参数（33→35）。验收 8 项全 PASS（validation/v6_judge.json）：回归不变量 max|Δ|=0、受光区 ≤0.00044、翻转 116 万像素全部提亮无变暗、暗区局部方差 ×3.15。
 
 ## 4. 过程资产
 

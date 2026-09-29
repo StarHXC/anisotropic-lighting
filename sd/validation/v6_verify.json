@@ -1,0 +1,7 @@
+{
+  "probe": "v6_verify",
+  "ok": true,
+  "v6_off.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v6_off.exr",
+  "v6_flip.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v6_flip.exr",
+  "v6_full.exr": "E:\\AI_Project\\Anisotropic Lighting\\sd\\validation\\v6_full.exr"
+}

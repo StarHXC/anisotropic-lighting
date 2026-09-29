@@ -13,10 +13,10 @@
       "ok": true
     },
     {
-      "step": "33 参数注册",
+      "step": "35 参数注册",
       "ok": true,
       "detail": {
-        "registered": 33
+        "registered": 35
       }
     },
     {
@@ -41,7 +41,7 @@
       "step": "PP1 主链发射",
       "ok": true,
       "detail": {
-        "fg_nodes": 585
+        "fg_nodes": 622
       }
     },
     {
@@ -59,15 +59,15 @@
       "step": "函数图排布",
       "ok": true,
       "detail": {
-        "pp1": 585,
+        "pp1": 622,
         "pp2": 52
       }
     },
     {
-      "step": "保存 aniso_lightmap.sbs v5",
+      "step": "保存 aniso_lightmap.sbs v6",
       "ok": true,
       "detail": {
-        "size": 225985
+        "size": 239758
       }
     },
     {
@@ -80,7 +80,7 @@
     }
   ],
   "fail": null,
-  "pp1_nodes": 585,
+  "pp1_nodes": 622,
   "pp2_nodes": 52,
   "color_patch": 5,
   "ok": true

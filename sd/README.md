@@ -1,6 +1,6 @@
-# SD Pixel Processor 迁移 — aniso_lightmap 交付包
+﻿# SD Pixel Processor 迁移 — aniso_lightmap 交付包
 
-Phase-2 完成：aniso.frag 主链已完整迁移进 **Substance Designer Pixel Processor**，交付 `sd/aniso_lightmap.sbs`（v5，33 参数实时调参的自定义节点）。
+Phase-2 完成：aniso.frag 主链已完整迁移进 **Substance Designer Pixel Processor**，交付 `sd/aniso_lightmap.sbs`（v6，35 参数实时调参的自定义节点）。
 
 > **参数面板逐项说明（调参必读）**：`doc/PARAMETERS.md`
 
@@ -10,10 +10,10 @@ Phase-2 完成：aniso.frag 主链已完整迁移进 **Substance Designer Pixel 
 
 1. **导入**：SD 里 File → Import 选择 `sd/aniso_lightmap.sbs`（贴图已 CopiedAndLinked 内嵌于 `.resources/`，随包走）
 2. **使用**：从 Library 拖 `aniso_lightmap` 进任意物质图；输出即成品 sRGB lightmap（2048² RGBA，A=1）
-3. **调参**：选中实例 → INSTANCE PARAMETERS 面板，5 个分组 34 项实时生效；5 个颜色参数带 **Color(RGB) 取色器**
+3. **调参**：选中实例 → INSTANCE PARAMETERS 面板，5 个分组 35 项实时生效；5 个颜色参数带 **Color(RGB) 取色器**
 4. **换资产**：重跑 `stage3_pp2.py`（改 `BAKE_ROOT` 指向新贴图目录）——图像输入无法经 Python API 创建（见「已知限制」），换资产=重新生成 wrapper
 
-## 参数分组（34 项）
+## 参数分组（35 项）
 
 | 分组 | 内容 |
 |---|---|
@@ -66,7 +66,7 @@ v4 变更：原 06_调试与系统组整组移除（7 项）——debug_mode/spe
 
 ```
 sd/
-├── aniso_lightmap.sbs        # ★ 交付物（v4：PP1+PP2 双链，34 参数）
+├── aniso_lightmap.sbs        # ★ 交付物（v6：PP1+PP2 双链，35 参数）
 ├── aniso_pp/                 # 共享模块：api/emitter/params/readback
 ├── stages.py                 # 主链发射（param_resolver 双模式）
 ├── stage3_pp2.py             # wrapper 生成脚本（换资产时重跑）

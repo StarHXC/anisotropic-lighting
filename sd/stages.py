@@ -12,6 +12,11 @@
 配方逐条对应 shaders/aniso.frag:219-355 与 common.glsl，不修复任何边界行为。
 
 v4：DEBUG 1-9 级联移除（验收证据由 Stage 1 判定链承担，成品路径数值恒等）。
+v6（用户裁定，差异 #8）：
+- 双面翻转：N·V<0 的 texel 法线翻向观察侧（p_two_sided，默认开）——
+  背光暗区重新吃到直射光（提亮+恢复各向异性高光），正面亮区逐像素不动
+- ambient 有界 AO 调制：amb = ambient_color × lerp(1, AO, p_ambient_ao)
+  （默认 0.5）——恢复褶皱暗部层次但有界（不回近黑）；v5 平面化 = s=0
 """
 from __future__ import annotations
 
@@ -118,6 +123,29 @@ def build_core(fg, texel: float = P['texel'], param_resolver=None):
     # ---- 解码（aniso.frag:223-229）
     coverage = em.step(em.c_f1(0.5), em.sw1(s_mask, 0))          # step(0.5, mask.r)
     Pw = em.v3(em.sw1(s_pos, 0), em.sw1(s_pos, 1), em.sw1(s_pos, 2))
+
+    # ---- 观察向量（v6 上移：供双面翻转的 V 参考；与下方 Vn 级联同源）
+    # directional: 归一化由图内 sqrt(1/dot) 实现（render_setup 语义）——
+    # 归一化 view_direction 参数（graph 内完成，不依赖 CPU）
+    vd_raw = v3p('view_direction')
+    vd_len = em.sqrt(em.dot3(vd_raw, vd_raw))
+    vd_len_prot = em.max_f1(vd_len, em.c_f1(1e-8))  # render_setup: 拒绝 <1e-8
+    Vn_dir = em.div(vd_raw, vd_len_prot)
+    vp = em.safe_normalize(em.sub(v3p('camera_position'), Pw),
+                           em.v3(em.c_f1(0.0), em.c_f1(0.0), em.c_f1(1.0)),
+                           1e-12)
+    Vn_persp = em.swizzle3_from_f4(vp)
+    # 翻转参考 V（v6）：mode2 代理 Vn=Ns 对翻转是循环引用 → 第三支用世界上向常数
+    Vref = em.pick3(Vn_dir, Vn_persp,
+                    em.v3(em.c_f1(0.0), em.c_f1(0.0), em.c_f1(1.0)),
+                    sc('view_mode'))
+    # 翻转参考 L（v6.1 门控）：与下方 H 块同一角度公式（az/el 参数驱动）
+    az_f = em.mul(sc('p_light_azimuth_deg'), em.c_f1(math.pi / 180.0))
+    el_f = em.mul(sc('p_light_elevation_deg'), em.c_f1(math.pi / 180.0))
+    L_ref = em.v3(em.mul(em.cos(el_f), em.cos(az_f)),
+                  em.mul(em.cos(el_f), em.sin(az_f)),
+                  em.sin(el_f))
+
     N0raw = em.sub(em.mul(em.v3(em.sw1(s_nrm, 0), em.sw1(s_nrm, 1),
                                 em.sw1(s_nrm, 2)),
                           em.c_f1(2.0)), em.bc_f3(em.c_f1(1.0)))
@@ -134,6 +162,19 @@ def build_core(fg, texel: float = P['texel'], param_resolver=None):
                                               1e-12))
     n0N = em.safe_normalize(N0raw, pf, 1e-12)
     N0 = em.swizzle3_from_f4(n0N)
+    # v6 双面翻转（用户裁定，差异 #8）：仅翻转既背向相机、又背向光源的 texel
+    #（ndv<0 AND ndl<0）。v6.0 单条件 ndv<0 实测把亮区里朝下但被光照到的
+    # 垂边 texel 也翻转（亮区最大变化 0.147，违反"其他位置不变"）；加 ndl<0
+    # 门控后亮区（ndl>0）逐像素不动，翻转只发生在本来要提亮的暗区。
+    # 翻转不改长度 → nValid（safe_normalize w 分量）与 validity 链完全不变。
+    ndv_pre = em.dot3(N0, Vref)
+    ndl_pre = em.dot3(N0, L_ref)
+    # step(edge,x)=1 当 x>=edge → 反向用：step(ndv,0)=1 当 ndv<=0（背面）
+    flip_gate = em.mul(em.step(ndv_pre, em.c_f1(0.0)),
+                       em.step(ndl_pre, em.c_f1(0.0)))  # 1=翻转，0=保持
+    flip_sign = em.lerp(em.c_f1(1.0), em.c_f1(-1.0), flip_gate)
+    flip_mult = em.lerp(em.c_f1(1.0), flip_sign, sc('two_sided'))
+    N0 = em.mulscalar(N0, flip_mult)
     nValid = em.mul(em.sw1(n0N, 3), coverage)
 
     # ---- 位置差分（aniso.frag:131-150；neighborValid :120-126）
@@ -236,17 +277,7 @@ def build_core(fg, texel: float = P['texel'], param_resolver=None):
     TAniso = em.add(em.mulscalar(A, ct), em.mulscalar(em.cross3(Ns, A), st))
 
     # ---- Vn（VIEW_MODE 三模式运行期级联；§7.5：宿主归一化语义必须复刻）
-    # directional: 归一化由图内 sqrt(1/dot) 实现（render_setup 语义）——
-    # 归一化 view_direction 参数（graph 内完成，不依赖 CPU）
-    vd_raw = v3p('view_direction')
-    vd_len = em.sqrt(em.dot3(vd_raw, vd_raw))
-    vd_len_prot = em.max_f1(vd_len, em.c_f1(1e-8))  # render_setup: 拒绝 <1e-8
-    Vn_dir = em.div(vd_raw, vd_len_prot)
-    vp = em.safe_normalize(em.sub(v3p('camera_position'), Pw),
-                           em.v3(em.c_f1(0.0), em.c_f1(0.0), em.c_f1(1.0)),
-                           1e-12)
-    Vn_persp = em.swizzle3_from_f4(vp)
-    # pick3(Vn_dir, Vn_persp, Ns, view_mode)
+    # Vn_dir / Vn_persp 已上移到解码前（v6：双面翻转需要 V 参考），此处复用
     Vn = em.pick3(Vn_dir, Vn_persp, Ns, sc('view_mode'))
 
     # ---- H（aniso.frag:287-289；light_dir 由图内角度公式生成并归一化校验）
@@ -305,13 +336,14 @@ def build_core(fg, texel: float = P['texel'], param_resolver=None):
     ao_factor = em.lerp(em.c_f1(1.0), ao_r, sc('ao_strength'))
     ao_direct = em.lerp(em.c_f1(1.0), ao_factor, sc('ao_direct_light'))
 
-    # ---- ambient（v5 用户裁定：平面化）----
-    # 源语义 amb = ambient_color × intensity × AO 在法线背光/高 AO 区产生
-    # 无法靠选色消除的暗斑（白也发暗）。裁定：ambient 项 = 所选颜色精确常量，
-    # 不乘 intensity、不乘 AO——"选择什么颜色就是什么颜色"；direct 项（投影
-    # /明暗）不动，投影范围不受影响。参数面板随之移除 p_ambient_intensity。
-    # AO 对直射光的压制仍由 ao_direct 保留。
-    amb = v3p('ambient_color')
+    # ---- ambient（v5 平面化 → v6 有界 AO 调制）----
+    # v5 裁定 amb = ambient_color 精确常量（差异 #7）。用户实测（T_Render_02）
+    # 反馈：暗区提亮后褶皱暗部细节消失——该区域的明暗层次恰来自 AO 调制。
+    # v6 裁定（差异 #8）：amb = ambient_color × lerp(1, AO, s)，s=p_ambient_ao
+    # ∈[0,1]（0=v5 平面、1=v4 全量、默认 0.5）。有界：白环境光下最暗
+    # ≈ sRGB(Reinhard(0.5))≈0.61，不会回到 v4 的近黑。direct 项不动。
+    amb_ao = em.lerp(em.c_f1(1.0), ao_r, sc('ambient_ao'))
+    amb = em.mulscalar(v3p('ambient_color'), amb_ao)
     diff_term = em.mulscalar(v3p('diffuse_color'), diff)
     light_rgb = em.mulscalar(v3p('light_color'),
                              sc('light_intensity'))

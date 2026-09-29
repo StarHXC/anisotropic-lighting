@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """参数 schema 单一来源（SD_MIGRATION_PLAN §7.4/§7.5）。
 
-34 项参数（v4）：id / 类型 / 默认 / UI 范围 / 分组 / GLSL uniform-define 映射。
+35 项参数（v6）：id / 类型 / 默认 / UI 范围 / 分组 / GLSL uniform-define 映射。
 默认值来源：out/bake_report.json 冻结快照（light_dir=(0.4,-0.6,0.7) 等）。
 角度参数由完整精度向量推导（显示近似 −56.3°/44.1° 不写回数值基准）。
 
@@ -14,6 +14,12 @@ v4 变更（用户裁定）：
 v5 变更（用户裁定）：
 - 移除 p_ambient_intensity——ambient 项平面化为精确常量（不乘 intensity/AO），
   修复法线背光/高 AO 区选色被压暗问题（完成报告差异 #7）
+
+v6 变更（用户裁定，完成报告差异 #8）：
+- +p_two_sided——双面光照：N·V<0 的 texel 法线翻向观察侧，使背光暗区重新
+  吃到直射光（提亮+恢复各向异性高光）；不改变法线长度，nValid/validity 不变
+- +p_ambient_ao——环境光 AO 调制强度（0=v5 平面、1=v4 全量），恢复褶皱暗部
+  层次但有界（默认 0.5，最暗 ≈ sRGB 0.61，不会回到近黑）
 
 校验器：跨字段规则在 validate() —— 滑块注解只管 UI，不替代校验。
 """
@@ -69,6 +75,12 @@ PARAMS: list[Param] = [
     Param('p_ambient_color', 'float3', (0.06, 0.07, 0.09), GROUPS['01'],
           glsl_map='u_ambientColor',
           note='v5: 平面项=所选颜色精确常量（不乘 intensity/AO）'),
+    Param('p_two_sided', 'int', 1, GROUPS['01'], 0, 1,
+          step=1.0, glsl_map='v6 新增：双面光照开关',
+          note='1=背面法线翻向观察侧（N·V<0 时翻转）'),
+    Param('p_ambient_ao', 'float1', 0.5, GROUPS['01'], 0.0, 1.0,
+          glsl_map='v6 新增：环境光 AO 调制强度',
+          note='0=v5 平面 / 1=v4 全量 AO；默认 0.5 有界调制'),
     # ---- 02 各向异性
     Param('p_aniso_angle_deg', 'float1', 0.0, GROUPS['02'], -180.0, 180.0,
           glsl_map='u_anisoAngle（度→图内转弧度）'),
@@ -168,7 +180,7 @@ def validate(values: dict) -> list[str]:
     # 枚举合法域
     for pid, lo, hi in (('p_spec_mode', 0, 2), ('p_diffuse_mode', 0, 2),
                         ('p_view_mode', 0, 2),
-                        ('p_aniso_axis', 0, 1)):
+                        ('p_aniso_axis', 0, 1), ('p_two_sided', 0, 1)):
         iv = int(v[pid])
         if not (lo <= iv <= hi):
             errs.append(f'{pid}={iv} 超出枚举域 [{lo},{hi}]')
