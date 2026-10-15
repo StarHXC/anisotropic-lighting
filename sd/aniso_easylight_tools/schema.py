@@ -1,18 +1,24 @@
 # -*- coding: utf-8 -*-
-"""aniso_easylight schema — 11 参数、冻结常数表、合法域（ANISO_EASYLIGHT 计划）。
+"""aniso_easylight schema — 6 参数、冻结常数表、合法域（ANISO_EASYLIGHT 计划）。
 
 参考 aniso_mask 范式：分组滑块、无颜色控件。相对旧 aniso_lightmap（35 参数）
 的删减与冻结机制逐项注释（「冻结≠结构删除」——公式在常数下构造性退化）。
 
 光照角默认从 light_dir=(0.4,-0.6,0.7) 完整精度推导冻结
 （与 aniso_pp.params._angles_from_light_dir 同式），不用显示近似回写。
+
+v1.1.0 变更记录：参数面板 11 → 6（用户裁定保留名单）。所有删除项
+（p_aniso_axis / p_two_sided / p_shift2 / p_exponent2 / p_ao_direct）一律
+冻结旧默认值进 FREEZE_CONSTANTS（[冻结v1.1] 标注）——builder.py 的
+resolver 查表自动冻结，公式不变，新版本默认输出与 11 参数版（v1.0.0）
+位级一致。GROUP_MASKING 组因两项全删而移除，INT_PIDS / EXPOSED_MAP 清空。
 """
 from __future__ import annotations
 
 import math
 
 # ---------------------------------------------------------------- 版本
-EASYLIGHT_VERSION = '1.0.0'
+EASYLIGHT_VERSION = '1.1.0'
 WRAPPER_ID = 'aniso_easylight'
 PKG_FILENAME = 'aniso_easylight.sbs'
 
@@ -20,28 +26,21 @@ PKG_FILENAME = 'aniso_easylight.sbs'
 GROUP_LIGHT = '01_光照定位'
 GROUP_ANISO = '02_各向异性'
 GROUP_SPEC = '03_高光形状'
-GROUP_MASKING = '04_遮蔽与双面'
 
-# ---------------------------------------------------------------- 11 参数
+# ---------------------------------------------------------------- 6 参数
 # (pid, label, default, min, max, group, step)
 PARAMS = [
     # pid                      label        default  mn      mx     group          step
     ('p_light_azimuth_deg',    '光照方位',   None,    -180.0, 180.0, GROUP_LIGHT,   0.01),
     ('p_light_elevation_deg',  '光照仰角',   None,    -89.0,  89.0,  GROUP_LIGHT,   0.01),
-    ('p_aniso_axis',           '主轴（u/v）', 0,       0,      1,     GROUP_ANISO,   1.0),
     ('p_aniso_angle_deg',      '条纹旋转角', 0.0,     -180.0, 180.0, GROUP_ANISO,   0.1),
     ('p_aniso_amount',         '各向异性度', 1.0,     0.0,    1.0,   GROUP_ANISO,   0.01),
-    ('p_shift1',               '层1偏移',    0.0,     -4.0,   4.0,   GROUP_SPEC,    0.01),
     ('p_exponent1',            '层1锐度',    48.0,    1.0,    256.0, GROUP_SPEC,    1.0),
-    ('p_shift2',               '层2偏移',    0.35,    -4.0,   4.0,   GROUP_SPEC,    0.01),
-    ('p_exponent2',            '层2锐度',    8.0,     1.0,    256.0, GROUP_SPEC,    1.0),
-    ('p_two_sided',            '双面光照',   1,       0,      1,     GROUP_MASKING, 1.0),
-    ('p_ao_direct',            '直射光 AO',  0.0,     0.0,    1.0,   GROUP_MASKING, 0.01),
+    ('p_shift1',               '层1偏移',    0.0,     -4.0,   4.0,   GROUP_SPEC,    0.01),
 ]
 
 EXPOSED_PIDS = frozenset(p[0] for p in PARAMS)
-INT_PIDS = frozenset(pid for pid, _l, _d, _mn, _mx, _g, _s in PARAMS
-                     if pid in ('p_aniso_axis', 'p_two_sided'))
+INT_PIDS = frozenset()
 
 
 def light_angles_full_precision() -> tuple[float, float]:
@@ -101,14 +100,19 @@ FREEZE_CONSTANTS = {
     #        ao_direct = lerp(1, lerp(1, ao_r, 1.0), p_ao_direct)
     #                   = lerp(1, ao_r, p_ao_direct)，默认输出不变）
     'ambient_ao': 0.5,                     # [死常数] amb 置零后不进有效数值
+    'aniso_axis': 0,                       # [冻结v1.1] 旧默认 0；axis=1 ≡ axis=0 +
+    #        angle=90°（KK 条纹轴对称，连续 angle 完全覆盖）
+    'two_sided': 1,                        # [冻结v1.1] 旧默认开，双面翻转门控修正项冻结
+    'ao_direct_light': 0,                  # [冻结v1.1] 旧默认 0=直射光不受 AO
+    'shift2': 0.35,                        # [冻结v1.1] 衬光层偏移旧默认
+    'exponent2': 8.0,                      # [冻结v1.1] 衬光层锐度旧默认（配 spec2_intensity=0.6 冻结配比）
     'validity_fill': 0.0,                  # [契约] 无效区精确 0（PP2 已删，留档）
     'exposure_ev': 0.0,                    # [契约] Raw 线性输出（PP2 已删，留档）
 }
 
 # 旧 build_core 参数名 → 新面板 pid 映射（只列非同名项）
-EXPOSED_MAP = {
-    'ao_direct_light': 'p_ao_direct',      # 合并 ao_strength（冻结 1.0）
-}
+# v1.1.0：ao_direct_light 随面板项删除改入冻结表，映射清空。
+EXPOSED_MAP = {}
 
 # ---------------------------------------------------------------- 合法域
 def validate_param_values(vals: dict) -> list[str]:

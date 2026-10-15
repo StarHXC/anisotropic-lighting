@@ -101,12 +101,12 @@ def main():
     wrapper = pkg.findResourceFromUrl('pkg:///aniso_easylight')
     step('解析 wrapper', wrapper is not None)
 
-    # ---- 2. 仅 11 参数可见
+    # ---- 2. 仅 6 参数可见
     props = wrapper.getProperties(SDPropertyCategory.Input)
     pids = [str(props.getItem(i).getId()) for i in range(props.getSize())
             if str(props.getItem(i).getId()).startswith('p_')]
     expect = set(p[0] for p in sch.PARAMS)
-    step('仅 11 参数可见', set(pids) == expect,
+    step(f'仅 {len(sch.PARAMS)} 参数可见', set(pids) == expect,
          {'got': sorted(pids), 'missing': sorted(expect - set(pids)),
           'extra': sorted(set(pids) - expect)})
 
@@ -133,7 +133,7 @@ def main():
 
     def set_inst(node, pid, v):
         pr = node.getPropertyFromId(pid, SDPropertyCategory.Input)
-        if pid in ('p_aniso_axis', 'p_two_sided'):   # int 参数用 SDValueInt
+        if pid in sch.INT_PIDS:                      # int 参数用 SDValueInt
             node.setPropertyValue(pr, SDValueInt.sNew(int(round(v))))
         else:
             node.setPropertyValue(pr, SDValueFloat.sNew(float(v)))
@@ -163,10 +163,10 @@ def main():
     exr_s2 = os.path.join(OUT_DIR, 'm2_sentinel_exp.exr')
     rb_s2 = compute_and_save(test, inst, exr_s2)
 
-    # 哨兵组 3：two_sided=0 + ao_direct=1（遮蔽路径变化）
+    # 哨兵组 3：amount=0 + shift1=2（各向同性退化 + 条纹平移，v1.1 面板内哨兵）
     set_inst(inst, 'p_exponent1', PD['p_exponent1'])
-    set_inst(inst, 'p_two_sided', 0.0)
-    set_inst(inst, 'p_ao_direct', 1.0)
+    set_inst(inst, 'p_aniso_amount', 0.0)
+    set_inst(inst, 'p_shift1', 2.0)
     exr_s3 = os.path.join(OUT_DIR, 'm2_sentinel_mask.exr')
     rb_s3 = compute_and_save(test, inst, exr_s3)
 
@@ -187,9 +187,9 @@ def main():
     set_inst(inst_b, 'p_aniso_amount', 0.4)
     set_inst(inst_b, 'p_exponent1', 16.0)
 
-    # 恢复实例 A 默认
-    set_inst(inst, 'p_two_sided', PD['p_two_sided'])
-    set_inst(inst, 'p_ao_direct', PD['p_ao_direct'])
+    # 恢复实例 A 默认（哨兵组 3 改过 amount/shift1）
+    set_inst(inst, 'p_aniso_amount', PD['p_aniso_amount'])
+    set_inst(inst, 'p_shift1', PD['p_shift1'])
 
     exr_a = os.path.join(OUT_DIR, 'm2_instA.exr')
     exr_b = os.path.join(OUT_DIR, 'm2_instB.exr')
@@ -198,9 +198,9 @@ def main():
     step('双实例求值', rb_a['ok'] and rb_b['ok'],
          {'A': rb_a['size'], 'B': rb_b['size']})
 
-    # 改 A → B 位级不变
+    # 改 A → B 位级不变（v1.1 面板内参数）
     set_inst(inst, 'p_exponent1', 128.0)
-    set_inst(inst, 'p_shift2', -1.0)
+    set_inst(inst, 'p_shift1', -1.0)
     exr_b2 = os.path.join(OUT_DIR, 'm2_instB_after.exr')
     rb_b2 = compute_and_save(test, inst_b, exr_b2)
     step('实例 B 改 A 后重求值', rb_b2['ok'], {'size': rb_b2['size']})
@@ -208,7 +208,7 @@ def main():
     step('双实例隔离（B 位级一致）', same,
          {'b': os.path.getsize(exr_b), 'b2': os.path.getsize(exr_b2)})
 
-    # ---- 6. 旧 lightmap 共存隔离
+    # ---- 6. 旧 lightmap 共存隔离（SD 重启后可能未加载 → 主动从磁盘加载）
     lm_res = None
     for i in range(pkg_mgr.getPackages().getSize()):
         p_ = pkg_mgr.getPackages().getItem(i)
@@ -219,6 +219,11 @@ def main():
                 break
         except BaseException:
             continue
+    if lm_res is None:
+        lm_pkg = pkg_mgr.loadUserPackage(
+            os.path.join(SD_DIR, 'aniso_lightmap.sbs'), True, True)
+        if lm_pkg is not None:
+            lm_res = lm_pkg.findResourceFromUrl('pkg:///aniso_lightmap')
     step('解析旧 lightmap', lm_res is not None)
     if lm_res is not None:
         inst_o = test.newInstanceNode(lm_res)

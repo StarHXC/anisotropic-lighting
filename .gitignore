@@ -14,3 +14,10 @@ imgui.ini
 sd/.autosave/
 sd/*.algautosave/
 sd/_bridge/
+
+# SD 打开包时生成的冗余副本/发布产物（内容与主副本一致或可再生成）
+sd/SBS/
+sd/*.sbsar
+sd/aniso_easylight.resources/2-*
+sd/aniso_easylight.resources/XXXXXX-*
+sd/aniso_easylight.resources/bake_*
