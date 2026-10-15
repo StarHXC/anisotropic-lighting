@@ -53,6 +53,13 @@ def main():
 
     pkg_mgr = sd.getContext().getSDApplication().getPackageMgr()
     test = SDAPI.get_current_graph()
+    if test is None:
+        # SD 无激活物质图（用户未打开任何 .sbs 图）——自建临时测试图
+        from sd.api.sbs.sdsbscompgraph import SDSBSCompGraph
+        tmp_pkg = pkg_mgr.newUserPackage()
+        test = SDSBSCompGraph.sNew(tmp_pkg)
+        test.setIdentifier('easylight_verify_scratch')
+        step('自建临时测试图（SD 无激活图）', test is not None)
 
     # ---- 0. 清扫旧实例 + 驻留包（mask M2 协议）
     deleted = 0
@@ -157,16 +164,15 @@ def main():
     exr_s1 = os.path.join(OUT_DIR, 'm2_sentinel_az.exr')
     rb_s1 = compute_and_save(test, inst, exr_s1)
 
-    # 哨兵组 2：exponent1=8（高光应显著变宽）
+    # 哨兵组 2：amount=0.3（拉丝减弱，v1.2 面板内参数）
     set_inst(inst, 'p_light_azimuth_deg', PD['p_light_azimuth_deg'])
-    set_inst(inst, 'p_exponent1', 8.0)
+    set_inst(inst, 'p_aniso_amount', 0.3)
     exr_s2 = os.path.join(OUT_DIR, 'm2_sentinel_exp.exr')
     rb_s2 = compute_and_save(test, inst, exr_s2)
 
-    # 哨兵组 3：amount=0 + shift1=2（各向同性退化 + 条纹平移，v1.1 面板内哨兵）
-    set_inst(inst, 'p_exponent1', PD['p_exponent1'])
-    set_inst(inst, 'p_aniso_amount', 0.0)
-    set_inst(inst, 'p_shift1', 2.0)
+    # 哨兵组 3：仰角 +40°（光从高处来，直射分量与高光位置变化）
+    set_inst(inst, 'p_aniso_amount', PD['p_aniso_amount'])
+    set_inst(inst, 'p_light_elevation_deg', PD['p_light_elevation_deg'] + 40.0)
     exr_s3 = os.path.join(OUT_DIR, 'm2_sentinel_mask.exr')
     rb_s3 = compute_and_save(test, inst, exr_s3)
 
@@ -185,11 +191,11 @@ def main():
     on_b.setPosition(float2(7600.0, 2600.0))
     inst_b.newPropertyConnectionFromId(pin_b, on_b, 'inputNodeOutput')
     set_inst(inst_b, 'p_aniso_amount', 0.4)
-    set_inst(inst_b, 'p_exponent1', 16.0)
+    set_inst(inst_b, 'p_light_elevation_deg',
+             PD['p_light_elevation_deg'] - 25.0)
 
-    # 恢复实例 A 默认（哨兵组 3 改过 amount/shift1）
-    set_inst(inst, 'p_aniso_amount', PD['p_aniso_amount'])
-    set_inst(inst, 'p_shift1', PD['p_shift1'])
+    # 恢复实例 A 默认（哨兵组 3 改过仰角）
+    set_inst(inst, 'p_light_elevation_deg', PD['p_light_elevation_deg'])
 
     exr_a = os.path.join(OUT_DIR, 'm2_instA.exr')
     exr_b = os.path.join(OUT_DIR, 'm2_instB.exr')
@@ -198,9 +204,9 @@ def main():
     step('双实例求值', rb_a['ok'] and rb_b['ok'],
          {'A': rb_a['size'], 'B': rb_b['size']})
 
-    # 改 A → B 位级不变（v1.1 面板内参数）
-    set_inst(inst, 'p_exponent1', 128.0)
-    set_inst(inst, 'p_shift1', -1.0)
+    # 改 A → B 位级不变（v1.2 面板内参数）
+    set_inst(inst, 'p_aniso_amount', 0.15)
+    set_inst(inst, 'p_light_azimuth_deg', PD['p_light_azimuth_deg'] + 60.0)
     exr_b2 = os.path.join(OUT_DIR, 'm2_instB_after.exr')
     rb_b2 = compute_and_save(test, inst_b, exr_b2)
     step('实例 B 改 A 后重求值', rb_b2['ok'], {'size': rb_b2['size']})

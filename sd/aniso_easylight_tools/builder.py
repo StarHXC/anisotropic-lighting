@@ -109,7 +109,7 @@ def build():
         pass
     step(f'wrapper {sch.WRAPPER_ID}', wrapper is not None)
 
-    # ---- 6 参数注册（group/slider 注解；int 属性注解用 SDValueInt）
+    # ---- 3 参数注册（group/slider 注解；int 属性注解用 SDValueInt）
     PD = sch.param_defaults()
     reg_ok = 0
     for pid, label, default, mn, mx, group, st in sch.PARAMS:

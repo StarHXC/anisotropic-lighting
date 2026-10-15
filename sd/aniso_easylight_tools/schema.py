@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""aniso_easylight schema — 6 参数、冻结常数表、合法域（ANISO_EASYLIGHT 计划）。
+"""aniso_easylight schema — 3 参数、冻结常数表、合法域（ANISO_EASYLIGHT 计划）。
 
 参考 aniso_mask 范式：分组滑块、无颜色控件。相对旧 aniso_lightmap（35 参数）
 的删减与冻结机制逐项注释（「冻结≠结构删除」——公式在常数下构造性退化）。
@@ -12,31 +12,32 @@ v1.1.0 变更记录：参数面板 11 → 6（用户裁定保留名单）。所�
 冻结旧默认值进 FREEZE_CONSTANTS（[冻结v1.1] 标注）——builder.py 的
 resolver 查表自动冻结，公式不变，新版本默认输出与 11 参数版（v1.0.0）
 位级一致。GROUP_MASKING 组因两项全删而移除，INT_PIDS / EXPOSED_MAP 清空。
+
+v1.2.0 变更记录：参数面板 6 → 3（用户实测裁定：角度/锐度/偏移调节
+效果不大）。删除项 p_aniso_angle_deg / p_exponent1 / p_shift1 冻结旧默认
+（[冻结v1.2] 标注），默认输出与 6 参数版（v1.1.0）位级一致。
+GROUP_SPEC 组全删移除。最终面板：光照方位/仰角 + 各向异性度。
 """
 from __future__ import annotations
 
 import math
 
 # ---------------------------------------------------------------- 版本
-EASYLIGHT_VERSION = '1.1.0'
+EASYLIGHT_VERSION = '1.2.0'
 WRAPPER_ID = 'aniso_easylight'
 PKG_FILENAME = 'aniso_easylight.sbs'
 
 # ---------------------------------------------------------------- 分组
 GROUP_LIGHT = '01_光照定位'
 GROUP_ANISO = '02_各向异性'
-GROUP_SPEC = '03_高光形状'
 
-# ---------------------------------------------------------------- 6 参数
+# ---------------------------------------------------------------- 3 参数
 # (pid, label, default, min, max, group, step)
 PARAMS = [
     # pid                      label        default  mn      mx     group          step
     ('p_light_azimuth_deg',    '光照方位',   None,    -180.0, 180.0, GROUP_LIGHT,   0.01),
     ('p_light_elevation_deg',  '光照仰角',   None,    -89.0,  89.0,  GROUP_LIGHT,   0.01),
-    ('p_aniso_angle_deg',      '条纹旋转角', 0.0,     -180.0, 180.0, GROUP_ANISO,   0.1),
     ('p_aniso_amount',         '各向异性度', 1.0,     0.0,    1.0,   GROUP_ANISO,   0.01),
-    ('p_exponent1',            '层1锐度',    48.0,    1.0,    256.0, GROUP_SPEC,    1.0),
-    ('p_shift1',               '层1偏移',    0.0,     -4.0,   4.0,   GROUP_SPEC,    0.01),
 ]
 
 EXPOSED_PIDS = frozenset(p[0] for p in PARAMS)
@@ -106,6 +107,9 @@ FREEZE_CONSTANTS = {
     'ao_direct_light': 0,                  # [冻结v1.1] 旧默认 0=直射光不受 AO
     'shift2': 0.35,                        # [冻结v1.1] 衬光层偏移旧默认
     'exponent2': 8.0,                      # [冻结v1.1] 衬光层锐度旧默认（配 spec2_intensity=0.6 冻结配比）
+    'aniso_angle_deg': 0.0,                # [冻结v1.2] 条纹旋转角旧默认（用户实测调节效果不大）
+    'exponent1': 48.0,                     # [冻结v1.2] 主层锐度旧默认（同上）
+    'shift1': 0.0,                         # [冻结v1.2] 主层偏移旧默认（同上）
     'validity_fill': 0.0,                  # [契约] 无效区精确 0（PP2 已删，留档）
     'exposure_ev': 0.0,                    # [契约] Raw 线性输出（PP2 已删，留档）
 }
