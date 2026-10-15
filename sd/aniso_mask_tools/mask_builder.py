@@ -2,7 +2,8 @@
 r"""aniso_mask 正式包构建核心（build_aniso_mask.py 的引擎；§5.2）。
 
 与探针的区别：
-  - 正式 wrapper identifier=aniso_mask、5 参数全注册（group/slider 注解）
+  - 正式 wrapper identifier=aniso_mask、4 参数全注册（group/slider 注解；
+    v1.1.0 起 p_roughness 冻结 0.5 不暴露）
   - 4 bitmap 来自旧 SBS 真实绑定 filename（§4.2 解析打包资源）
   - 2048² 生产尺寸（生产仅 2048²；测试探针才允许小尺寸）
   - 保存 aniso_mask.sbs + 独立 aniso_mask.resources/
@@ -101,6 +102,7 @@ def build(save_xml_patch=True):
     from aniso_mask_tools import kernel as kmask
     from aniso_mask_tools.schema import (
         MASK_VERSION, WRAPPER_ID, param_defaults)
+    from aniso_mask_tools import schema as sch
 
     step('环境', True, {'sd_api_version': SDAPI.app_version(),
                         'mask_version': MASK_VERSION})
@@ -121,12 +123,11 @@ def build(save_xml_patch=True):
         pass
     step('wrapper aniso_mask', wrapper is not None)
 
-    # ---- 5 参数（group + slider 注解；§2 面板）
+    # ---- 4 参数（group + slider 注解；§2 面板；v1.1.0 冻结 p_roughness）
     PD = param_defaults()
     UI = [
         ('p_anisotropy', '各向异性度', 0.0, 1.0, 0.01, '01_高光形状'),
         ('p_direction_deg', '方向（织纹参考）', 0.0, 180.0, 0.1, '01_高光形状'),
-        ('p_roughness', '高光粗糙度／宽度', 0.0, 1.0, 0.01, '01_高光形状'),
         ('p_light_azimuth_deg', '光照方位', -180.0, 180.0, 0.01, '02_光照定位'),
         ('p_light_elevation_deg', '光照仰角', -89.0, 89.0, 0.01, '02_光照定位'),
     ]
@@ -149,7 +150,7 @@ def build(save_xml_patch=True):
             wrapper.setPropertyAnnotationValueFromId(
                 prop, 'clamp', SDValueBool.sNew(True))
         reg_ok += 1
-    step('5 参数注册（group/slider）', reg_ok == 5)
+    step('4 参数注册（group/slider）', reg_ok == 4)
 
     # ---- 4 bitmap（CopiedAndLinked → 独立 aniso_mask.resources/）
     bmp_nodes = []
@@ -213,8 +214,10 @@ def build(save_xml_patch=True):
                                      frame_out=frame)
     step('core 发射 + frame 收集', len(frame) == 7, {'nodes': meta['nodes']})
 
-    # ---- §3 kernel（5 参数中 3 个形状参数进入 kernel）
+    # ---- §3 kernel（暴露参数 → get 节点；冻结参数 → 图内常数 v1.1.0）
     def getf(pid):
+        if pid in sch.FROZEN_KERNEL_PARAMS:
+            return em.c_f1(float(sch.FROZEN_KERNEL_PARAMS[pid]))
         gf = fg.newNode('sbs::function::get_float1')
         gf.setInputPropertyValueFromId('__constant__', SDValueString.sNew(pid))
         return NodeRef(gf, 'f1')

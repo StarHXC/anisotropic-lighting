@@ -1,19 +1,23 @@
 # -*- coding: utf-8 -*-
-"""aniso_mask schema — 5 参数、固定常量、合法域、版本与源快照（计划 §2/§4.2）。
+"""aniso_mask schema — 4 参数、固定常量、合法域、版本与源快照（计划 §2/§4.2）。
 
-5 项 float 参数（3 形状 + 2 光照定位）。光照角度默认从旧 params 完整精度
+4 项 float 参数（2 形状 + 2 光照定位）。光照角度默认从旧 params 完整精度
 推导值冻结（light_dir=(0.4,-0.6,0.7) → az/el 全精度），不用显示近似回写。
+
+v1.1.0 变更：p_roughness 取消暴露（用户实测裁定效果不大）——冻结默认
+0.5 进 FROZEN_KERNEL_PARAMS，kernel 查表改图内常数，公式与默认输出不变
+（M3 判据 PD 中 r=0.5 即该冻结值，parity 证据不失效）。
 """
 from __future__ import annotations
 
 import math
 
 # ---------------------------------------------------------------- 版本
-MASK_VERSION = '1.0.0'
+MASK_VERSION = '1.1.0'
 WRAPPER_ID = 'aniso_mask'
 PKG_FILENAME = 'aniso_mask.sbs'
 
-# ---------------------------------------------------------------- 5 参数
+# ---------------------------------------------------------------- 4 参数
 # (pid, 显示名, 默认, min, max, group, step)
 GROUP_SHAPE = '01_高光形状'
 GROUP_LIGHT = '02_光照定位'
@@ -22,10 +26,14 @@ PARAMS = [
     # pid                  label        default  min    max   group        step
     ('p_anisotropy',       '各向异性度',   0.7,    0.0,   1.0,  GROUP_SHAPE, 0.01),
     ('p_direction_deg',    '方向（织纹参考）', 0.0, 0.0,   180.0, GROUP_SHAPE, 0.1),
-    ('p_roughness',        '高光粗糙度／宽度', 0.5, 0.0,   1.0,  GROUP_SHAPE, 0.01),
     ('p_light_azimuth_deg',   '光照方位',   -56.309932474020215, -180.0, 180.0, GROUP_LIGHT, 0.01),
     ('p_light_elevation_deg', '光照仰角',   44.148948676558244, -89.0, 89.0, GROUP_LIGHT, 0.01),
 ]
+
+# v1.1.0 冻结的 kernel 参数（旧默认值；kernel 查表优先级高于面板 get）
+FROZEN_KERNEL_PARAMS = {
+    'p_roughness': 0.5,    # 高光粗糙度／宽度旧默认（alpha=0.03+0.47·0.25）
+}
 
 
 def light_angles_full_precision() -> tuple[float, float]:

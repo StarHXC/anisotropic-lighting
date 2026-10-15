@@ -51,6 +51,13 @@ def main():
 
     # ---- 清扫驻留 aniso_mask（先删测试图实例）
     test = SDAPI.get_current_graph()
+    if test is None:
+        # SD 无激活物质图——自建临时测试图（easylight v1.2 同款 fallback）
+        from sd.api.sbs.sdsbscompgraph import SDSBSCompGraph
+        tmp_pkg = pkg_mgr.newUserPackage()
+        test = SDSBSCompGraph.sNew(tmp_pkg)
+        test.setIdentifier('mask_verify_scratch')
+        step('自建临时测试图（SD 无激活图）', test is not None)
     deleted = 0
     nodes_all = test.getNodes()
     to_del = []
@@ -99,16 +106,16 @@ def main():
     wrapper = pkg.findResourceFromUrl('pkg:///aniso_mask')
     step('解析 wrapper', wrapper is not None)
 
-    # ---- 参数面板断言：仅 5 项，全部 float1
+    # ---- 参数面板断言：仅 4 项，全部 float1（v1.1.0 冻结 p_roughness）
     props = wrapper.getProperties(SDPropertyCategory.Input)
     pids = []
     for i in range(props.getSize()):
         pid = str(props.getItem(i).getId())
         if pid.startswith('p_'):
             pids.append(pid)
-    expect = {'p_anisotropy', 'p_direction_deg', 'p_roughness',
+    expect = {'p_anisotropy', 'p_direction_deg',
               'p_light_azimuth_deg', 'p_light_elevation_deg'}
-    step('仅 5 参数可见', set(pids) == expect,
+    step('仅 4 参数可见', set(pids) == expect,
          {'got': sorted(pids), 'missing': sorted(expect - set(pids)),
           'extra': sorted(set(pids) - expect)})
 
@@ -146,9 +153,8 @@ def main():
         node.setPropertyValue(pr, SDValueFloat.sNew(float(v)))
 
     set_inst(inst_a, 'p_anisotropy', 0.7)
-    set_inst(inst_a, 'p_roughness', 0.5)
     set_inst(inst_b, 'p_anisotropy', 0.2)
-    set_inst(inst_b, 'p_roughness', 0.8)
+    set_inst(inst_b, 'p_direction_deg', 90.0)
 
     exr_a = os.path.join(OUT_DIR, 'm2_instA.exr')
     exr_b = os.path.join(OUT_DIR, 'm2_instB.exr')
